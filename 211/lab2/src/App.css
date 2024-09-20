@@ -1,0 +1,22 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.spacing {
+  margin-right: 10px; /* Adjust the value as needed */
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+#root ol li {
+  text-align: left; /* Ensure the list items are also aligned left */
+}

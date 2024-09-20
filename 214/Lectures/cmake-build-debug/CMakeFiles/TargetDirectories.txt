@@ -1,0 +1,3 @@
+/home/kiefer/Programming/ICS/214/Lectures/cmake-build-debug/CMakeFiles/Lectures.dir
+/home/kiefer/Programming/ICS/214/Lectures/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/kiefer/Programming/ICS/214/Lectures/cmake-build-debug/CMakeFiles/rebuild_cache.dir
