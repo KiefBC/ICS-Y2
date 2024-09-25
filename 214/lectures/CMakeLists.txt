@@ -7,4 +7,5 @@ include_directories(.)
 
 add_executable(Lectures
         Testing.cpp
-        Testing.h)
+        Testing.h
+        main.cpp)

@@ -3,6 +3,7 @@
 //
 
 #include "Zellers.h"
+#include "ThomasSaidSo.h"
 #include <iostream>
 #include <limits>
 
@@ -47,13 +48,10 @@ int promptForYear() {
     int yearInput;
 
     std::cout << "Enter the year (ex: 1990): ";
-    std::cin >> yearInput;
+    yearInput = validateInput(0, std::numeric_limits<int>::max(), "Enter the year (ex: 1990): ", "Invalid input. Please enter a valid year: ");
 
-    while (std::cin.fail() || yearInput < 0 || yearInput > 9999) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Invalid input. Please enter a valid year between 0 and 9999: ";
-        std::cin >> yearInput;
+    if (yearInput == -0) {
+        yearInput = 0;
     }
 
     return yearInput;
@@ -63,14 +61,7 @@ int promptForMonth() {
     int monthInput;
 
     std::cout << "Enter the month (ex: 8): ";
-    std::cin >> monthInput;
-
-    while (std::cin.fail() || monthInput < 1 || monthInput > 12) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Invalid input. Please enter a valid month between 1 and 12: ";
-        std::cin >> monthInput;
-    }
+    monthInput = validateInput(1, 12, "Enter the month (ex: 8): ", "Invalid input. Please enter a valid month between 1 and 12: ");
 
     return monthInput;
 }
@@ -92,7 +83,7 @@ int promptForDay(int month, int year) {
             if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
                 daysOfMonth = 29; // Leap year
             } else {
-                daysOfMonth = 28;
+                daysOfMonth = 28; // Non-leap year
             }
             break;
         default:
@@ -101,14 +92,7 @@ int promptForDay(int month, int year) {
     }
 
     std::cout << "Enter the day (max " << daysOfMonth << "): ";
-    std::cin >> dayInput;
-
-    while (std::cin.fail() || dayInput < 0 || dayInput > daysOfMonth) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Invalid input. Please enter a valid day between 1 and " << daysOfMonth << ": ";
-        std::cin >> dayInput;
-    }
+    dayInput = validateInput(1, daysOfMonth, "Enter the day (max " + std::to_string(daysOfMonth) + "): ", "Invalid input. Please enter a valid day between 1 and " + std::to_string(daysOfMonth) + ": ");
 
     return dayInput;
 }

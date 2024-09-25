@@ -5,6 +5,11 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+/**
+ * @brief Main Function
+ *
+ * @return
+ */
 int main();
 
 #endif //MAIN_H

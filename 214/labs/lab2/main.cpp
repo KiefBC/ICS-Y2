@@ -6,38 +6,23 @@
 #include "main.h"
 #include "Zellers.h"
 
-int main()
-{
+int main() {
+    std::cout << "===========================" << std::endl;
+    std::cout << "Test run data: 2015, 1, 25" << std::endl;
+    std::cout << "---------------------------" << std::endl;
+    Weekday test = calculateWeekday(2015, 1, 25);
+    std::string dayOfWeek_test[] = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    std::cout << "     Test run: " << dayOfWeek_test[static_cast<int>(test)] << std::endl;
+    std::cout << "===========================\n" << std::endl;
+
     int year = promptForYear();
     int month = promptForMonth();
     int day = promptForDay(month, year);
 
     Weekday weekday = calculateWeekday(year, month, day);
 
-//    switch (weekday) {
-//        case Weekday::Saturday:
-//            std::cout << "The day of the week is Saturday." << std::endl;
-//            break;
-//        case Weekday::Sunday:
-//            std::cout << "The day of the week is Sunday." << std::endl;
-//            break;
-//        case Weekday::Monday:
-//            std::cout << "The day of the week is Monday." << std::endl;
-//            break;
-//        case Weekday::Tuesday:
-//            std::cout << "The day of the week is Tuesday." << std::endl;
-//            break;
-//        case Weekday::Wednesday:
-//            std::cout << "The day of the week is Wednesday." << std::endl;
-//            break;
-//        case Weekday::Thursday:
-//            std::cout << "The day of the week is Thursday." << std::endl;
-//            break;
-//        case Weekday::Friday:
-//            std::cout << "The day of the week is Friday." << std::endl;
-//            break;
-//    }
-
     std::string dayOfWeek[] = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    std::cout << "\n================================" << std::endl;
     std::cout << "The day of the week is " << dayOfWeek[static_cast<int>(weekday)] << "." << std::endl;
+    std::cout << "================================" << std::endl;
 }
