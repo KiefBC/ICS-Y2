@@ -13,10 +13,12 @@ int numOfTimesRepeat(const std::string&, char);
 int numOfTimesRepeat(const char[], char);
 int largestInArray(const int[], int);
 int indexOfLargest(const int[], int);
-char repeatCharacter(std::string);
+char repeatCharacter(const std::string&);
+char repeatCharacter(const char*);
 void vowelReplacer(std::string&);
 char* stringConcat(const char*, const char*);
 
+// This works, but don't do it this way
 struct Student {
     std::string name;
     int id{};
@@ -37,8 +39,8 @@ struct Student {
 };
 
 struct Student1 {
-    std::string name;
-    int id{};
+    std::string name {"unknown"};
+    int id{0};
 };
 
 Student1* createStudent(const std::string&, int);

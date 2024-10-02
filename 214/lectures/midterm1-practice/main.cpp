@@ -15,23 +15,28 @@ int main() {
     std::cout << numOfTimesRepeat(input, letter) << std::endl;;
     std::cout << "The number of times " << letter << " repeats in a C-String: ";
     std::cout << numOfTimesRepeat(charString, letter) << std::endl;
+
     std::cout << "\nThe largest number the array is: ";
     std::cout << largestInArray(madeArray, size) << std::endl;
     std::cout << "The index of the largest number in the array is: ";
     std::cout << indexOfLargest(madeArray, size) << std::endl;
+
     std::cout << "\nThe repeating characters in the array is: ";
     std::cout << repeatCharacter(input) << std::endl;
     std::cout << "The repeating character in the C Array is: ";
     std::cout << repeatCharacter(charString) << std::endl;
+
     std::cout << "\nOriginal String: " << input << std::endl;
     vowelReplacer(input);
     std::cout << "Modified String: " << input << std::endl;
+
     const Student1* student1 = createStudent(studentName, id);
-    std::cout << "Student1 Struct Student1 Name: " << student1->name << std::endl;
-    std::cout << "Student1 Struct Modified Student1 ID: " << student1->id << std::endl;
+    std::cout << "Student1 Struct w/o Constructor Name: " << student1->name << std::endl;
+    std::cout << "Student1 Struct w/o Constructor Student1 ID: " << student1->id << std::endl;
+
     const Student1* student2 = createStudent(studentName2, id2);
-    std::cout << "Student1 Modified Student2 Name: " << student2->name << std::endl;
-    std::cout << "Student1 Modified Student2 ID: " << student2->id << std::endl;
+    std::cout << "Student2 w/o Constructor Name: " << student2->name << std::endl;
+    std::cout << "Student2 w/o Constructor ID: " << student2->id << std::endl;
 
     delete student1;
     delete student2;
@@ -39,9 +44,8 @@ int main() {
     Student student3("Alice", 101);
     Student student4("Jake", 102);
 
-
-    const char *jake = "Jake";
-    const char *alice = "Alice";
+    const char* jake = "Jake";
+    const char* alice = "Alice";
     char* concatStrings = stringConcat(jake, alice);
     std::cout << concatStrings << std::endl;
     free(concatStrings);
@@ -63,7 +67,10 @@ char* stringConcat(const char* jake, const char* alice) {
 
 Student1* createStudent(const std::string& name, const int id) {
     std::cout << "\nCreating new Student..." << std::endl;
-    Student1* newStudent = new Student1(name, id);
+    Student1* newStudent = new Student1;
+
+    newStudent->name = name;
+    newStudent->id = id;
 
     return newStudent;
 }
@@ -95,10 +102,9 @@ char repeatCharacter(const char* string) {
     }
 
     return mostFrequentChar;
-
 }
 
-char repeatCharacter(std::string input) {
+char repeatCharacter(const std::string& input) {
     std::unordered_map<char, int> charMap;
     char mostFrequentChar = '\0';
     int maxCount{ 0 };
