@@ -1,7 +1,6 @@
 //
 // Created by kiefer on 10/2/24.
 //
-
 #include "Card.h"
 
 // Picks a random card from the deck (represented by an int between 0-51)
@@ -45,8 +44,7 @@ bool allArrayElementsAreTrue(const bool arr[], int size) {
 //            If verbose is true, outputs cards picked & the pick count.
 // - return: an int representing the number of card picks it takes to cover 4 suits.
 int getPickCountNeededForFourSuits(bool verbose) {
-    // Initialize an array to keep track of suits that have been picked
-    bool suitsPicked[static_cast<int>(Suit::count)] = { false };
+    bool suitsPicked[static_cast<int>(Suit::count)] = {false};
     int pickCount = 0;
 
     while (!allArrayElementsAreTrue(suitsPicked, static_cast<int>(Suit::count))) {
@@ -66,6 +64,58 @@ int getPickCountNeededForFourSuits(bool verbose) {
 
     if (verbose) {
         std::cout << "Total picks needed: " << pickCount << std::endl;
+    }
+
+    return pickCount;
+}
+
+// Shuffles the deck
+void shuffleDeck(int deck[], int size) {
+    // Create a random number generator
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    // Shuffle the deck
+    std::shuffle(deck, deck + size, gen);
+
+    // Print the shuffled deck
+//    for (int i = 0; i < size; ++i) {
+//        std::cout << deck[i] << " " << std::endl;
+//    }
+}
+
+int getPickCountNeededForFourSuitsNoReplacement(bool verbose) {
+    bool suitsPicked[static_cast<int>(Suit::count)] = {false};
+    int pickCount = 0;
+
+    int deck[Constants::CARD_COUNT];
+    for (int i = 0; i < Constants::CARD_COUNT; ++i) {
+        deck[i] = i;
+    }
+
+    shuffleDeck(deck, Constants::CARD_COUNT);
+    int currentCardIndex = 0;
+
+    // Draw cards from the deck until all suits have been picked or deck is empty
+    while (!allArrayElementsAreTrue(suitsPicked, static_cast<int>(Suit::count)) &&
+           currentCardIndex < Constants::CARD_COUNT) {
+        int cardIndex = deck[currentCardIndex];
+        Rank rank = getRank(cardIndex);
+        Suit suit = getSuit(cardIndex);
+
+        suitsPicked[static_cast<int>(suit)] = true;
+        ++pickCount;
+        ++currentCardIndex;
+
+        if (verbose) {
+            std::cout << "Pick " << pickCount << ": "
+                      << Constants::RANKS[static_cast<int>(rank)] << " of "
+                      << Constants::SUITS[static_cast<int>(suit)] << std::endl;
+        }
+    }
+
+    if (verbose) {
+        std::cout << "Total picks needed (without replacement): " << pickCount << std::endl;
     }
 
     return pickCount;
