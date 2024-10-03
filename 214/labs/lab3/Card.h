@@ -8,6 +8,7 @@
 #include <iostream>
 #include <random>
 #include <chrono>
+#include <algorithm>
 
 enum class Suit
 {
@@ -59,6 +60,8 @@ int pickRandomCard();
 Rank getRank(int);
 Suit getSuit(int);
 bool allArrayElementsAreTrue(const bool array[]);
+int getPickCountNeededForFourSuits1(bool, std::mt19937&);
+int getPickCountNeededForFourSuits3(bool);
 int getPickCountNeededForFourSuits(bool);
 
 #endif // CARDS_H
