@@ -8,6 +8,9 @@ int main()
 {
     srand(time(0));
 
+    auto startTime = std::chrono::high_resolution_clock::now();
+
+
     int totalCardsDrawn = 0;
     int totalTrials = 0;
     int loopSize = 10000000;
@@ -23,6 +26,11 @@ int main()
     double averageCardsDrawn = static_cast<double>(totalCardsDrawn) / totalTrials;
     std::cout << "\nTotal cards drawn: " << totalCardsDrawn << std::endl;
     std::cout << "Average cards drawn: " << averageCardsDrawn << std::endl;
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+    std::cout << "Time taken for simulation: " << duration.count() << " milliseconds" << std::endl;
 
     return 0;
 }

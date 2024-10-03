@@ -54,12 +54,18 @@ bool allArrayElementsAreTrue(const bool suitsPicked[])
 // getPickCountNeededForFourSuits();
 int getPickCountNeededForFourSuits(bool verbose)
 {
+    std::vector<int> deck(52);
+    for (int i = 0; i < 52; ++i)
+        deck[i] = i;
+
+    static thread_local std::mt19937 generator(std::random_device{}());
+    std::shuffle(deck.begin(), deck.end(), generator);
+
     bool suitsPicked[Constants::NUM_SUITS] = {false, false, false, false};
     int pickCount = 0;
 
-    while (!allArrayElementsAreTrue(suitsPicked))
+    for (int cardIndex : deck)
     {
-        int cardIndex = pickRandomCard();
         Suit suit = getSuit(cardIndex);
 
         if (!suitsPicked[static_cast<int>(suit)])
@@ -68,11 +74,15 @@ int getPickCountNeededForFourSuits(bool verbose)
 
             if (verbose)
             {
-                std::cout << "Picked card: " << Constants::RANKS[static_cast<int>(getRank(cardIndex))] << " of " << Constants::SUITS[static_cast<int>(suit)] << std::endl;
+                std::cout << "Picked card: " << Constants::RANKS[static_cast<int>(getRank(cardIndex))] << " of "
+                          << Constants::SUITS[static_cast<int>(suit)] << std::endl;
             }
         }
 
         pickCount++;
+
+        if (allArrayElementsAreTrue(suitsPicked))
+            break;
     }
 
     if (verbose)

@@ -7,8 +7,10 @@
 
 #include <iostream>
 #include <random>
+#include <algorithm>
+#include <vector>
+#include <chrono>
 
-// Card Suits and Ranks
 enum class Suit
 {
     CLUBS,
