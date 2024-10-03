@@ -8,22 +8,23 @@ int main()
 {
     srand(time(0));
 
-    auto startTime = std::chrono::high_resolution_clock::now();
+    const auto startTime = std::chrono::high_resolution_clock::now();
 
 
     int totalCardsDrawn = 0;
     int totalTrials = 0;
-    int loopSize = 100000000;
+    constexpr int loopSize = 10000000;
 
-    bool verbose = false;
+
     for (int i = 0; i < loopSize; i++)
     {
-        int pickCount = getPickCountNeededForFourSuits(verbose);
+        constexpr bool verbose = false;
+        const int pickCount = getPickCountNeededForFourSuits(verbose);
         totalCardsDrawn += pickCount;
         totalTrials++;
     }
 
-    double averageCardsDrawn = static_cast<double>(totalCardsDrawn) / totalTrials;
+    const double averageCardsDrawn = static_cast<double>(totalCardsDrawn) / totalTrials;
     std::cout << "\nTotal cards drawn: " << totalCardsDrawn << std::endl;
     std::cout << "Average cards drawn: " << averageCardsDrawn << std::endl;
 

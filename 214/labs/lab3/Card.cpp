@@ -31,16 +31,16 @@ bool allArrayElementsAreTrue(const bool suitsPicked[])
 int getPickCountNeededForFourSuits(bool verbose)
 {
     int suitsPickedMask = 0;
-    const int allSuitsMask = 0b1111; // All suits picked when mask is 1111
+    constexpr int allSuitsMask = 0b1111; // All suits picked when mask is 1111
     int pickCount = 0;
 
     thread_local std::mt19937 generator(std::random_device{}());
-    std::uniform_int_distribution<int> distribution(0, 3);
+    std::uniform_int_distribution<> distribution(0, 3);
 
     while (suitsPickedMask != allSuitsMask)
     {
-        int suit = distribution(generator);
-        int suitBit = 1 << suit;
+        const int suit = distribution(generator);
+        const int suitBit = 1 << suit;
 
         if (!(suitsPickedMask & suitBit))
         {
