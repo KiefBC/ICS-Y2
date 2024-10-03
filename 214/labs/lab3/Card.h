@@ -58,7 +58,7 @@ namespace Constants
 int pickRandomCard();
 Rank getRank(int);
 Suit getSuit(int);
-bool allArrayElementsAreTrue(bool array[]);
+bool allArrayElementsAreTrue(const bool array[]);
 int getPickCountNeededForFourSuits(bool);
 
 #endif // CARDS_H

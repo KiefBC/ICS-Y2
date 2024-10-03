@@ -29,11 +29,11 @@ Suit getSuit(int cardIndex)
 // - param 2: ? do we need any other parameters here to make this work? You decide.
 // - return: a bool : true if ALL the elements in param 1 are true, false otherwise.
 // allArrayElementsAreTrue();
-bool allArrayElementsAreTrue(bool array[])
+bool allArrayElementsAreTrue(const bool suitsPicked[])
 {
-    for (int i = 0; i < Constants::CARD_COUNT; i++)
+    for (int i = 0; i < Constants::NUM_SUITS; i++)
     {
-        if (!array[i])
+        if (!suitsPicked[i])
         {
             return false;
         }
@@ -52,34 +52,33 @@ bool allArrayElementsAreTrue(bool array[])
 // If verbose is true, generate output cards picked & the pick count.
 // - return: an int representing the number of card picks it takes to cover 4 suits.
 // getPickCountNeededForFourSuits();
-int getPickCountNeededForFourSuits(const bool verbose)
+int getPickCountNeededForFourSuits(bool verbose)
 {
-    // create an array of bools to represent the suits that have been picked
-    bool suitsPicked[Constants::CARD_COUNT];
-    for (int i = 0; i < Constants::CARD_COUNT; i++)
-    {
-        suitsPicked[i] = false;
-    }
-
+    bool suitsPicked[Constants::NUM_SUITS] = {false, false, false, false};
     int pickCount = 0;
+
     while (!allArrayElementsAreTrue(suitsPicked))
     {
-        int card = pickRandomCard();
-        if (!suitsPicked[card])
-        {
-            suitsPicked[card] = true;
-            pickCount++;
+        int cardIndex = pickRandomCard();
+        Suit suit = getSuit(cardIndex);
 
-            // if verbose is true, print the card picked & the pick count
+        if (!suitsPicked[static_cast<int>(suit)])
+        {
+            suitsPicked[static_cast<int>(suit)] = true;
+
             if (verbose)
             {
-                std::cout << "\nCard Index: " << card << std::endl;
-                Rank rank = getRank(card);
-                std::cout << "Rank: " << Constants::RANKS[static_cast<int>(rank)] << std::endl;
-                Suit suit = getSuit(card);
-                std::cout << "Suit: " << Constants::SUITS[static_cast<int>(suit)] << std::endl;
+                std::cout << "Picked card: " << Constants::RANKS[static_cast<int>(getRank(cardIndex))] << " of " << Constants::SUITS[static_cast<int>(suit)] << std::endl;
             }
         }
+
+        pickCount++;
     }
+
+    if (verbose)
+    {
+        std::cout << "Picks needed to get all suits: " << pickCount << std::endl;
+    }
+
     return pickCount;
 }

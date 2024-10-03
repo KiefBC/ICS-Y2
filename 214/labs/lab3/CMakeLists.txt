@@ -9,4 +9,6 @@ add_executable(lab3
         Card.cpp
         Card.h
         main.h
+        main.cpp
+        main.cpp
         main.cpp)
