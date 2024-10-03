@@ -13,7 +13,7 @@ int main()
 
     int totalCardsDrawn = 0;
     int totalTrials = 0;
-    int loopSize = 10000000;
+    int loopSize = 100000000;
 
     bool verbose = false;
     for (int i = 0; i < loopSize; i++)
@@ -30,7 +30,7 @@ int main()
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-    std::cout << "Time taken for simulation: " << duration.count() << " milliseconds" << std::endl;
+    std::cout << "Time taken for simulation: " << duration.count() / 60000 << " minutes " << (duration.count() % 60000) / 1000 << " seconds" << std::endl;
 
     return 0;
 }
