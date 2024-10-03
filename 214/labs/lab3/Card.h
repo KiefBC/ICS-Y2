@@ -5,68 +5,60 @@
 #ifndef CARDS_H
 #define CARDS_H
 
-#include <string>
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
 #include <random>
 
-// Enums and Constants (as previously defined)
-enum class Suit {
-    Hearts,
-    Diamonds,
-    Clubs,
-    Spades,
-    count
+// Card Suits and Ranks
+enum class Suit
+{
+    CLUBS,
+    DIAMONDS,
+    HEARTS,
+    SPADES,
+    count,
 };
 
-enum class Rank {
-    Two,
-    Three,
-    Four,
-    Five,
-    Six,
-    Seven,
-    Eight,
-    Nine,
-    Ten,
-    Jack,
-    Queen,
-    King,
-    Ace,
-    count
+enum class Rank
+{
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    TEN,
+    JACK,
+    QUEEN,
+    KING,
+    ACE,
+    count,
 };
 
-namespace Constants {
-    const int CARD_COUNT = static_cast<int>(Suit::count) * static_cast<int>(Rank::count);
-    const int NUM_SUITS = static_cast<int>(Suit::count);
-    const int NUM_RANKS = static_cast<int>(Rank::count);
-//    constexpr int CARD_COUNT{ static_cast<int>(Suit::count) * static_cast<int>(Rank::count) };
-    const std::string SUITS[] { "Hearts", "Diamonds", "Clubs", "Spades" };
-    const std::string RANKS[] { "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
-                                "Ten", "Jack", "Queen", "King", "Ace" };
-}
+namespace Constants
+{
+    constexpr int CARD_COUNT{static_cast<int>(Rank::count) * static_cast<int>(Suit::count)}; // the # of cards in a deck
+    constexpr int NUM_RANKS{static_cast<int>(Rank::count)}; // the # of ranks in a deck
+    constexpr int NUM_SUITS{static_cast<int>(Suit::count)}; // the # of suits in a deck
 
-// Shuffles the deck
-void shuffleDeck(int deck[], int size);
+    /*
+     * Potentially both of these work, but I'm not sure which is better
+     */
+    // const std::string SUITS[]{"CLUBS", "DIAMONDS", "HEARTS", "SPADES"}; // initialize & match with enums
+    // const std::string RANKS[]{
+    //     "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN", "JACK", "QUEEN", "KING", "ACE"
+    // };
+    constexpr const char* SUITS[]{"CLUBS", "DIAMONDS", "HEARTS", "SPADES"};
+    constexpr const char* RANKS[]{
+        "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN", "JACK", "QUEEN", "KING", "ACE"
+    };
+};
 
-// Calculates the number of picks needed to get all four suits without replacement
-int getPickCountNeededForFourSuitsNoReplacement(bool verbose = true);
-
-// Picks a random card from the deck (represented by an int between 0-51)
 int pickRandomCard();
-
-// Gets the rank of a specific card index
-Rank getRank(int cardIndex);
-
-// Gets the suit of a specific card index
-Suit getSuit(int cardIndex);
-
-// Checks if all elements in a boolean array are true
-bool allArrayElementsAreTrue(const bool arr[], int size);
-
-// Calculates the number of picks needed to get all four suits
-int getPickCountNeededForFourSuits(bool verbose = true);
+Rank getRank(int);
+Suit getSuit(int);
+bool allArrayElementsAreTrue(bool array[]);
+int getPickCountNeededForFourSuits(bool);
 
 #endif // CARDS_H

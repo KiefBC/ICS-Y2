@@ -3,28 +3,22 @@
 //
 #include "Card.h"
 
-int main() {
-    // Seed the random number generator
-    srand(static_cast<unsigned int>(time(0)));
+int main()
+{
+    srand(time(0));
 
-    // Variables to keep track of total cards drawn and total trials
-    long long totalCardsDrawn = 0;
-    long long totalTrials = 0;
-    int loopSize = 10000000;
+    int card = pickRandomCard();
+    std::cout << "Card Index: " << card << std::endl;
 
-    // Loop for the specified number of trials
-    for (int i = 0; i < loopSize; ++i) {
-        int picksNeeded = getPickCountNeededForFourSuitsNoReplacement(false); // Set verbose to false
-        totalCardsDrawn += picksNeeded;
-        ++totalTrials;
-    }
+    Rank rank = getRank(card);
+    std::cout << "Rank: " << Constants::RANKS[static_cast<int>(rank)] << std::endl;
 
-    // Calculate the average number of picks needed
-    double averagePicks = static_cast<double>(totalCardsDrawn) / totalTrials;
+    Suit suit = getSuit(card);
+    std::cout << "Suit: " << Constants::SUITS[static_cast<int>(suit)] << std::endl;
 
-    // Output the result
-    std::cout << "After " << totalTrials << " trials (without replacement), the average number of picks needed to get all four suits is: "
-              << averagePicks << std::endl;
+    const bool verbose = false;
+    int pickCount = getPickCountNeededForFourSuits(verbose);
+    std::cout << "Pick Count: " << pickCount << std::endl;
 
     return 0;
 }
