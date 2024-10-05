@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Hello World</title>
+    <link rel="stylesheet" href="styles.css"/>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
@@ -15,45 +16,64 @@
 <script type="text/babel">
 
     const favoriteMovies = [
-        {id: 0, title: "The Dark Knight", genre: "Action", url: "https://www.imdb.com/title/tt0468569/"},
-        {id: 1, title: "The Godfather", genre: "Crime", url: "https://www.imdb.com/title/tt0068646/"},
-        {id: 2, title: "The Lord of the Rings: The Return of the King", genre: "Action", url: "https://www.imdb.com/title/tt0167261/"},
+        {
+            id: 0,
+            title: "The Dark Knight",
+            genre: "Action",
+            url: "https://www.imdb.com/title/tt0468569/"},
+        {
+            id: 1,
+            title: "The Godfather",
+            genre: "Crime",
+            url: "https://www.imdb.com/title/tt0068646/"},
+        {
+            id: 2,
+            title: "The Lord of the Rings: The Return of the King",
+            genre: "Action",
+            url: "https://www.imdb.com/title/tt0167261/"
+        },
     ];
 
     const Header = () => {
         return (
             <>
-                <h1>ICS 211 - Lab 3!</h1>
-                <h3>Made by Kiefer with React</h3>
+                <div id={"header"}>
+                    <div id={"header-title"}>
+                        <h1>ICS 211 - Lab 3!</h1>
+                    </div>
+                    <div id={"header-subtitle"}>
+                        <h3>Made by Kiefer with React</h3>
+                    </div>
+                </div>
             </>
         )
     };
 
-    const FavoriteMovie = () => {
+    const FavoriteMovie = ({title, genre, url}) => {
         return (
-            <FavoriteItemList favoriteMovies={favoriteMovies}/>
+            <li>
+                {title} ({genre}): <a href={url}>{url}</a>
+            </li>
         )
     }
 
-    const FavoriteItemList = ({favoriteMovies}) => {
+    const FavoriteMovieList = ({favoriteMovies}) => {
         return (
-            <div>
+            <div id={"favorite-movies"}>
                 <ol>
-                    {favoriteMovies.map(movie =>
-                        <li key={movie.id}>
-                            {movie.title} ({movie.genre}): <a href={movie.url}>{movie.url}</a>
-                        </li>
-                    )}
+                    {favoriteMovies.map(movie => (
+                        <FavoriteMovie key={movie.id} title={movie.title} genre={movie.genre} url={movie.url}/>
+                    ))}
                 </ol>
             </div>
         )
     }
 
-    const MyApp = () => {
+    const App = () => {
         return (
             <>
                 <Header/>
-                <FavoriteMovie/>
+                <FavoriteMovieList favoriteMovies={favoriteMovies}/>
             </>
         );
     }
@@ -62,7 +82,7 @@
     const root = ReactDOM.createRoot(container);
     root.render(
         <>
-            <MyApp/>
+            <App/>
         </>
     );
 
