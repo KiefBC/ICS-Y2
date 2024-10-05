@@ -1,0 +1,13 @@
+baseURL: https://example.org/
+languageCode: en-us
+title: I love hotdogs
+theme: Mainroad
+params:
+  subtitle: ICS 211 Lab 4 Hugo Site
+  copyright: Kiefer Hay
+  sidebar:
+    home: right
+    list: left
+    widgets:
+      - taglist
+      - recent
