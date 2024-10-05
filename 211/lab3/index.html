@@ -1,13 +1,71 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+
+    const favoriteMovies = [
+        {id: 0, title: "The Dark Knight", genre: "Action", url: "https://www.imdb.com/title/tt0468569/"},
+        {id: 1, title: "The Godfather", genre: "Crime", url: "https://www.imdb.com/title/tt0068646/"},
+        {id: 2, title: "The Lord of the Rings: The Return of the King", genre: "Action", url: "https://www.imdb.com/title/tt0167261/"},
+    ];
+
+    const Header = () => {
+        return (
+            <>
+                <h1>ICS 211 - Lab 3!</h1>
+                <h3>Made by Kiefer with React</h3>
+            </>
+        )
+    };
+
+    const FavoriteMovie = () => {
+        return (
+            <FavoriteItemList favoriteMovies={favoriteMovies}/>
+        )
+    }
+
+    const FavoriteItemList = ({favoriteMovies}) => {
+        return (
+            <div>
+                <ol>
+                    {favoriteMovies.map(movie =>
+                        <li key={movie.id}>
+                            {movie.title} ({movie.genre}): <a href={movie.url}>{movie.url}</a>
+                        </li>
+                    )}
+                </ol>
+            </div>
+        )
+    }
+
+    const MyApp = () => {
+        return (
+            <>
+                <Header/>
+                <FavoriteMovie/>
+            </>
+        );
+    }
+
+    const container = document.getElementById('root');
+    const root = ReactDOM.createRoot(container);
+    root.render(
+        <>
+            <MyApp/>
+        </>
+    );
+
+</script>
+</body>
 </html>
