@@ -1,6 +1,7 @@
 #include "Credit.h"
+#include <iostream>
 
-int main() {
+void testGetSumOfDigits() {
   int input;
 
   std::cout << "Enter a Number: ";
@@ -8,25 +9,59 @@ int main() {
 
   int result = getSumOfDigits(input);
   std::cout << "Total Sum of Digits: " << result << std::endl;
+}
 
-  std::string input2;
+void testStartsWith() {
+  std::string userInput;
+  std::string userPrefix;
+
   std::cout << "Enter a Number: ";
-  std::cin >> input2;
+  std::cin >> userInput;
 
-  std::string prefix;
   std::cout << "Enter a Prefix: ";
-  std::cin >>  prefix;
+  std::cin >> userPrefix;
 
-  bool result2 = startsWith(input2, prefix);
+  bool result = startsWith(userInput, userPrefix);
+  std::cout << "Does the number start with the Prefix? "
+            << (result ? "True" : "False") << std::endl;
+}
 
-  std::cout << "The Bool Result is: " << (result2 ? "True" : "False") << std::endl;
-  
-  std::cout << "Testing the Prefix... ";
-  if (hasValidPrefix(input2)) {
+void testHasValidPrefix() {
+  std::string userInput;
+
+  std::cout << "Enter a Prefix: ";
+  std::cin >> userInput;
+
+  if (hasValidPrefix(userInput)) {
     std::cout << "True" << std::endl;
   } else {
     std::cout << "False" << std::endl;
   }
+}
+
+int main() {
+  std::string userInput;
+
+  std::cout << "Do you want to test getSumOfDigits()? ";
+  std::cin >> userInput;
+
+  if (userInput == "yes" || userInput == "y") {
+    testGetSumOfDigits();
+  }
+
+  std::cout << "Do you want to test startsWith()? ";
+  std::cin >> userInput;
+
+  if (userInput == "yes" || userInput == "y") {
+    testStartsWith();
+  }
+
+  std::cout << "Do you want to test hasValidPrefix()? ";
+  std::cin >> userInput;
+
+  if (userInput == "yes" || userInput == "y") {
+    testStartsWith();
+  }
 
   return 0;
-} 
+}

@@ -22,7 +22,8 @@ bool startsWith(const std::string cardNumber, const std::string prefix) {
 }
 
 bool hasValidPrefix(const std::string& cardNumber) {
-  std::string substr = cardNumber.substr(Constants::START_INDEX, Constants::END_INDEX);
+  // We only need the first digit of the cardNumber
+  const std::string substr = cardNumber.substr(Constants::START_INDEX, Constants::END_INDEX);
   
   for (const auto prefix : Constants::cardPrefix) {
     if (substr == prefix) {
