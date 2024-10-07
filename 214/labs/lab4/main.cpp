@@ -1,31 +1,32 @@
-#include <iostream>
+#include "Credit.h"
 
 int main() {
-  int cardNumber, tempCardNumber, evenPositionSum = 0, oddPositionSum = 0, positionCounter = 0, currentDigit, totalSum = 0;
+  int input;
+
+  std::cout << "Enter a Number: ";
+  std::cin >> input;
+
+  int result = getSumOfDigits(input);
+  std::cout << "Total Sum of Digits: " << result << std::endl;
+
+  std::string input2;
+  std::cout << "Enter a Number: ";
+  std::cin >> input2;
+
+  std::string prefix;
+  std::cout << "Enter a Prefix: ";
+  std::cin >>  prefix;
+
+  bool result2 = startsWith(input2, prefix);
+
+  std::cout << "The Bool Result is: " << (result2 ? "True" : "False") << std::endl;
   
-  std::cout << "Enter a card number: ";
-  std::cin >> cardNumber;
-
-  while (cardNumber < 1) {
-    std::cout << "Invalid card number. Please enter a number between 1 and 52: ";
-    std::cin >> cardNumber;
-  }
- 
-  tempCardNumber = cardNumber;
-
-  while (tempCardNumber > 0) {
-    cardValue = tempCardNumber % 10;
-
-    if (positionCounter % 2 == 0) {
-      currentDigit *= 2;
-      if (currentDigit > 9) {
-        currentDigit = (currentDigit / 10) + (currentDigit % 10);
-      }
-    }
-    sum += cardValue;
-    tempCardNumber /= 10;
+  std::cout << "Testing the Prefix... ";
+  if (hasValidPrefix(input2)) {
+    std::cout << "True" << std::endl;
+  } else {
+    std::cout << "False" << std::endl;
   }
 
-  std::cout << "The sum of the digits in " << cardNumber << " is " << sum << std::endl;
-
-}
+  return 0;
+} 
