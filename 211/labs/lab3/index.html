@@ -62,7 +62,7 @@
             <div id={"favorite-movies"}>
                 <ol>
                     {favoriteMovies.map(movie => (
-                        <FavoriteMovie key={movie.id} title={movie.title} genre={movie.genre} url={movie.url}/>
+                      <FavoriteMovie key={movie.id} {...movie}/>
                     ))}
                 </ol>
             </div>
