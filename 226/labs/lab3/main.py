@@ -52,7 +52,6 @@ def main():
                 print("No treasure at this location.")
 
             # Check if all treasures have been found
-            # TODO: Not working yet... I don't think
             if not any(cell.isdigit() for row in board.grid for cell in row if cell != "-"):
                 print("\nAll treasures have been found!")
                 print(player)
