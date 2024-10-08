@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Goblins on I love hotdogs</title>
+    <link>https://example.org/tags/goblins/</link>
+    <description>Recent content in Goblins on I love hotdogs</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 07 Oct 2024 14:37:59 -0700</lastBuildDate>
+    <atom:link href="https://example.org/tags/goblins/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My Resume</title>
+      <link>https://example.org/posts/my-resume/</link>
+      <pubDate>Mon, 07 Oct 2024 14:37:59 -0700</pubDate>
+      <guid>https://example.org/posts/my-resume/</guid>
+      <description>&lt;h1 id=&#34;chapter-2&#34;&gt;Chapter 2&lt;/h1&gt;&#xA;&lt;p&gt;Here is my &lt;strong&gt;Resume&lt;/strong&gt;: &lt;a href=&#34;https://example.org/ics-211-lab-4-hugo.pdf&#34;&gt;My Resume&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://example.org/dancing-frog.gif&#34; alt=&#34;Dancing Frog&#34;&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

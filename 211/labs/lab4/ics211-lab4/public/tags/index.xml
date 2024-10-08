@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on I love hotdogs</title>
+    <link>https://example.org/tags/</link>
+    <description>Recent content in Tags on I love hotdogs</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 07 Oct 2024 14:37:59 -0700</lastBuildDate>
+    <atom:link href="https://example.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Goblins</title>
+      <link>https://example.org/tags/goblins/</link>
+      <pubDate>Mon, 07 Oct 2024 14:37:59 -0700</pubDate>
+      <guid>https://example.org/tags/goblins/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Shamans</title>
+      <link>https://example.org/tags/shamans/</link>
+      <pubDate>Mon, 07 Oct 2024 14:37:59 -0700</pubDate>
+      <guid>https://example.org/tags/shamans/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Warcraft</title>
+      <link>https://example.org/tags/warcraft/</link>
+      <pubDate>Mon, 07 Oct 2024 14:37:59 -0700</pubDate>
+      <guid>https://example.org/tags/warcraft/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>World</title>
+      <link>https://example.org/tags/world/</link>
+      <pubDate>Mon, 07 Oct 2024 14:37:59 -0700</pubDate>
+      <guid>https://example.org/tags/world/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camosun</title>
+      <link>https://example.org/tags/camosun/</link>
+      <pubDate>Fri, 04 Oct 2024 20:54:07 -0700</pubDate>
+      <guid>https://example.org/tags/camosun/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hugo</title>
+      <link>https://example.org/tags/hugo/</link>
+      <pubDate>Fri, 04 Oct 2024 20:54:07 -0700</pubDate>
+      <guid>https://example.org/tags/hugo/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Ics 211</title>
+      <link>https://example.org/tags/ics-211/</link>
+      <pubDate>Fri, 04 Oct 2024 20:54:07 -0700</pubDate>
+      <guid>https://example.org/tags/ics-211/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Learning</title>
+      <link>https://example.org/tags/learning/</link>
+      <pubDate>Fri, 04 Oct 2024 20:54:07 -0700</pubDate>
+      <guid>https://example.org/tags/learning/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

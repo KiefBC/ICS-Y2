@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ics 211 on I love hotdogs</title>
+    <link>https://example.org/tags/ics-211/</link>
+    <description>Recent content in Ics 211 on I love hotdogs</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 04 Oct 2024 20:54:07 -0700</lastBuildDate>
+    <atom:link href="https://example.org/tags/ics-211/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My First Post</title>
+      <link>https://example.org/posts/my-first-post/</link>
+      <pubDate>Fri, 04 Oct 2024 20:54:07 -0700</pubDate>
+      <guid>https://example.org/posts/my-first-post/</guid>
+      <description>&lt;!-- raw HTML omitted --&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#chapter-1&#34;&gt;Chapter 1&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;h2 id=&#34;chapter-1&#34;&gt;Chapter 1&lt;/h2&gt;&#xA;&lt;p&gt;There once lived someone who could not eat hotdogs.&#xA;Their life was a &lt;strong&gt;wreck&lt;/strong&gt; and nothing could &lt;em&gt;satisy&lt;/em&gt; them.&#xA;It was not until he met the hotdog queen that he felt purpose.&lt;/p&gt;&#xA;&lt;p&gt;The end.&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://example.org/dancing-ferris.gif&#34; alt=&#34;Jerris the Crab&#34;&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
