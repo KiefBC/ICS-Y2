@@ -1,66 +1,41 @@
 #include "Credit.h"
-#include <iostream>
-
-void testGetSumOfDigits() {
-  int input;
-
-  std::cout << "Enter a Number: ";
-  std::cin >> input;
-
-  int result = getSumOfDigits(input);
-  std::cout << "Total Sum of Digits: " << result << std::endl;
-}
-
-void testStartsWith() {
-  std::string userInput;
-  std::string userPrefix;
-
-  std::cout << "Enter a Number: ";
-  std::cin >> userInput;
-
-  std::cout << "Enter a Prefix: ";
-  std::cin >> userPrefix;
-
-  bool result = startsWith(userInput, userPrefix);
-  std::cout << "Does the number start with the Prefix? "
-            << (result ? "True" : "False") << std::endl;
-}
-
-void testHasValidPrefix() {
-  std::string userInput;
-
-  std::cout << "Enter a Prefix: ";
-  std::cin >> userInput;
-
-  if (hasValidPrefix(userInput)) {
-    std::cout << "True" << std::endl;
-  } else {
-    std::cout << "False" << std::endl;
-  }
-}
+#include "test.h"
 
 int main() {
   std::string userInput;
+  int validSum = Constants::ZERO;
+  int invalidSum = Constants::ZERO;
 
-  std::cout << "Do you want to test getSumOfDigits()? ";
+  std::cout << "Are we Testing? ";
   std::cin >> userInput;
+  std::cout << "" << std::endl;
 
-  if (userInput == "yes" || userInput == "y") {
-    testGetSumOfDigits();
+  if (userInput == "y" || userInput == "yes") {
+    areWeTesting();
   }
 
-  std::cout << "Do you want to test startsWith()? ";
-  std::cin >> userInput;
+  std::string filename = "cards.txt";
+  std::ifstream fin;
+  fin.open(filename);
 
-  if (userInput == "yes" || userInput == "y") {
-    testStartsWith();
-  }
+  if (fin.is_open()) {
+    std::string ccNum;
 
-  std::cout << "Do you want to test hasValidPrefix()? ";
-  std::cin >> userInput;
+    while (fin >> ccNum) {
+      if (isCardValid(ccNum)) {
+        validSum++;
+      } else {
+        invalidSum++;
+      }
+    }
 
-  if (userInput == "yes" || userInput == "y") {
-    testStartsWith();
+    fin.close();
+
+    std::cout << "\nTotal Valid: " << validSum << std::endl;
+    std::cout << "Total Invalid: " << invalidSum << std::endl;
+  } else {
+    std::cout << "Failed to open file: \"" << filename << "\"" << std::endl;
+    exit(1);
   }
 
   return 0;

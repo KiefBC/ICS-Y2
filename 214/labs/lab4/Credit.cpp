@@ -1,48 +1,95 @@
 #include "Credit.h"
 
-/*
- * This takes in a given number and adds up all the digits.
- * It then returns the total as an <int> type
- */
 int getSumOfDigits(int number) {
-  int sum = 0;
+  int sum = Constants::ZERO;
 
-  while (number > 0) {
-    int lastDigit = number % 10;
+  while (number > Constants::ZERO) {
+    int lastDigit = number % Constants::TEN;
     sum += lastDigit;
-
-    std::cout << "lastDigit: " << lastDigit << std::endl;
-    number /= 10;
+    number /= Constants::TEN;
   }
 
   return sum;
 }
 
-/*
- * This checks if our cardNumber starts with the given Prefix
- */
 bool startsWith(const std::string cardNumber, const std::string prefix) {
-  // We are only interested in the first digit of the cardNumber
   const std::string substr =
-      cardNumber.substr(Constants::START_INDEX, Constants::END_INDEX);
+      cardNumber.substr(Constants::START_INDEX, prefix.length());
 
   return substr == prefix;
 }
 
-/*
- * This Checks if our cardNumber starts with one of the Literals in
- * Constants::cardPrefix
- */
 bool hasValidPrefix(const std::string &cardNumber) {
-  // We only need the first digit of the cardNumber
-  const std::string substr =
-      cardNumber.substr(Constants::START_INDEX, Constants::END_INDEX);
-
   for (const auto prefix : Constants::cardPrefix) {
-    if (substr == prefix) {
+    if (startsWith(cardNumber, prefix)) {
       return true;
     }
   }
 
+  return false;
+}
+
+int sumOfOddDigitsRightToLeft(const std::string cardNumber) {
+  int sum = Constants::ZERO;
+
+  for (int i = cardNumber.size() - 1; i >= 0; i--) {
+    int digitOnRight = cardNumber.size() - i;
+
+    if (digitOnRight % 2 != Constants::ZERO) {
+      int digit = cardNumber[i] - '0';
+      sum += digit;
+    }
+  }
+
+  return sum;
+}
+
+int sumOfEvenDigitsRightToLeft(const std::string cardNumber) {
+  int sum = 0;
+
+  for (int i = cardNumber.size() - 1; i >= 0; i--) {
+    int digitOnRight = cardNumber.size() - i;
+
+    if (digitOnRight % 2 == 0) {
+      // Fancy trick for converting String to Int
+      int digit = cardNumber[i] - '0';
+      int doubledValue = digit * Constants::TWO;
+
+      sum += getSumOfDigits(doubledValue);
+    }
+  }
+
+  return sum;
+}
+
+bool isCardValid(const std::string &cardNumber) {
+  const int CARD_SIZE = cardNumber.size();
+  bool valid = true;
+  const int cardNumberWidth = 20;
+  const int statusWidth = 10;
+
+  if (CARD_SIZE < 13 || CARD_SIZE > 16) {
+    valid = false;
+  }
+
+  if (!hasValidPrefix(cardNumber)) {
+    valid = false;
+  }
+
+  int totalSum = sumOfOddDigitsRightToLeft(cardNumber) +
+                 sumOfEvenDigitsRightToLeft(cardNumber);
+
+  if (totalSum % 10 != 0) {
+    valid = false;
+  }
+
+  if (valid) {
+    std::cout << std::setw(cardNumberWidth) << cardNumber
+              << std::setw(statusWidth) << "Valid:1" << std::endl;
+    return true;
+  }
+
+  std::cout << std::setw(cardNumberWidth) << cardNumber
+            << std::setw(statusWidth) << "Invalid:0" << std::endl;
   return false;
 }
