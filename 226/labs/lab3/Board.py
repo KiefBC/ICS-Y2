@@ -53,9 +53,16 @@ class Board:
         Marks the spot with a checkmark if it's an empty location.
         Returns the value of the treasure, or None if there is no treasure.
         """
+        # Check if the row or column is out of bounds
+        if not (0 <= row < self.board_size) or not (0 <= col < self.board_size):
+            raise IndexError("Row or column out of bounds")
+
+        if self.grid[row][col] in ["✗", "✓"]:
+            return None
+
         if self.grid[row][col] == "-":
             self.grid[row][col] = "✗"
-            return None  # No treasure at this location
+            return None
         elif self.grid[row][col].isdigit():
             value = int(self.grid[row][col])
             self.grid[row][col] = "✓"  # Mark the spot as picked
