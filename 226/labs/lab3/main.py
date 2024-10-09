@@ -1,6 +1,9 @@
 from Board import Board
 from Player import Player
 
+# dos2unix /home/kiefer/school/ICS-Y2/226/labs/lab3/226_lab3/bin/pytest
+# dos2unix 226_lab3/bin/activate
+
 
 def get_input(prompt, min_val=None, max_val=None):
     """
