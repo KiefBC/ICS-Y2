@@ -1,3 +1,4 @@
+# This workflow installs Python dependencies, runs tests, and lints with a single version of Python
 name: Test Python Game
 
 on:
@@ -28,12 +29,10 @@ jobs:
         pip install flake8 pytest pytest-assume
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Set up Docker
+    - name: Set up Docker (official script)
       run: |
-        sudo apt-get update
-        sudo apt-get install docker.io
-        sudo systemctl start docker
-        sudo systemctl enable docker
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sudo sh get-docker.sh
 
     - name: Build Docker container
       run: |
