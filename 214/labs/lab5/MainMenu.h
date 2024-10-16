@@ -45,4 +45,22 @@ Command getMenuCommand();
 // - param 2: a Command (enum) representing the action to be taken.
 void handleMenuInput(Employee*& pHead, Command command);
 
+// Display the list of employees
+void viewEmployees(Employee* pHead);
+
+// Create a new employee node
+Employee* createEmployee(const std::string&);
+
+// Add an employee to the list
+void addNewEmployee(Employee*& pHead, const std::string&);
+
+// Remove an employee from the list
+void removeEmployee(Employee*& pHead, int);
+
+// Get the node info for a target node in the list.
+// - param 1: a pointer to the front of the list of employees
+// - param 2: the id of the target node
+// - return: a NodeInfo struct containing the target node and its parent node.
+NodeInfo getNodeInfo(Employee* pHead, int);
+
 #endif
