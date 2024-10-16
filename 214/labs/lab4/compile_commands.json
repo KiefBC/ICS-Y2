@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/home/kiefer/Programming/ICS/214/labs/lab4",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/main.dir/main.cpp.o -c /home/kiefer/Programming/ICS/214/labs/lab4/main.cpp",
+  "file": "/home/kiefer/Programming/ICS/214/labs/lab4/main.cpp",
+  "output": "CMakeFiles/main.dir/main.cpp.o"
+},
+{
+  "directory": "/home/kiefer/Programming/ICS/214/labs/lab4",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/main.dir/Credit.cpp.o -c /home/kiefer/Programming/ICS/214/labs/lab4/Credit.cpp",
+  "file": "/home/kiefer/Programming/ICS/214/labs/lab4/Credit.cpp",
+  "output": "CMakeFiles/main.dir/Credit.cpp.o"
+},
+{
+  "directory": "/home/kiefer/Programming/ICS/214/labs/lab4",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/main.dir/test.cpp.o -c /home/kiefer/Programming/ICS/214/labs/lab4/test.cpp",
+  "file": "/home/kiefer/Programming/ICS/214/labs/lab4/test.cpp",
+  "output": "CMakeFiles/main.dir/test.cpp.o"
+}
+]

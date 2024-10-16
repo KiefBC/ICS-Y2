@@ -1,0 +1,3 @@
+/home/kiefer/Programming/ICS/214/labs/lab4/CMakeFiles/main.dir
+/home/kiefer/Programming/ICS/214/labs/lab4/CMakeFiles/edit_cache.dir
+/home/kiefer/Programming/ICS/214/labs/lab4/CMakeFiles/rebuild_cache.dir

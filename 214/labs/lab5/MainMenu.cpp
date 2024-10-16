@@ -1,113 +1,108 @@
 // See comments in MainMenu.h for general details on what each functin does.
 #include <iostream>
 #include <limits>
+
 #include "MainMenu.h"
 
-
 // clear any characters from the (keyboard) input buffer
-void ignoreLine()
-{
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+void ignoreLine() {
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-// read and return an int from the console.  Keep trying if invalid until an int is returned.
-int getIntFromUser()
-{
-    while (true)
-    {
-        int guess;
-        std::cin >> guess;
+// read and return an int from the console.  Keep trying if invalid until an int
+// is returned.
+int getIntFromUser() {
+  while (true) {
+    int guess;
+    std::cin >> guess;
 
-        if (std::cin.fail())
-        {
-            std::cin.clear();
-            ignoreLine();
-            std::cerr << "Invalid input. Input must be a valid int.  Please try again.\n";
-        }
-        else
-        {
-            ignoreLine();
-            return guess;
-        }
+    if (std::cin.fail()) {
+      std::cin.clear();
+      ignoreLine();
+      std::cerr
+          << "Invalid input. Input must be a valid int.  Please try again.\n";
+    } else {
+      ignoreLine();
+      return guess;
     }
+  }
 }
 
 // output the menu choices to the console.
-void displayMainMenu()
-{
-    std::cout << "\n";
-    std::cout << "--- MENU ---\n";
-    std::cout << "1) View Employees\n";
-    std::cout << "2) Add Employee\n";
-    std::cout << "3) Remove Employee\n";
-    std::cout << "0) Exit\n";
-    std::cout << "-------------\n";
-    std::cout << "Select:";
+void displayMainMenu() {
+  std::cout << "\n";
+  std::cout << "--- MENU ---\n";
+  std::cout << "1) View Employees\n";
+  std::cout << "2) Add Employee\n";
+  std::cout << "3) Remove Employee\n";
+  std::cout << "4) Remove All Employees\n";  // New option
+  std::cout << "0) Exit\n";
+  std::cout << "-------------\n";
+  std::cout << "Select: ";
 }
 
 // Attempt to read an int from the keyboard.
 // If there was a failure, clear the buffer and return -1.
-Command getMenuCommand()
-{
-    // read user input
-    int input{-1}; // default
-    std::cin >> input;
-    if (std::cin.fail())
-    {
-        std::cin.clear(); // clear the failure
-        input = -1; // indicate an error
-    }
-    ignoreLine(); // ignore any extra input
+Command getMenuCommand() {
+  int input{-1};  // default
+  std::cin >> input;
+  if (std::cin.fail()) {
+    std::cin.clear();  // clear the failure
+    input = -1;        // indicate an error
+  }
+  ignoreLine();  // ignore any extra input
 
-    Command command = Command::invalid; // default
-    // match input with specific commands
-    switch (input)
-    {
-    case 1: command = Command::viewEmployees;
-        break;
-    case 2: command = Command::addEmployee;
-        break;
-    case 3: command = Command::removeEmployee;
-        break;
-    case 0: command = Command::exit;
-        break;
-    }
-    return command;
+  Command command = Command::invalid;  // default
+  // match input with specific commands
+  switch (input) {
+    case 1:
+      command = Command::viewEmployees;
+      break;
+    case 2:
+      command = Command::addEmployee;
+      break;
+    case 3:
+      command = Command::removeEmployee;
+      break;
+    case 4:  // New case for removing all employees
+      command = Command::removeAllEmployees;
+      break;
+    case 0:
+      command = Command::exit;
+      break;
+  }
+  return command;
 }
 
 // This function is called when a user picks a selection from the menu.
 // It determines what action to take depending on the menuItemSelected,
 // and calls the appropriate function.
 // Returns true the selection was a request to exit menu, false otherwise.
-void handleMenuInput(Employee*& pHead, Command command)
-{
-    switch (command)
-    {
+void handleMenuInput(Employee*& pHead, Command command) {
+  switch (command) {
     case Command::viewEmployees:
-        std::cout << ">> View Employees:\n";
-        viewEmployees(pHead);
-        break;
-    case Command::addEmployee:
-        {
-            std::cout << ">> Add Employee:\n";
-            std::cout << "Enter name:";
-            std::string name;
-            std::getline(std::cin, name);
-            addNewEmployee(pHead, name);
-        }
-        break;
+      std::cout << ">> View Employees:\n";
+      viewEmployees(pHead);
+      break;
+    case Command::addEmployee: {
+      std::cout << ">> Add Employee:\n";
+      std::cout << "Enter name:";
+      std::string name;
+      std::getline(std::cin, name);
+      addNewEmployee(pHead, name);
+    } break;
     case Command::removeEmployee:
-        std::cout << ">> Remove Employee:\n";
-        std::cout << "Enter id:";
-        removeEmployee(pHead, getIntFromUser());
-        break;
+      std::cout << ">> Remove Employee:\n";
+      std::cout << "Enter id:";
+      removeEmployee(pHead, getIntFromUser());
+      break;
     case Command::exit:
-        std::cout << "Exiting\n";
-        break;
+      std::cout << "Exiting\n";
+      break;
     default:
-        std::cout << "Invalid input.\n";
-        break;
-    }
+      std::cout << "Invalid input.\n";
+      break;
+  }
 }
 
 // =============================================================================
@@ -129,23 +124,19 @@ void handleMenuInput(Employee*& pHead, Command command)
 //			 of the list of employees.
 // return: nothing
 // TODO ------------------------------------------------------------------------
-//viewEmployees(Employee* pHead);
-void viewEmployees(Employee* pHead)
-{
-    if (pHead == nullptr)
-    {
-        std::cout << "Empty List" << std::endl;
-        return;
-    }
+// viewEmployees(Employee* pHead);
+void viewEmployees(Employee* pHead) {
+  if (pHead == nullptr) {
+    std::cout << "Empty List" << std::endl;
+    return;
+  }
 
-    Employee* pCurrent = pHead;
-    while (pCurrent != nullptr)
-    {
-        std::cout << pCurrent->id << " " << pCurrent->name << std::endl;
-        pCurrent = pCurrent->pNext;
-    }
+  Employee* pCurrent = pHead;
+  while (pCurrent != nullptr) {
+    std::cout << pCurrent->id << " " << pCurrent->name << std::endl;
+    pCurrent = pCurrent->pNext;
+  }
 }
-
 
 // Create a new employee struct on the heap.
 // Use a static local variable to generate unique employee id's with (initialize
@@ -158,19 +149,17 @@ void viewEmployees(Employee* pHead)
 // - param 1: a string - the employee's name.
 // - return: a pointer to the dynamically allocated Employee struct
 // TODO ------------------------------------------------------------------------
-//createEmployee();
-Employee* createEmployee(const std::string& employeeName)
-{
-    static int uniqueID = 0;
-    Employee* pEmployee = new Employee;
+// createEmployee();
+Employee* createEmployee(const std::string& employeeName) {
+  static int uniqueID = 0;
+  Employee* pEmployee = new Employee;
 
-    pEmployee->id = uniqueID++;
-    pEmployee->name = employeeName;
-    pEmployee->pNext = nullptr;
+  pEmployee->id = uniqueID++;
+  pEmployee->name = employeeName;
+  pEmployee->pNext = nullptr;
 
-    return pEmployee;
+  return pEmployee;
 }
-
 
 // Create a new employee node, then add it to the list
 // Use createEmployee() for node creation.
@@ -181,14 +170,12 @@ Employee* createEmployee(const std::string& employeeName)
 // - param 2: a string - the employee's name.
 // - return: nothing
 // TODO ------------------------------------------------------------------------
-//addNewEmployee(Employee*& pHead);
-void addNewEmployee(Employee*& pHead, const std::string& employeeName)
-{
-    Employee* pEmployee = createEmployee(employeeName);
-    pEmployee->pNext = pHead;
-    pHead = pEmployee;
+// addNewEmployee(Employee*& pHead);
+void addNewEmployee(Employee*& pHead, const std::string& employeeName) {
+  Employee* pEmployee = createEmployee(employeeName);
+  pEmployee->pNext = pHead;
+  pHead = pEmployee;
 }
-
 
 // Search through the list for a node with the given id.
 // Tip: Use a pointer to iterate through the linked list and another
@@ -202,27 +189,23 @@ void addNewEmployee(Employee*& pHead, const std::string& employeeName)
 //           If node is first in the list, NodeInfo.pParent should be nullptr.
 // TODO ------------------------------------------------------------------------
 // getNodeInfo(Employee* pHead);
-NodeInfo getNodeInfo(Employee* pHead, const int id)
-{
-    NodeInfo nodeInfo{nullptr, nullptr};
-    Employee* pCurrent = pHead;
-    Employee* pParent = nullptr;
+NodeInfo getNodeInfo(Employee* pHead, const int id) {
+  NodeInfo nodeInfo{nullptr, nullptr};
+  Employee* pCurrent = pHead;
+  Employee* pParent = nullptr;
 
-    while (pCurrent != nullptr)
-    {
-        if (pCurrent->id == id)
-        {
-            nodeInfo.pNode = pCurrent;
-            nodeInfo.pParent = pParent;
-            return nodeInfo;
-        }
-        pParent = pCurrent;
-        pCurrent = pCurrent->pNext;
+  while (pCurrent != nullptr) {
+    if (pCurrent->id == id) {
+      nodeInfo.pNode = pCurrent;
+      nodeInfo.pParent = pParent;
+      return nodeInfo;
     }
+    pParent = pCurrent;
+    pCurrent = pCurrent->pNext;
+  }
 
-    return nodeInfo;
+  return nodeInfo;
 }
-
 
 // Removes an employee node with the given id from the list.
 // Try to find a node with the given id (use getNodeInfo()).
@@ -232,34 +215,31 @@ NodeInfo getNodeInfo(Employee* pHead, const int id)
 //			-Output "removed id:# \n" to the console
 //			-Deallocate the node (return it to the heap)
 //  3) otherwise the node was found and a parent exists
-//			-Set the parent's next pointer to the next pointer of the node we want to delete
-//			-Output a "removed id: #n" message to the console
-//			-Deallocate the node (return it to the heap).
-// - param 1: (given) a pointer to the front of the list of employees (passed by reference)
+//			-Set the parent's next pointer to the next pointer of
+//the
+// node we want to delete 			-Output a "removed id: #n" message to
+// the console 			-Deallocate the node (return it to the heap).
+// - param 1: (given) a pointer to the front of the list of employees (passed by
+// reference)
 // - param 2: an int (the id of the employee we're searching for).
 // - return: nothing
 // TODO ------------------------------------------------------------------------
-//removeEmployee(Employee*& pHead);
-void removeEmployee(Employee*& pHead, const int id)
-{
-    const NodeInfo nodeInfo = getNodeInfo(pHead, id);
+// removeEmployee(Employee*& pHead);
+void removeEmployee(Employee*& pHead, const int id) {
+  const NodeInfo nodeInfo = getNodeInfo(pHead, id);
 
-    if (nodeInfo.pNode == nullptr)
-    {
-        std::cout << "Error: employee id:" << id << " not found\n";
-        return;
-    }
+  if (nodeInfo.pNode == nullptr) {
+    std::cout << "Error: employee id:" << id << " not found\n";
+    return;
+  }
 
-    if (nodeInfo.pParent == nullptr)
-    {
-        pHead = nodeInfo.pNode->pNext;
-        std::cout << "removed id (first if block):" << id << std::endl;
-        // delete nodeInfo.pNode;
-    }
-    else
-    {
-        nodeInfo.pParent->pNext = nodeInfo.pNode->pNext;
-        std::cout << "removed id:" << id << std::endl;
-        // delete nodeInfo.pNode;
-    }
+  if (nodeInfo.pParent == nullptr) {
+    pHead = nodeInfo.pNode->pNext;
+    std::cout << "removed id (first if block):" << id << std::endl;
+    delete nodeInfo.pNode;
+  } else {
+    nodeInfo.pParent->pNext = nodeInfo.pNode->pNext;
+    std::cout << "removed id:" << id << std::endl;
+    delete nodeInfo.pNode;
+  }
 }
