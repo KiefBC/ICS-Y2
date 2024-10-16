@@ -1,3 +1,4 @@
+
 # This workflow installs Python dependencies, runs tests, and lints with a single version of Python
 name: Test Python Game
 
@@ -28,12 +29,36 @@ jobs:
         # Install flake8 and pytest, and check for requirements.txt if it exists
         pip install flake8 pytest pytest-assume
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Install Docker
+      run: |
+        sudo apt-get update
+        sudo apt-get install docker.io -y
+        sudo systemctl start docker
+        sudo systemctl enable docker
+
+    - name: Build Docker container
+      run: |
+        sudo docker build -t 226-server .
+
+    - name: Start Docker container
+      run: |
+        sudo docker run -d --name 226-server -p 12345:12345 226-server
+        sleep 10  # Wait for container to start
+
     - name: Lint with flake8
       run: |
         # Stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # Exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
     - name: Test with pytest
       run: |
         pytest --maxfail=5 --disable-warnings -v
+
+    - name: Stop and remove Docker container
+      if: always()
+      run: |
+        sudo docker stop 226-server
+        sudo docker rm 226-server
