@@ -29,11 +29,6 @@ jobs:
         pip install flake8 pytest pytest-assume
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Run the server
-      run: |
-        nohup python3 226/labs/lab4/main.py &   # Run the server in the background
-        sleep 10                               # Wait for the server to start
-
     - name: Lint with flake8
       run: |
         # Stop the build if there are Python syntax errors or undefined names
