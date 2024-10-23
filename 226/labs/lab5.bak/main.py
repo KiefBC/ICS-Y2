@@ -1,8 +1,6 @@
 import socket
 import struct
 import threading
-import traceback
-
 from Board import Board
 from Player import Player
 
@@ -14,16 +12,17 @@ BOARD_SIZE = 10
 TREASURE_AMT = 5
 MAX_CONNECTIONS = 2
 
+# Shared variables
 active_connections = 0
 lock = threading.Lock()
-players = {}
+players = {}  # To keep track of player scores
 
-def handle_client(client_socket, client_address, board, player_id):
+def handle_client(client_socket, client_address, player_id):
     global active_connections
     try:
         # Send player name to client
         with lock:
-            player_name = f"{'One' if active_connections == 1 else 'Two'}"
+            player_name = "One"
             name_length = struct.pack('!H', len(player_name))
             client_socket.sendall(name_length)
             client_socket.sendall(player_name.encode('utf-8'))
@@ -31,39 +30,23 @@ def handle_client(client_socket, client_address, board, player_id):
 
         while True:
             # Receive row and column as packed unsigned shorts
-            move_data = client_socket.recv(1)
-            if len(move_data) < 1:
+            move_data = client_socket.recv(4)
+            if len(move_data) < 4:
                 print(f"Client {client_address} disconnected.")
                 break
-            segment = struct.unpack('B', move_data)[0]
-            row = (segment >> 4)
-            col = segment & 0xF
-
-            # move_data = client_socket.recv(4)
-            # if len(move_data) < 4:
-            #     print(f"Client {client_address} disconnected.")
-            #     break
-            # row, col = struct.unpack('!HH', move_data)
-
+            row, col = struct.unpack('!HH', move_data)
             print(f"Received move from {client_address} - Row: {row}, Col: {col}")
 
+            # Update the board and player's score
             with lock:
-                # pick the value in the row, col
-                treasure_value = board.pick(row, col)
-                if treasure_value is None:
-                    print(f"Player {player_id} picked an empty spot.")
-                else:
-                    print(f"Player {player_id} picked a treasure with value {treasure_value}.")
-
-
+                # Update score logic as per your game rules
                 current_score = players[player_id].get_score()
-                new_score = current_score + treasure_value if treasure_value is not None else 0
-                players[player_id].add_score(new_score)
+                new_score = current_score + 1  # Example increment
+                players[player_id].set_score(new_score)
 
                 # Get opponent's score
                 opponent_id = 1 if player_id == 2 else 2
                 opponent_score = players[opponent_id].get_score() if opponent_id in players else 0
-                print(board)
 
             # Send back the player's score and opponent's score
             reply = struct.pack('!HH', new_score, opponent_score)
@@ -71,7 +54,6 @@ def handle_client(client_socket, client_address, board, player_id):
 
     except Exception as e:
         print(f"Error handling client {client_address}: {e}")
-        print(traceback.format_exc())
     finally:
         client_socket.close()
         with lock:
@@ -81,10 +63,13 @@ def handle_client(client_socket, client_address, board, player_id):
 def main():
     global active_connections
 
+    # Initialize game board
     board = Board(BOARD_SIZE, TREASURE_AMT)
 
+    print("Creating game Board...")
     print(board)
 
+    # Set up the server socket
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind((HOST, PORT))

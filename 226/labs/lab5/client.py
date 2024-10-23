@@ -1,16 +1,14 @@
 import socket
 import struct
 
+import Board
+
+
 def send_player_name(sock, player_name):
     """Send the player's name length (packed) followed by the player name."""
     # First send the length of the player's name as an unsigned short (2 bytes)
-    name_length_data = sock.recv(2)
-    if len(name_length_data) < 2:
-        print("Failed to receive player name length.")
-        return
-    name_length = struct.unpack('!H', name_length_data)[0]
+    name_length = struct.pack('!H', len(player_name))
     sock.sendall(name_length)
-    # Then send the player name itself
     sock.sendall(player_name.encode('utf-8'))
 
 def main():
@@ -37,18 +35,22 @@ def main():
 
             while True:
                 try:
-                    # Prompt for row and column
                     row = int(input("Enter the row: "))
                     col = int(input("Enter the column: "))
-
-                    # Pack and send row and column
-                    move_data = struct.pack('!HH', row, col)
+                    segment = (row << 4) | col
+                    move_data = struct.pack('!B', segment)
                     sock.sendall(move_data)
 
-                    # Receive the response from the server
+                    # row = int(input("Enter the row: "))
+                    # col = int(input("Enter the column: "))
+                    #
+                    # # Pack and send row and column
+                    # move_data = struct.pack('!H', row, col)
+                    # sock.sendall(move_data)
+
                     response = sock.recv(4)
                     if len(response) < 4:
-                        print("Server closed connection.")
+                        print("Server closed the connection.")
                         break
 
                     # Unpack the server's response
@@ -62,5 +64,5 @@ def main():
     except ConnectionError as e:
         print(f"Connection failed: {e}")
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
