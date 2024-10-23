@@ -1,102 +1,156 @@
-#include <array>
-#include <iostream>
-#include <unordered_map>
+#include "main.h"
 
-int howManyTimes(const std::string, char);
-int howManyTimes(const char[], char);
-int largest(const std::array<int, 5>&);
-int largestIndex(const std::array<int, 5>&);
-char occursMost(const std::string&);
+int numOfTimes(const std::string& name, char repeatChar) {
+	int repeatCount = 0;
+
+	for (char currChar : name) {
+		if (currChar == repeatChar) {
+			repeatCount++;
+		}
+	}
+
+	return repeatCount;
+}
+
+int numOfTimes(char cString[], char repeatChar) {
+	int repeatCount = 0;
+
+	for (int i = 0; cString[i] != '\0'; i++) {
+		if (cString[i] == repeatChar) {
+			repeatCount++;
+		}
+	}
+
+	return repeatCount;
+}
+
+int largestNum(const int numArray[], const int size) {
+	int largest = numArray[0];
+
+	for (int i = 0; i < size; i++) {
+		if (numArray[i] > largest) {
+			largest = numArray[i];
+		}
+	}
+
+	return largest;
+}
+
+int indexLargest(const int numArray[], const int size) {
+	int largest = numArray[0];
+	int index = 0;
+
+	for (int i = 0; i < size; i++) {
+		if (numArray[i] > largest) {
+			largest = numArray[i];
+			index = i;
+		}
+	}
+
+	return index;
+}
+
+char returnRepeatChar(const std::string& string) {
+	char repeatChar = '\0';
+	int maxCount = 0;
+	std::unordered_map<char, int> map;
+
+	for (const auto& currChar : string) {
+		map[currChar]++;
+	}
+
+	for (const auto& curr : map) {
+		if (curr.second > maxCount) {
+			maxCount = curr.second;
+			repeatChar = curr.first;
+		}
+	}
+
+	return repeatChar;
+}
+
+char returnRepeatChar(const char cString[]) {
+	char repeatChar = '\0';
+	int maxCount = 0;
+	std::unordered_map<char, int> map;
+
+	for (int i = 0; cString[i] != '\0'; i++) {
+		map[cString[i]]++;
+	}
+
+	for (const auto& currChar : map) {
+		if (currChar.second > maxCount) {
+			maxCount = currChar.second;
+			repeatChar = currChar.first;
+		}
+	}
+
+	return repeatChar;
+}
+
+void vowelReplacer(std::string& string) {
+	for (auto& currChar : string) {
+		for (auto& vowel : Constants::VOWELS) {
+			if (currChar == vowel) {
+				currChar = '*';
+			}
+		}
+	}
+}
+
+Student* createStudent(int id, std::string& name) {
+	Student* student = new Student;
+	student->id = id;
+	student->name = name;
+
+	return student;
+}
+
+char* stringConcat(char cString[], char cString2[]) {
+	size_t length1 = strlen(cString);
+	size_t length2 = strlen(cString2);
+	size_t length = length1 + length2 + 1; // + 1 for the null terminator
+
+	char* pString = new char[length];
+
+	strcpy_s(pString, length, cString);
+	strcat_s(pString, length, cString2);
+
+	return pString;
+}
 
 int main() {
-  std::cout << "Testing our howManyTimes()...." << std::endl;
-  std::string message = "a New Nay";
-  int result = howManyTimes(message, 'a');
-  std::cout << "The character appears: " << result << " times!" << std::endl;
+	int repeatResult = numOfTimes(Constants::NAME, Constants::CHARACTER);
+	std::cout << "Repeat Char (std::string) " << Constants::CHARACTER << " repeated " << repeatResult << " times" << std::endl;
 
-  char cArray[5]{'a', 'a', 'a', 'b', 'b'};
-  int result2 = howManyTimes(cArray, 'a');
-  std::cout << "The character appears (C-Style): " << result2 << " times!"
-            << std::endl;
+	char cString[] = { "Kiefer Kyler Killer" };
+	int repeatResult2 = numOfTimes(Constants::CSTRING, Constants::CHARACTER);
+	std::cout << "Repeat Char (c string) " << Constants::CHARACTER << " repeated " << repeatResult2 << " times" << std::endl;
 
-  std::array<int, 5> intArray = {1, 2, 3, 5, 9};
-  int result3 = largest(intArray);
-  std::cout << "The largest num in the array is: " << result3 << std::endl;
+	
+	int largestNumResult = largestNum(Constants::ARRAYNUM, Constants::SIZE);
+	int indexResult = indexLargest(Constants::ARRAYNUM, Constants::SIZE);
+	std::cout << "Largest num is " << largestNumResult << std::endl;
+	std::cout << "Index of Largest num is " << indexResult << std::endl;
 
-  int result4 = largestIndex(intArray);
-  std::cout << "The largest num Index is: " << result4 << std::endl;
+	char resultChar = returnRepeatChar(Constants::NAME);
+	char resultChar2 = returnRepeatChar(Constants::CSTRING);
+	std::cout << "Repeated Character is " << resultChar << std::endl;
+	std::cout << "Repeated Character is (c string) " << resultChar2 << std::endl;
 
-  std::string longStr = "Hello my old friendly fellow";
-  char result5 = occursMost(longStr);
-  std::cout << "Char that occurs the most is: " << result5 << std::endl;
-}
+	std::string beforeVowels{ "Kiefer Kyler Killer" };
+	std::cout << "Before Vowel Replacement: " << beforeVowels << std::endl;
+	vowelReplacer(beforeVowels);
+	std::cout << "After Vowel Replacement: " << beforeVowels << std::endl;
 
-char occursMost(const std::string& str) {
-  std::unordered_map<char, int> characters;
-  char frequentChar = '\0';
-  int numOccurance = 0;
+	std::string studentName { "Kiefer Kyler Killer" };
+	Student* student = createStudent(1, studentName);
+	std::cout << "Student: " << student->name << " has the ID: " << student->id << std::endl;
+	delete student;
 
-  // Build the map
-  for (const char c : str) {
-    characters[c]++;
-  }
+	char* newString = stringConcat(Constants::CSTRING, Constants::CSTRING);
+	std::cout << "Concatted String: " << newString << std::endl;
+	delete newString;
 
-  for (const auto& c : characters) {
-    if (c.second > numOccurance) {
-      numOccurance = c.second;
-      frequentChar = c.first;
-    }
-  }
-
-  return frequentChar;
-}
-
-int largestIndex(const std::array<int, 5>& intArray) {
-  int largest = intArray[0];
-  int largestIndex = 0;
-
-  for (int i = 1; i < intArray.size(); i++) {
-    if (intArray[i] > largest) {
-      largest = intArray[i];
-      largestIndex = i;
-    }
-  }
-
-  return largestIndex;
-}
-
-int largest(const std::array<int, 5>& intArray) {
-  int largest = intArray[0];
-
-  for (int num : intArray) {
-    if (num > largest) {
-      largest = num;
-    }
-  }
-
-  return largest;
-}
-
-int howManyTimes(const std::string msg, char character) {
-  int charCount = 0;
-
-  for (char _char : msg) {
-    if (_char == character) {
-      charCount++;
-    }
-  }
-
-  return charCount;
-}
-
-int howManyTimes(const char cStringArray[], char character) {
-  int charCount = 0;
-
-  for (int i = 0; i < cStringArray[i] != '\0'; i++) {
-    if (cStringArray[i] == character) {
-      charCount++;
-    }
-  }
-
-  return charCount;
+	return 0;
 }
