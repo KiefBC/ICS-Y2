@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
 
 // The sample questions below are to give you some practice at working through
 // practical questions in preparation for the midterm. Often questions will
@@ -39,18 +40,18 @@
 //    see testQ1() below
 // -------------------------------------------------------------
 void swapByRef(char &charOne, char &charTwo) {
-  const char temp = charTwo;
-  charTwo = charOne;
-  charOne = temp;
+    const char temp = charTwo;
+    charTwo = charOne;
+    charOne = temp;
 }
 
 void testQ1() {
-  std::cout << "testQ1()----------\n";
-  char c1{'a'};
-  char c2{'b'};
-  swapByRef(c1, c2);
-  std::cout << "Expected: ba\n";
-  std::cout << "Result: " << c1 << c2 << '\n'; // output: ba
+    std::cout << "testQ1()----------\n";
+    char c1{'a'};
+    char c2{'b'};
+    swapByRef(c1, c2);
+    std::cout << "Expected: ba\n";
+    std::cout << "Result: " << c1 << c2 << '\n'; // output: ba
 }
 
 // Topics:
@@ -68,21 +69,20 @@ void testQ1() {
 // Use example:
 //   see testQ2() below
 // -------------------------------------------------------------
-void swapByAddress(char* pOne, char* pTwo)
-{
-  const char pTemp = *pOne;
-  *pOne = *pTwo;
-  *pTwo = pTemp;
+void swapByAddress(char *pOne, char *pTwo) {
+    const char pTemp = *pOne;
+    *pOne = *pTwo;
+    *pTwo = pTemp;
 }
 
 
 void testQ2() {
-  std::cout << "testQ2()----------\n";
-  char c1{'a'};
-  char c2{'b'};
-  swapByAddress(&c1, &c2);
-  std::cout << "Expected: ba\n";
-  std::cout << "Result: " << c1 << c2 << '\n';  // output: ba
+    std::cout << "testQ2()----------\n";
+    char c1{'a'};
+    char c2{'b'};
+    swapByAddress(&c1, &c2);
+    std::cout << "Expected: ba\n";
+    std::cout << "Result: " << c1 << c2 << '\n';  // output: ba
 }
 
 // Topics:
@@ -95,11 +95,11 @@ void testQ2() {
 // Use example:
 //   see testQ3() below
 // -------------------------------------------------------------
-void logMessage(const std::string& msg) { std::cout << msg << '\n'; }
+void logMessage(const std::string &msg) { std::cout << msg << '\n'; }
 
 void testQ3() {
-  std::cout << "testQ3()----------\n";
-  logMessage("testing 123");
+    std::cout << "testQ3()----------\n";
+    logMessage("testing 123");
 }
 
 // Topics:
@@ -119,23 +119,20 @@ void testQ3() {
 // Use example:
 //   see testQ4() below
 // -------------------------------------------------------------
-void capitalize(std::string& location)
-{
-  for (auto& smallChar : location)
-  {
-    if (smallChar > 'Z')
-    {
-      smallChar -= 32;
+void capitalize(std::string &location) {
+    for (auto &smallChar: location) {
+        if (smallChar > 'Z') {
+            smallChar -= 32;
+        }
     }
-  }
 }
 
 void testQ4() {
-  std::cout << "testQ4()----------\n";
-  std::string location = "Victoria, British Columbia";
-  capitalize(location);
-  std::cout << "Expected: VICTORIA, BRITISH COLUMBIA\n";
-  std::cout << "Result: " << location << '\n';	//  output: VICTORIA, BRITISH COLUMBIA
+    std::cout << "testQ4()----------\n";
+    std::string location = "Victoria, British Columbia";
+    capitalize(location);
+    std::cout << "Expected: VICTORIA, BRITISH COLUMBIA\n";
+    std::cout << "Result: " << location << '\n';    //  output: VICTORIA, BRITISH COLUMBIA
 }
 
 // Topics:
@@ -156,42 +153,37 @@ void testQ4() {
 // Use example:
 //   see testQ5() below
 // -------------------------------------------------------------
-struct ArrayStats
-{
-  int min;
-  int max;
+struct ArrayStats {
+    int min;
+    int max;
 } structResult;
 
-ArrayStats getArrayStats(const std::array<int, 6>& arrayNum)
-{
-  int min = 0;
-  int max = 0;
+ArrayStats getArrayStats(const std::array<int, 6> &arrayNum) {
+    int min = 0;
+    int max = 0;
 
-  for (int i = 0; i < arrayNum.size(); i++)
-  {
-    if (arrayNum[i] < arrayNum[min])
-    {
-      min = i;
+    for (int i = 0; i < arrayNum.size(); i++) {
+        if (arrayNum[i] < arrayNum[min]) {
+            min = i;
+        }
+
+        if (arrayNum[i] > arrayNum[max]) {
+            max = i;
+        }
     }
 
-    if (arrayNum[i] > arrayNum[max])
-    {
-      max = i;
-    }
-  }
+    structResult.min = min;
+    structResult.max = max;
 
-  structResult.min = min;
-  structResult.max = max;
-
-  return structResult;
+    return structResult;
 }
 
 void testQ5() {
-  std::cout << "testQ5()----------\n";
-  constexpr std::array<int, 6> intArr{33, 55, 11, 22, 99, 11};
-  const ArrayStats stats = getArrayStats(intArr);
-  std::cout << "Expected: min: 2, max: 4\n";
-  std::cout << "Result: min: " << stats.min << ", max: " << stats.max <<'\n';  //
+    std::cout << "testQ5()----------\n";
+    constexpr std::array<int, 6> intArr{33, 55, 11, 22, 99, 11};
+    const ArrayStats stats = getArrayStats(intArr);
+    std::cout << "Expected: min: 2, max: 4\n";
+    std::cout << "Result: min: " << stats.min << ", max: " << stats.max << '\n';  //
 }
 
 // Topics:
@@ -212,14 +204,24 @@ void testQ5() {
 // Use example:
 //   see testQ6() below
 // -------------------------------------------------------------
+void censorString(char *msg, std::vector<char> &censor) {
+    for (int i = 0; msg[i] != '\0'; i++) {
+        for (char letter: censor) {
+            if (msg[i] == letter) {
+                msg[i] = '*';
+            }
+        }
+    }
+}
 
 void testQ6() {
-  std::cout << "testQ6()----------\n";
+    std::cout << "testQ6()----------\n";
 
-  std::vector<char> blockedChars{'M', 'i'};
-  char location[]{"Mississippi"};
-  // censorString(location, blockedChars);
-  // std::cout << location << '\n';		//	output: **ss*ss*pp*
+    std::vector<char> blockedChars{'M', 'i'};
+    char location[]{"Mississippi"};
+    censorString(location, blockedChars);
+    std::cout << "Expected: **ss*ss*pp*\n";
+    std::cout << "Result: " << location << '\n';        //	output: **ss*ss*pp*
 }
 
 // Topics:
@@ -255,8 +257,41 @@ void testQ6() {
 // - [1 pt] Call createRandomPoints() and store the result in local variable.
 // - [1 pt] call printPoints to print the std::vector created earlier
 // -------------------------------------------------------------
+struct Points {
+    int x;
+    int y;
+};
 
-void testQ7() { std::cout << "testQ7()----------\n"; }
+std::vector<Points> createRandomPoints(int numPoints, int maxRan) {
+    std::vector<Points> vPoints;
+    srand(time(0));
+
+    for (int i = 0; i < numPoints; i++) {
+        Points points;
+        points.x = rand() % maxRan;
+        points.y = rand() % maxRan;
+
+        vPoints.push_back(points);
+    }
+
+    return vPoints;
+}
+
+void printPoints(std::vector<Points> &vPoints) {
+    for (const auto &vpoints: vPoints) {
+        std::cout << "Point[" << vpoints.x << ", " << vpoints.y << "]" << "\n";
+    }
+}
+
+void testQ7() {
+    std::cout << "testQ7()----------\n";
+
+    int maxRan{5};
+    int points{5};
+
+    std::vector<Points> vPoints = createRandomPoints(points, maxRan);
+    printPoints(vPoints);
+}
 
 // Topics:
 // - pass by address
@@ -280,23 +315,31 @@ void testQ7() { std::cout << "testQ7()----------\n"; }
 // use example:
 //   see test Q8 below
 // -------------------------------------------------------------
-//char *concatCStrings(const char msg1[], const char msg2[]) {
-//  const int len1 = strlen(msg1);
-//  const int len2 = strlen(msg1);
-//  return nullptr; // replace this return value as part of this question
-//}
+char *concatCStrings(const char msg1[], const char msg2[]) {
+    const size_t len1 = strlen(msg1);
+    const size_t len2 = strlen(msg1);
+    const size_t length = len1 + len2 + 1;
+
+    char *newString = new char[length];
+    strcpy(newString, msg1);
+    strcat(newString, msg2);
+
+    return newString; // replace this return value as part of this question
+}
+
 
 void testQ8() {
-  std::cout << "testQ8()----------\n";
+    std::cout << "testQ8()----------\n";
 
-  char *pResult{nullptr};
-  // pResult = concatCStrings("hi", "fi");	// uncomment this when ready to
-  // test
-  if (pResult) {
-    std::cout << pResult; // expected output: "hifi"
-    delete[] pResult;
-    pResult = nullptr;
-  }
+    char *pResult{nullptr};
+    pResult = concatCStrings("hi", "fi");    // uncomment this when ready to
+    // test
+    if (pResult) {
+        std::cout << "Expected: hifi\n";
+        std::cout << "Result: " << pResult << "\n"; // expected output: "hifi"
+        delete[] pResult;
+        pResult = nullptr;
+    }
 }
 
 // Topics:
@@ -332,7 +375,39 @@ void testQ8() {
 //          and print the average to the console.
 // -------------------------------------------------------------
 
-void testQ9() { std::cout << "testQ9()----------\n"; }
+std::vector<double> getGradesFromUser() {
+    double userGrade;
+    std::vector<double> grades;
+
+    do {
+        std::cout << "Enter a Grade (-1 to Finish): ";
+        std::cin >> userGrade;
+
+        if (userGrade != -1) {
+            grades.push_back(userGrade);
+        }
+
+    } while (userGrade != -1);
+
+    return grades;
+}
+
+double getAvgGrade(std::vector<double> &doubles) {
+    double sum{0};
+
+    for (double &num: doubles) {
+        sum += num;
+    }
+
+    return sum / static_cast<double>(doubles.size());
+}
+
+void testQ9() {
+    std::cout << "testQ9()----------\n";
+    std::vector<double> userGrades = getGradesFromUser();
+    double average = getAvgGrade(userGrades);
+    std::cout << "Result: " << average << "\n";
+}
 
 // Topics:
 // - return by reference
@@ -349,20 +424,20 @@ void testQ9() { std::cout << "testQ9()----------\n"; }
 // testQ12()) to make this work. use example:
 //   see testQ10()
 // -------------------------------------------------------------
-std::string getLongerString(std::string s1, std::string s2) {
-  if (s1.length() > s2.length()) {
-    return s1;
-  }
-  return s2;
+std::string& getLongerString(std::string &s1, std::string &s2) {
+    if (s1.length() > s2.length()) {
+        return s1;
+    }
+    return s2;
 }
 
 void testQ10() {
-  std::cout << "testQ10()----------\n";
-  std::string str1{"123"};
-  std::string str2{"12345"};
-  std::string longerString{getLongerString(str1, str2)};
-  longerString += "!";
-  // std::cout << str2 << "\n";		// should output: 12345!
+    std::cout << "testQ10()----------\n";
+    std::string str1{"123"};
+    std::string str2{"12345"};
+    std::string& longerString{getLongerString(str1, str2)};
+    longerString += "!";
+    std::cout << str2 << "\n";        // should output: 12345!
 }
 
 // Topics:
@@ -381,41 +456,55 @@ void testQ10() {
 //       not found)
 // -------------------------------------------------------------
 struct Employee {
-  int id;
-  Employee *pNext;
+    int id;
+    Employee *pNext;
 };
 
+Employee* findEmployeeById(Employee* pHead, const int id) {
+    Employee* currEmp = pHead;
+
+    while (pHead != nullptr) {
+        if (currEmp->id == id) {
+            return currEmp;
+        }
+
+        currEmp = currEmp->pNext;
+    }
+
+    return nullptr;
+}
+
 void testQ11() {
-  std::cout << "testQ11()----------\n";
+    std::cout << "testQ11()----------\n";
 
-  // create a linked list with 2 nodes in it (pEmployees points to the first
-  // node) eg:  pEmployees->[id:2]->[id:1]->//
-  Employee *pEmp2 = new Employee{1, nullptr};
-  Employee *pEmployees = new Employee{2, pEmp2};
-  // search the list for id:2
-  int searchId{2};
+    // create a linked list with 2 nodes in it (pEmployees points to the first
+    // node) eg:  pEmployees->[id:2]->[id:1]->//
+    Employee *pEmp2 = new Employee{1, nullptr};
+    Employee *pEmployees = new Employee{2, pEmp2};
+    // search the list for id:2
+    int searchId{2};
 
-  Employee *pFound = nullptr;
-  // uncomment these lines when ready to test:
-  // pFound = findEmployeeById(pEmployees, searchId);
-  if (pFound) {
-    // std::cout << "found id: " << pFound->id << '\n';
-  } else {
-    // std::cout << "id: " << searchId << " not found\n";
-  }
+    Employee *pFound = nullptr;
+    // uncomment these lines when ready to test:
+     pFound = findEmployeeById(pEmployees, searchId);
+    if (pFound) {
+         std::cout << "found id: " << pFound->id << '\n';
+    } else {
+         std::cout << "id: " << searchId << " not found\n";
+    }
 }
 
 int main() {
-  // use this space for testing and for output from the questions above
-  testQ1();
-  testQ2();
-  testQ3();
-  testQ4();
-  testQ5();
-  testQ6();
-  testQ7();
-  testQ8();
-  testQ9();
-  testQ10();
-  testQ11();
+    // use this space for testing and for output from the questions above
+    testQ1();
+    testQ2();
+    testQ3();
+    testQ4();
+    testQ5();
+    testQ6();
+    testQ7();
+    testQ8();
+    testQ9();
+    testQ10();
+    testQ11();
 }
