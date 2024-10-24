@@ -113,8 +113,8 @@ char* stringConcat(char cString[], char cString2[]) {
 
 	char* pString = new char[length];
 
-	strcpy_s(pString, length, cString);
-	strcat_s(pString, length, cString2);
+	// strcpy_s(pString, length, cString);
+	// strcat_s(pString, length, cString2);
 
 	return pString;
 }
