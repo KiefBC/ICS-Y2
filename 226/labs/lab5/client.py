@@ -4,6 +4,7 @@ import struct
 import Board
 
 
+
 def send_player_name(sock, player_name):
     """Send the player's name length (packed) followed by the player name."""
     # First send the length of the player's name as an unsigned short (2 bytes)

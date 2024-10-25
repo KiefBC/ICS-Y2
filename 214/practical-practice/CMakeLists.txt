@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(.)
 
 add_executable(practical_practice
-    MidtermSampleQuestions.cpp)
+#    MidtermSampleQuestions.cpp
+        MidtermSampleQuestions_bak.cpp)
