@@ -44,8 +44,10 @@ async def handle_client(reader, writer, board, player_id):
                 treasure_value if treasure_value is not None else 0
             )
             # players[player_id].add_score(new_score)
-            players[player_id].add_score(treasure_value if treasure_value is not None else 0)
-            
+            players[player_id].add_score(
+                treasure_value if treasure_value is not None else 0
+            )
+
             # Get opponent's score
             opponent_id = 1 if player_id == 2 else 2
             opponent_score = (
