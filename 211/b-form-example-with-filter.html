@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>ICS 211 Adding a Filter to the Messages Form</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+
+
+    const EnterMessageForm = ({ addMessage }) => {
+
+      const [message, setMessage] = React.useState('');
+
+
+      const addNewMessage = event => {
+        event.preventDefault();
+        addMessage(message);
+        setMessage('');
+      }
+
+
+      return (
+        <form onSubmit={addNewMessage}>
+          <fieldset>
+            <legend>Enter a Message:</legend>
+            <input type='text'
+              value={message}
+              onChange={event => setMessage(event.target.value)}
+            />
+            <button type="submit">
+              Add Message
+            </button>
+          </fieldset>
+        </form>
+      );
+    };
+
+
+    const FilterMessage = ({searchMessage, handleSearchMessageChange}) => (
+      <div style={{ margin: '15px'}}>Show only messages containing:&nbsp;
+        <input value={searchMessage} onChange={handleSearchMessageChange} />
+      </div>
+    );
+
+
+    const DisplayMessages = ({ messages, searchMessage }) => {
+
+      const messagesToShow = searchMessage
+        ? messages.filter((message) => message.text.toLowerCase().includes(searchMessage) )
+        : messages
+      
+      return (
+        <ul>
+          {messagesToShow.map(message =>
+            <Message key={message.id} messageText={message.text} />
+          )}
+        </ul>
+      );
+    };
+    
+    
+    const Message = ({ messageText }) => (
+      <li>{messageText}</li>
+    );
+
+
+
+    const App = () => {
+      // list of messages
+      const [messages, setMessages] = React.useState([]);
+
+      const [searchMessage, setSearchMessage] = React.useState('');
+
+      // this will be called by addNewMessage in the Form
+      // inverse data flow - pass data up to App
+      const addMessage = (newMessage) => {
+        // create Message object with id and text properties
+        const newMessageObject = {
+          id: messages.length,
+          text: newMessage
+        }
+
+        // create new array and add message at end
+        setMessages(messages.concat(newMessageObject));
+      }
+
+
+      return (
+        <>
+          <EnterMessageForm addMessage={addMessage} />
+          <FilterMessage searchMessage={searchMessage}
+            handleSearchMessageChange=
+              {event => setSearchMessage(event.target.value)}
+          />
+          <DisplayMessages
+            messages={messages}
+            searchMessage={searchMessage}
+          />
+        </>
+      );
+    }
+
+
+    ReactDOM.createRoot(document.getElementById('root')).render(
+      <App />
+    );
+  </script>
+</body>
+
+</html>
