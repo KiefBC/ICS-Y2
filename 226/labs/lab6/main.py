@@ -5,7 +5,6 @@ import traceback
 from Board import Board
 from Player import Player
 
-# Constants
 BUF_SIZE = 2
 HOST = "0.0.0.0"
 PORT = 12345
@@ -18,6 +17,14 @@ players = {}
 
 
 async def handle_client(reader, writer, board, player_id):
+    '''
+    Handle client connection
+    :param reader: StreamReader object
+    :param writer: StreamWriter object
+    :param board: Board object
+    :param player_id: int
+    :return
+    '''
     global active_connections
     try:
         # Send player name to client
@@ -43,7 +50,6 @@ async def handle_client(reader, writer, board, player_id):
             new_score = current_score + (
                 treasure_value if treasure_value is not None else 0
             )
-            # players[player_id].add_score(new_score)
             players[player_id].add_score(
                 treasure_value if treasure_value is not None else 0
             )
@@ -59,6 +65,7 @@ async def handle_client(reader, writer, board, player_id):
             reply = struct.pack("!HH", new_score, opponent_score)
             writer.write(reply)
             await writer.drain()
+
     except asyncio.IncompleteReadError:
         print(f"Client {player_id} disconnected unexpectedly.")
     except Exception as e:
@@ -73,11 +80,16 @@ async def handle_client(reader, writer, board, player_id):
 
 
 async def main():
+    '''
+    Main function
+    :return
+    '''
     global active_connections
 
     board = Board(BOARD_SIZE, TREASURE_AMT)
     print(board)
 
+    # Accept clients
     async def accept_client(reader, writer):
         global active_connections
         if active_connections >= MAX_CONNECTIONS:
@@ -93,12 +105,16 @@ async def main():
         )
         await handle_client(reader, writer, board, player_id)
 
+    # Start the server
     server = await asyncio.start_server(accept_client, HOST, PORT)
     print(f"Server listening on port {PORT}")
 
+    # Serve the server
     async with server:
         await server.serve_forever()
 
 
 if __name__ == "__main__":
+    print("Starting server...")
     asyncio.run(main())
+    print("Server stopped.")
