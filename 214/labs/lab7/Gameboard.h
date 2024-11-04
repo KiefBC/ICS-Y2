@@ -99,7 +99,7 @@ public:
   // assert the point is valid (use isValidPoint())
   // - param 1: a Point (the XY of the content weant to retrieve)
   // - return: an int, the content from the grid at the specified point
-  int getContent(Point) const;
+  int getContent(const Point&) const;
 
   // get the content at a given XY location
   // assert the point is valid (use isValidPoint())

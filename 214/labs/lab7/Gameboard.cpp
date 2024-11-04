@@ -54,7 +54,6 @@ void Gameboard::printToConsole() const {
       }
     }
 
-    // Separator
     std::cout << "   |   ";
 
     for (int x = 0; x < MAX_X; x++) {
@@ -70,20 +69,22 @@ void Gameboard::printToConsole() const {
 
 // THIS DOES NOT WORK
 // int Gameboard::getContent(Point p) const {
-//     assert(isValidPoint(p.getX(), p.getY()));  // Check point validity
+//     assert(isValidPoint(p.getX(), p.getY()));
 //     return grid[p.getY()][p.getX()];
 // }
 
 int Gameboard::getContent(int x, int y) const {
-    assert(isValidPoint(x, y));  // Check x, y validity
+    assert(isValidPoint(x, y));
     return grid[y][x];
 }
 
-int Gameboard::getContent(Point p) const {
-  if (isValidPoint(p.getX(), p.getY())) {
-    return grid[p.getY()][p.getX()];
-  }
-  return EMPTY_BLOCK;
+int Gameboard::getContent(const Point& p) const {
+  assert(isValidPoint(p.getX(), p.getY()));
+  // if (isValidPoint(p.getX(), p.getY())) {
+  //   return grid[p.getY()][p.getX()];
+  // }
+  // return EMPTY_BLOCK;
+  return grid[p.getY()][p.getX()];
 }
 
 // THIS WORKS BOTH WAYS
@@ -122,7 +123,7 @@ bool Gameboard::areAllLocsEmpty(std::vector<Point> points) const {
 }
 
 void Gameboard::removeRow(int rowIndex) {
-    assert(rowIndex >= 0 && rowIndex < MAX_Y);  // Validate row index
+    assert(rowIndex >= 0 && rowIndex < MAX_Y);
     for (int y = rowIndex; y > 0; y--) {
         copyRowIntoRow(y - 1, y);
     }
@@ -144,7 +145,7 @@ Point Gameboard::getSpawnLoc() const {
 }
 
 bool Gameboard::isRowCompleted(int rowIndex) const {
-    assert(rowIndex >= 0 && rowIndex < MAX_Y);  // Validate row index
+    assert(rowIndex >= 0 && rowIndex < MAX_Y);
     for (int x = 0; x < MAX_X; x++) {
         if (getContent(x, rowIndex) == EMPTY_BLOCK) {
             return false;
@@ -192,8 +193,8 @@ int Gameboard::removeCompletedRows() {
 }
 
 void Gameboard::copyRowIntoRow(int sourceRowIndex, int targetRowIndex) {
-    assert(sourceRowIndex >= 0 && sourceRowIndex < MAX_Y);  // Validate source
-    assert(targetRowIndex >= 0 && targetRowIndex < MAX_Y);  // Validate target
+    assert(sourceRowIndex >= 0 && sourceRowIndex < MAX_Y);
+    assert(targetRowIndex >= 0 && targetRowIndex < MAX_Y);
     for (int x = 0; x < MAX_X; x++) {
         setContent(x, targetRowIndex, getContent(x, sourceRowIndex));
     }
