@@ -31,26 +31,37 @@ const App = ({ className }) => {
   ]);
   const [filterText, setFilterText] = useState("");
 
+  const handleFilterChange = (text) => {
+    setFilterText(text);
+  };
+
+  const addFavoriteMovie = (title, url) => {
+    // Check if a movie with the same title already exists
+    const isDuplicate = favoriteMovies.some(
+      (movie) => movie.title.toLowerCase() === title.toLowerCase(),
+    );
+
+    if (isDuplicate) {
+      alert("This movie is already in your favorites!");
+      return;
+    }
+
+    // Add the new movie if no duplicate is found
+    const newMovie = {
+      id: favoriteMovies.length,
+      title,
+      genre: "Unknown",
+      url,
+      color: getRandomColor(),
+    };
+
+    setFavoriteMovies(favoriteMovies.concat(newMovie));
+  };
+
   const getRandomColor = () =>
     ["brown", "red", "blue", "green", "purple", "orange"][
       Math.floor(Math.random() * 6)
     ];
-
-  const addFavoriteMovie = (title, url) => {
-    setFavoriteMovies(
-      favoriteMovies.concat({
-        id: favoriteMovies.length,
-        title,
-        genre: "Unknown",
-        url,
-        color: getRandomColor(),
-      }),
-    );
-  };
-
-  const handleFilterChange = (text) => {
-    setFilterText(text);
-  };
 
   return (
     <div className={className}>

@@ -18,6 +18,9 @@ const FavoriteItemForm = ({ addFavoriteMovie }) => {
     setFormData({ title: "", url: "" });
   };
 
+  // Check if either field is empty
+  const isFormIncomplete = !formData.title || !formData.url;
+
   return (
     <form onSubmit={handleSubmit}>
       <fieldset style={{ border: "1px solid gray", padding: "10px" }}>
@@ -58,13 +61,17 @@ const FavoriteItemForm = ({ addFavoriteMovie }) => {
             marginTop: "15px",
           }}
         >
-          <StyledButton type="submit">Add Movie</StyledButton>
+          {/* Pass the disabled prop based on form completion */}
+          <StyledButton type="submit" disabled={isFormIncomplete}>
+            Add Movie
+          </StyledButton>
         </div>
       </fieldset>
     </form>
   );
 };
 
+// Style adjustments to handle disabled state
 const StyledLegend = styled.legend`
   font-weight: bold;
   color: navy;
@@ -85,6 +92,8 @@ const StyledButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
 
   &:hover {
     background-color: green;
