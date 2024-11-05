@@ -35,18 +35,21 @@ const App = ({ className }) => {
     setFilterText(text);
   };
 
-  const addFavoriteMovie = (title, url) => {
-    // Check if a movie with the same title already exists
-    const isDuplicate = favoriteMovies.some(
-      (movie) => movie.title.toLowerCase() === title.toLowerCase(),
+  // Function to check for duplicate titles (case-insensitive)
+  const isDuplicateTitle = (title, excludeId = null) => {
+    return favoriteMovies.some(
+      (movie) =>
+        movie.title.toLowerCase() === title.toLowerCase() &&
+        movie.id !== excludeId,
     );
+  };
 
-    if (isDuplicate) {
+  const addFavoriteMovie = (title, url) => {
+    if (isDuplicateTitle(title)) {
       alert("This movie is already in your favorites!");
       return;
     }
 
-    // Add the new movie if no duplicate is found
     const newMovie = {
       id: favoriteMovies.length,
       title,
@@ -56,6 +59,20 @@ const App = ({ className }) => {
     };
 
     setFavoriteMovies(favoriteMovies.concat(newMovie));
+  };
+
+  // Update the title of a movie
+  const handleTitleChange = (id, newTitle) => {
+    if (isDuplicateTitle(newTitle, id)) {
+      alert("This title already exists in your favorites!");
+      return;
+    }
+
+    setFavoriteMovies(
+      favoriteMovies.map((movie) =>
+        movie.id === id ? { ...movie, title: newTitle } : movie,
+      ),
+    );
   };
 
   const getRandomColor = () =>
@@ -72,6 +89,8 @@ const App = ({ className }) => {
       <FavoriteItemList
         favoriteMovies={favoriteMovies}
         filterText={filterText}
+        onTitleChange={handleTitleChange}
+        isDuplicateTitle={isDuplicateTitle} // Pass the duplicate checker as a prop
       />
     </div>
   );
