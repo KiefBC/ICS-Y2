@@ -9,6 +9,7 @@ PORT = 12345
 
 
 def main():
+    # Check if the user provided a message. If not, print the usage and exit
     if len(argv) != 2:
         print(f"{argv[0]} Message?")
         exit(1)
@@ -18,12 +19,15 @@ def main():
         print(f"Connected to {HOST}:{PORT}")
         print(f"Client: {sock.getsockname()}")
 
+        # Encode the message and send it to the server
+        # We do this because the socket expects bytes, not strings
         data = argv[1].encode("utf-8")
         sock.sendall(data)  # Send the message to the server
-        print(f"Sent data: {argv[1]} to {HOST}:{PORT}")
+        print(f"Sent data: '{argv[1]}' to {HOST}:{PORT}")
 
+        # Receive the reply from the server
         reply = sock.recv(BUF_SIZE)  # Receive data from the server
-        print(f"Reply: {reply}")
+        print(f"Reply: {reply.decode()}")
 
 
 if __name__ == "__main__":
