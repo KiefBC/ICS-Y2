@@ -14,7 +14,7 @@ def main():
         sock.bind((HOST, PORT))
         sock.listen(1)
         print(f"Server is listening on port {PORT}")
-        print(f"Server is running on {HOST}")
+        print(f"Server is running on {HOST}\n")
 
         # Repeatedly accept connections
         while True:
@@ -22,7 +22,8 @@ def main():
             with conn:
                 print(f"Connected by {addr}")
                 data = conn.recv(1)
-                print(f"Received {data.decode()} from client")
+                print(f"Received {data} from client\n")
+
                 if data:
                     # Get the byte data
                     byte_value = data[0]  # [0] is the first byte
@@ -32,8 +33,16 @@ def main():
                         # Notify client
                         reply = "The first 4 bits are all 1's".encode("utf-8")
                         conn.sendall(reply)
+                    else:
+                        print("Notification:: The first 4 bits are not all 1's")
+
+                        # Notify client
+                        reply = "The first 4 bits are not all 1's".encode("utf-8")
+                        conn.sendall(reply)
                 else:
                     print("No data received from client")
+                    reply = "No data received".encode("utf-8")
+                    conn.sendall(reply)
 
 
 if __name__ == "__main__":
