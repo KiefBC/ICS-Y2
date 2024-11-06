@@ -19,7 +19,7 @@ def main():
             f"Client: {sock.getsockname()}"
         )  # getsockname() returns the socket's own address
 
-        data = argv[1].encode("utf-8")
+        data = bytes([int(argv[1])])
         print(f"Sending data: '{argv[1]}' to {HOST}:{PORT}")
 
         sock.sendall(data)
