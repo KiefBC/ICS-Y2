@@ -54,6 +54,8 @@ void Tetromino::setShape(TetShape newShape) {
 }
 
 void Tetromino::rotateClockwise() {
+    if (shape == TetShape::O) return;
+
     for (auto& block : blockLocs) {
         int temp = block.getX();
         block.setX(block.getY());

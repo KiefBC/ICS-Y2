@@ -50,6 +50,8 @@ std::vector<Point> GridTetromino::getBlockLocsMappedToGrid() const {
 /// @details Transposes the block locations of the tetromino.
 /// @return void
 void GridTetromino::rotateCounterClockwise() {
+    if (getShape() == TetShape::O) return;
+
     for (auto& block : blockLocs) {
         int temp = block.getX();
         block.setX(-block.getY());

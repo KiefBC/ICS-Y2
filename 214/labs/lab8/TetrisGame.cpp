@@ -9,8 +9,13 @@ const int TetrisGame::BLOCK_HEIGHT = 32;
 const double TetrisGame::MAX_SECONDS_PER_TICK = 0.75;
 const double TetrisGame::MIN_SECONDS_PER_TICK = 0.20;
 
-// PUBLIC METHODS
+// My Constants
+const int POINTS_PER_LINE_CLEARED = 100;
+const int VOLUME_INCREMENT = 10;
+const float VOLUME_INITIAL = 50.0f;
+const int NUM_SHAPES = 7;
 
+// PUBLIC METHODS
 TetrisGame::TetrisGame(sf::RenderWindow& window, sf::Sprite& blockSprite, const Point& gameboardOffset, const Point& nextShapeOffset)
     : window(window), 
       blockSprite(blockSprite), 
@@ -31,7 +36,7 @@ TetrisGame::TetrisGame(sf::RenderWindow& window, sf::Sprite& blockSprite, const 
         std::cerr << "Failed to load background music" << std::endl;
     } else {
         backgroundMusic.setLoop(true);
-        backgroundMusic.setVolume(50.0f);  // Set volume to 50% (0-100 range)
+        backgroundMusic.setVolume(VOLUME_INITIAL);  // Set volume to 50% (0-100 range)
         backgroundMusic.play();
     }   
 
@@ -56,7 +61,7 @@ void TetrisGame::onKeyPressed(const sf::Event& event) {
             if (event.key.shift) {
                 attemptRotateCounterClockwise(currentShape);
             } else if (event.key.control) {
-                backgroundMusic.setVolume(backgroundMusic.getVolume() + 10);
+                backgroundMusic.setVolume(backgroundMusic.getVolume() + VOLUME_INCREMENT);
             } else {
                 attemptRotate(currentShape);
             }
@@ -69,7 +74,7 @@ void TetrisGame::onKeyPressed(const sf::Event& event) {
             break;
         case sf::Keyboard::Down:
             if (event.key.control) {
-                backgroundMusic.setVolume(backgroundMusic.getVolume() - 10);
+                backgroundMusic.setVolume(backgroundMusic.getVolume() - VOLUME_INCREMENT);
             } else {
                 attemptMove(currentShape, 0, 1);
             }
@@ -96,27 +101,22 @@ void TetrisGame::processGameLoop(float secondsSinceLastLoop) {
 
     // If a shape was placed since the last game loop, check for lines cleared
     if (shapePlacedSinceLastGameLoop) {
-        // Remove any completed rows and update the score
         int linesCleared = board.removeCompletedRows();
-        score += linesCleared * 100; // 100 points per line cleared
+        score += linesCleared * POINTS_PER_LINE_CLEARED;
         updateScoreDisplay();
-
-        // Adjust the tick rate based on the number of lines cleared
         determineSecondsPerTick();
 
         // If the shape can't be spawned, reset the game
         if (!spawnNextShape()) {
             reset();
         }
-
-        // Pick the next shape
         pickNextShape();
+
         shapePlacedSinceLastGameLoop = false;
     }
 }
 
 // PRIVATE METHODS
-
 void TetrisGame::tick() {
     if (!attemptMove(currentShape, 0, 1)) { lock(currentShape); }
 }
@@ -130,22 +130,21 @@ void TetrisGame::reset() {
 }
 
 void TetrisGame::pickNextShape() {
-    int ranShape = rand() % 7;
+    int ranShape = rand() % NUM_SHAPES;
     nextShape.setShape(static_cast<TetShape>(ranShape));
 }
 
 bool TetrisGame::spawnNextShape() {
     currentShape = nextShape;
     currentShape.setGridLoc(board.getSpawnLoc());
+
     return isPositionLegal(currentShape);
 }
 
 bool TetrisGame::attemptRotate(GridTetromino& shape) {
-    // Create a temporary copy of the shape
     GridTetromino temp = shape;
     temp.rotateClockwise();
     
-    // Check if the rotated position is legal
     if (isPositionLegal(temp)) {
         shape = temp;
         return true;
@@ -161,6 +160,7 @@ bool TetrisGame::attemptMove(GridTetromino& shape, int xOffset, int yOffset) {
         shape = temp;
         return true;
     }
+
     return false;
 }
 
@@ -213,20 +213,19 @@ void TetrisGame::updateScoreDisplay() {
 }
 
 // STATE & GAMEPLAY/LOGIC METHODS
-
 bool TetrisGame::isPositionLegal(const GridTetromino& shape) const {
-    // First check if the shape is within borders
     if (!isWithinBorders(shape)) {
         return false;
     }
     
-    // Then check if the locations are empty on the board
+    // Check if the locations are empty on the board
     std::vector<Point> mappedLocs = shape.getBlockLocsMappedToGrid();
     for (const auto& loc : mappedLocs) {
         if (board.getContent(loc) != Gameboard::EMPTY_BLOCK) {
             return false;
         }
     }
+
     return true;
 }
 
@@ -238,9 +237,11 @@ bool TetrisGame::isWithinBorders(const GridTetromino& shape) const {
         // Check all borders: left, right, top, and bottom
         if (loc.getX() < 0 || loc.getX() >= Gameboard::MAX_X || 
             loc.getY() < 0 || loc.getY() >= Gameboard::MAX_Y) {
+
             return false;
         }
     }
+
     return true;
 }
 
@@ -249,7 +250,6 @@ void TetrisGame::determineSecondsPerTick() {
 }
 
 // MY OWN METHODS CUS IM COOL AS FUCK
-
 bool TetrisGame::attemptRotateCounterClockwise(GridTetromino& shape) {
     // Create a temporary copy of the shape
     GridTetromino temp = shape;
@@ -261,6 +261,7 @@ bool TetrisGame::attemptRotateCounterClockwise(GridTetromino& shape) {
     if (isPositionLegal(temp)) {
         // If legal, apply the rotation to the actual shape
         shape = temp;
+
         return true;
     }
     
