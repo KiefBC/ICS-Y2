@@ -27,6 +27,14 @@ TetrisGame::TetrisGame(sf::RenderWindow& window, sf::Sprite& blockSprite, const 
         std::cerr << "Failed to load font" << std::endl;
     }
 
+    if (!backgroundMusic.openFromFile("audio/Tetromino-Flow.ogg")) {
+        std::cerr << "Failed to load background music" << std::endl;
+    } else {
+        backgroundMusic.setLoop(true);  // Make the music loop continuously
+        backgroundMusic.setVolume(100.0f);  // Set volume to 50% (0-100 range)
+        backgroundMusic.play();
+    }   
+
     scoreText.setFont(scoreFont);
     scoreText.setCharacterSize(24);
     scoreText.setFillColor(sf::Color::White);

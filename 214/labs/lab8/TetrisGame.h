@@ -20,6 +20,7 @@
 #include "Gameboard.h"
 #include "GridTetromino.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 
 class TetrisGame
@@ -48,6 +49,9 @@ private:
 
 	sf::Font scoreFont;				// SFML font for displaying the score.
 	sf::Text scoreText;				// SFML text object for displaying the score
+
+	// MY OWN MEMBER VARIABLE
+	sf::Music backgroundMusic;
 									
 	// Time members ----------------------------------------------
 	// Note: a "tick" is the amount of time it takes a block to fall one line.
