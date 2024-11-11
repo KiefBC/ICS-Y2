@@ -10,7 +10,11 @@
 #define GRIDTETROMINO_H
 
 #include "Tetromino.h"
+#include "Point.h"
+#include "TestSuite.h"
 #include <vector>
+#include <iostream>
+
 
 
 // Make this class extend (inherit from) the Tetromino class.

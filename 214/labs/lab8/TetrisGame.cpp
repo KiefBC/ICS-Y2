@@ -1,7 +1,4 @@
 #include "TetrisGame.h"
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
 
 // Define static constants
 const int TetrisGame::BLOCK_WIDTH = 32;
@@ -51,13 +48,12 @@ TetrisGame::TetrisGame(sf::RenderWindow& window, sf::Sprite& blockSprite, const 
         backgroundMusic.setLoop(true);
         backgroundMusic.setVolume(VOLUME_INITIAL);  // Set volume to 50% (0-100 range)
         backgroundMusic.play();
-    }   
+    } 
 
     reset();
 }
 
-/// @brief Draws the game elements to the screen.
-/// @details Draws the gameboard, current shape, next shape, and score.
+/// @brief Draws the gameboard, current shape, next shape, and score.
 void TetrisGame::draw() {
     drawGameboard();
     drawTetromino(currentShape, gameboardOffset);
@@ -116,7 +112,24 @@ void TetrisGame::processGameLoop(float secondsSinceLastLoop) {
     // If a shape was placed since the last game loop, check for lines cleared
     if (shapePlacedSinceLastGameLoop) {
         int linesCleared = board.removeCompletedRows();
-        score += linesCleared * POINTS_PER_LINE_CLEARED;
+        
+        switch (linesCleared) {
+            case 1:
+                score += 100;
+                break;
+            case 2:
+                score += 300;
+                break;
+            case 3:
+                score += 500;
+                break;
+            case 4:
+                score += 800;
+                break;
+            default:
+                break;
+        }
+
         updateScoreDisplay();
         determineSecondsPerTick();
 
@@ -124,16 +137,15 @@ void TetrisGame::processGameLoop(float secondsSinceLastLoop) {
         if (!spawnNextShape()) {
             reset();
         }
+        
         pickNextShape();
-
         shapePlacedSinceLastGameLoop = false;
     }
 }
 
 // PRIVATE METHODS
 
-/// @brief Ticks the game.
-/// @details Moves the current shape down one line if possible, otherwise locks it.
+/// @brief Moves the current shape down one line if possible, otherwise locks it.
 void TetrisGame::tick() {
     if (!attemptMove(currentShape, 0, 1)) { lock(currentShape); }
 }
@@ -146,15 +158,13 @@ void TetrisGame::reset() {
     spawnNextShape();
 }
 
-/// @brief Picks the next shape.
-/// @details Sets the next shape to a random shape.
+/// @brief Sets the next shape to a random shape.
 void TetrisGame::pickNextShape() {
     int ranShape = rand() % NUM_SHAPES;
     nextShape.setShape(static_cast<TetShape>(ranShape));
 }
 
-/// @brief Spawns the next shape.
-/// @details Sets the current shape to the next shape and sets its grid location to the spawn location.
+/// @brief Sets the current shape to the next shape and sets its grid location to the spawn location.
 /// @return True if the shape is legal, false otherwise.
 bool TetrisGame::spawnNextShape() {
     currentShape = nextShape;
@@ -174,7 +184,7 @@ bool TetrisGame::attemptRotate(GridTetromino& shape) {
         shape = temp;
         return true;
     }
-    
+
     return false;
 }
 
@@ -194,15 +204,13 @@ bool TetrisGame::attemptMove(GridTetromino& shape, int xOffset, int yOffset) {
     return false;
 }
 
-/// @brief Drops the shape.
-/// @details Moves the shape down one line until it can't move anymore.
+/// @brief Moves the shape down one line until it can't move anymore.
 /// @param shape The shape to drop.
 void TetrisGame::drop(GridTetromino& shape) {
     while(attemptMove(shape, 0, 1));
 }
 
-/// @brief Locks the shape.
-/// @details Locks the shape on the board by setting the content of the shape's block locations to the shape's color.
+/// @brief Locks the shape on the board by setting the content of the shape's block locations to the shape's color.
 /// @param shape The shape to lock.
 void TetrisGame::lock(GridTetromino& shape) {
     std::vector<Point> mappedLocs = shape.getBlockLocsMappedToGrid();
@@ -229,8 +237,7 @@ void TetrisGame::drawBlock(const Point& topLeft, int xOffset, int yOffset, TetCo
     window.draw(blockSprite);
 }
 
-/// @brief Draws the gameboard.
-/// @details Draws the gameboard by iterating through each cell and drawing a block if it is not empty.
+/// @brief Draws the gameboard by iterating through each cell and drawing a block if it is not empty.
 void TetrisGame::drawGameboard() {
     for (int row = 0; row < Gameboard::MAX_Y; row++) {
         for (int col = 0; col < Gameboard::MAX_X; col++) {
@@ -254,8 +261,7 @@ void TetrisGame::drawTetromino(const GridTetromino& tetromino, const Point& topL
     }
 }
 
-/// @brief Updates the score display.
-/// @details Updates the score display by setting the string of the score text to the current score.
+/// @brief Updates the score display by setting the string of the score text to the current score.
 void TetrisGame::updateScoreDisplay() {
     scoreText.setString("Score: " + std::to_string(score));
 }
@@ -300,8 +306,7 @@ bool TetrisGame::isWithinBorders(const GridTetromino& shape) const {
     return true;
 }
 
-/// @brief Determines the seconds per tick based on the score.
-/// @details Determines the seconds per tick based on the score by dividing the maximum seconds per tick by the score divided by 100 plus 1.
+/// @brief Determines the seconds per tick based on the score by dividing the maximum seconds per tick by the score divided by 100 plus 1.
 void TetrisGame::determineSecondsPerTick() {
     secondsPerTick = MAX_SECONDS_PER_TICK / (score / 100 + 1);
 }

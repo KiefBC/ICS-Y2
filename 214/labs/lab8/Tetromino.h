@@ -1,7 +1,3 @@
-//
-// Created by kiefer on 10/22/24.
-//
-
 #ifndef LAB6_TETROMINO_H
 #define LAB6_TETROMINO_H
 
@@ -56,4 +52,4 @@ private:
     std::vector<Point> blockLocs;
 };
 
-#endif //LAB6_TETROMINO_H
+#endif //TETROMINO_H

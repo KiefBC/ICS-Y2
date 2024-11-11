@@ -57,6 +57,8 @@
 
 #include "Point.h"
 #include <vector>
+#include <iomanip>
+#include <cassert>
 
 class Gameboard {
   friend class TestSuite;

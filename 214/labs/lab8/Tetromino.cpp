@@ -1,22 +1,25 @@
-//
-// Created by kiefer on 10/22/24.
-//
-
 #include "Tetromino.h"
 
+/// @brief Constructor that sets a random shape.
 Tetromino::Tetromino() {
     shape = static_cast<TetShape>(rand() % 7);
     setShape(shape);
 }
 
+/// @brief Returns the color of the tetromino.
+/// @return The color of the tetromino.
 TetColor Tetromino::getColor() const {
     return color;
 }
 
+/// @brief Returns the shape of the tetromino.
+/// @return The shape of the tetromino.
 TetShape Tetromino::getShape() const {
     return shape;
 }
 
+/// @brief Sets the shape of the tetromino to the given shape.
+/// @param newShape The shape to set the tetromino to.
 void Tetromino::setShape(TetShape newShape) {
     this->shape = newShape;
     blockLocs.clear();
@@ -53,6 +56,8 @@ void Tetromino::setShape(TetShape newShape) {
     }
 }
 
+/// @brief Rotates the tetromino 90 degrees clockwise.
+/// @details If the shape is O, it does nothing. Otherwise, it transposes the block locations of the tetromino.
 void Tetromino::rotateClockwise() {
     if (shape == TetShape::O) return;
 
@@ -63,6 +68,8 @@ void Tetromino::rotateClockwise() {
     }
 }
 
+/// @brief Prints the tetromino to the console.
+/// @details Prints the tetromino to the console by iterating through each cell in a 5x5 grid and checking if the cell contains a block.
 void Tetromino::printToConsole() const {
     for (int y = 2; y >= -2; --y) {
         for (int x = -2; x <= 2; ++x) {

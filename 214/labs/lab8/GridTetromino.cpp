@@ -1,7 +1,5 @@
 #include "GridTetromino.h"
-#include "TestSuite.h"
-#include <iostream>
-#include "Point.h"
+
 
 /// @brief Default constructor for GridTetromino.
 /// @details Initializes the grid location to (0, 0).

@@ -21,6 +21,9 @@
 #include "GridTetromino.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 
 class TetrisGame
@@ -133,9 +136,6 @@ private:
 
 	// MY OWN METHOD
 	bool attemptRotateCounterClockwise(GridTetromino& shape);
-
-	// MY OWN METHOD
-	void rotateCounterClockwise();
    
 	// test if a move is legal on the tetromino, if so, move it.
 	//  To do this:

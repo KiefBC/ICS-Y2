@@ -1,7 +1,3 @@
-//
-// Created by kiefer on 10/22/24.
-//
-
 #ifndef LAB6_POINT_H
 #define LAB6_POINT_H
 
@@ -43,4 +39,4 @@ private:
 };
 
 
-#endif //LAB6_POINT_H
+#endif //POINT_H
