@@ -93,12 +93,17 @@ void TetrisGame::processGameLoop(float secondsSinceLastLoop) {
 // PRIVATE METHODS
 
 void TetrisGame::tick() {
-    attemptMove(currentShape, 0, 1);
-
-    // If the shape can't be moved down, lock it in place
-    if (!isPositionLegal(currentShape)) {
+    // Create a temporary shape to test the next position
+    GridTetromino temp = currentShape;
+    temp.move(0, 1);
+    
+    // If the next position would be illegal, lock the current piece
+    if (!isPositionLegal(temp)) {
         lock(currentShape);
         shapePlacedSinceLastGameLoop = true;
+    } else {
+        // Otherwise, move the piece down
+        currentShape = temp;
     }
 }
 
@@ -198,13 +203,19 @@ void TetrisGame::updateScoreDisplay() {
 // STATE & GAMEPLAY/LOGIC METHODS
 
 bool TetrisGame::isPositionLegal(const GridTetromino& shape) const {
+    // First check if the shape is within borders
+    if (!isWithinBorders(shape)) {
+        return false;
+    }
+    
+    // Then check if the locations are empty on the board
     std::vector<Point> mappedLocs = shape.getBlockLocsMappedToGrid();
     for (const auto& loc : mappedLocs) {
         if (board.getContent(loc) != Gameboard::EMPTY_BLOCK) {
             return false;
         }
     }
-    return isWithinBorders(shape);
+    return true;
 }
 
 
