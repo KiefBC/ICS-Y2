@@ -30,8 +30,8 @@ TetrisGame::TetrisGame(sf::RenderWindow& window, sf::Sprite& blockSprite, const 
     if (!backgroundMusic.openFromFile("audio/Tetromino-Flow.ogg")) {
         std::cerr << "Failed to load background music" << std::endl;
     } else {
-        backgroundMusic.setLoop(true);  // Make the music loop continuously
-        backgroundMusic.setVolume(100.0f);  // Set volume to 50% (0-100 range)
+        backgroundMusic.setLoop(true);
+        backgroundMusic.setVolume(50.0f);  // Set volume to 50% (0-100 range)
         backgroundMusic.play();
     }   
 
@@ -55,6 +55,8 @@ void TetrisGame::onKeyPressed(const sf::Event& event) {
         case sf::Keyboard::Up:
             if (event.key.shift) {
                 attemptRotateCounterClockwise(currentShape);
+            } else if (event.key.control) {
+                backgroundMusic.setVolume(backgroundMusic.getVolume() + 10);
             } else {
                 attemptRotate(currentShape);
             }
@@ -66,10 +68,21 @@ void TetrisGame::onKeyPressed(const sf::Event& event) {
             attemptMove(currentShape, 1, 0);
             break;
         case sf::Keyboard::Down:
-            attemptMove(currentShape, 0, 1);
+            if (event.key.control) {
+                backgroundMusic.setVolume(backgroundMusic.getVolume() - 10);
+            } else {
+                attemptMove(currentShape, 0, 1);
+            }
             break;
         case sf::Keyboard::Space:
             drop(currentShape);
+            break;
+        case sf::Keyboard::S:
+            if (backgroundMusic.getStatus() == sf::Music::Playing) {
+                backgroundMusic.pause();
+            } else {
+                backgroundMusic.play();
+            }
             break;
     }
 }
