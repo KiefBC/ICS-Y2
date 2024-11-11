@@ -45,10 +45,3 @@ std::vector<Point> GridTetromino::getBlockLocsMappedToGrid() const {
     }
     return mappedBlocks;
 }
-
-/// @brief Main function to run the test suite.
-/// @return 0 if the test suite runs successfully.
-int main() {
-    TestSuite::runTestSuite();
-    return 0;
-}

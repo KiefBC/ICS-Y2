@@ -5,6 +5,7 @@
 #include "Tetromino.h"
 
 Tetromino::Tetromino() {
+    shape = static_cast<TetShape>(rand() % 7);
     setShape(shape);
 }
 
@@ -18,32 +19,36 @@ TetShape Tetromino::getShape() const {
 
 void Tetromino::setShape(TetShape newShape) {
     this->shape = newShape;
-
     blockLocs.clear();
 
-    switch (shape) {
-        case TetShape::S:
-            blockLocs = {Point(0,0), Point(1,0), Point(1, 1), Point(2,1)};
-            break;
-        case TetShape::O:
-            blockLocs = {Point(0, 0), Point(1, 0), Point(0, 1), Point(1, 1)};
-            break;
+    switch (newShape) {
         case TetShape::I:
+            color = TetColor::BLUE_LIGHT;
             blockLocs = {Point(0, 0), Point(0, 1), Point(0, 2), Point(0, 3)};
             break;
-        case TetShape::T:
-            blockLocs = {Point(0, 0), Point(1, 0), Point(2, 0), Point(1, 1)};
-            break;
-        case TetShape::L:
-            blockLocs = {Point(0, 0), Point(0, 1), Point(0, 2), Point(1, 2)};
-            break;
         case TetShape::J:
+            color = TetColor::BLUE_DARK;
             blockLocs = {Point(0, 0), Point(0, 1), Point(0, 2), Point(1, 0)};
             break;
-        case TetShape::Z:
-            blockLocs = {Point(0, 1), Point(1, 1), Point(1, 0), Point(2, 0)};
+        case TetShape::L:
+            color = TetColor::ORANGE;
+            blockLocs = {Point(0, 0), Point(0, 1), Point(0, 2), Point(1, 2)};
             break;
-        default:
+        case TetShape::O:
+            color = TetColor::YELLOW;
+            blockLocs = {Point(0, 0), Point(1, 0), Point(0, 1), Point(1, 1)};
+            break;
+        case TetShape::S:
+            color = TetColor::GREEN;
+            blockLocs = {Point(0,0), Point(1,0), Point(1, 1), Point(2,1)};
+            break;
+        case TetShape::T:
+            color = TetColor::PURPLE;
+            blockLocs = {Point(0, 0), Point(1, 0), Point(2, 0), Point(1, 1)};
+            break;
+        case TetShape::Z:
+            color = TetColor::RED;
+            blockLocs = {Point(0, 1), Point(1, 1), Point(1, 0), Point(2, 0)};
             break;
     }
 }

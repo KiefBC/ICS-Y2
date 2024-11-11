@@ -6,9 +6,9 @@
 // 1) Call TestSuite::runTestSuite() from main()
 // 2) Uncomment the #define statements directly below:
 //-----------------------------------------------------------------------
-//#define POINT
-//#define TETROMINO
-//#define GAMEBOARD
+#define POINT
+#define TETROMINO
+#define GAMEBOARD
 #define GRIDTETROMINO
 
 #include <string>
