@@ -109,7 +109,6 @@ void TetrisGame::processGameLoop(float secondsSinceLastLoop) {
         secondsSinceLastTick -= secondsPerTick;
     }
 
-    // If a shape was placed since the last game loop, check for lines cleared
     if (shapePlacedSinceLastGameLoop) {
         int linesCleared = board.removeCompletedRows();
         
