@@ -45,7 +45,11 @@ void TetrisGame::draw() {
 void TetrisGame::onKeyPressed(const sf::Event& event) {
     switch (event.key.code) {
         case sf::Keyboard::Up:
-            attemptRotate(currentShape);
+            if (event.key.shift) {
+                attemptRotateCounterClockwise(currentShape);
+            } else {
+                attemptRotate(currentShape);
+            }
             break;
         case sf::Keyboard::Left:
             attemptMove(currentShape, -1, 0);
@@ -118,13 +122,10 @@ bool TetrisGame::spawnNextShape() {
 bool TetrisGame::attemptRotate(GridTetromino& shape) {
     // Create a temporary copy of the shape
     GridTetromino temp = shape;
-    
-    // Rotate the temporary shape
     temp.rotateClockwise();
     
     // Check if the rotated position is legal
     if (isPositionLegal(temp)) {
-        // If legal, apply the rotation to the actual shape
         shape = temp;
         return true;
     }
@@ -147,15 +148,10 @@ void TetrisGame::drop(GridTetromino& shape) {
 }
 
 void TetrisGame::lock(GridTetromino& shape) {
-    // 1. Get the mapped locations of the shape
     std::vector<Point> mappedLocs = shape.getBlockLocsMappedToGrid();
-
-    // 2. Set the content of the board at the mapped locations
     for (const auto& loc : mappedLocs) {
         board.setContent(loc, static_cast<int>(shape.getColor()));
     }
-
-    // 3. Set the flag
     shapePlacedSinceLastGameLoop = true;
 }
 
@@ -218,9 +214,9 @@ bool TetrisGame::isWithinBorders(const GridTetromino& shape) const {
     std::vector<Point> mappedLocs = shape.getBlockLocsMappedToGrid();
     
     for (const Point& loc : mappedLocs) {
-        // Check left, right, and bottom borders
+        // Check all borders: left, right, top, and bottom
         if (loc.getX() < 0 || loc.getX() >= Gameboard::MAX_X || 
-            loc.getY() >= Gameboard::MAX_Y) {
+            loc.getY() < 0 || loc.getY() >= Gameboard::MAX_Y) {
             return false;
         }
     }
@@ -229,4 +225,23 @@ bool TetrisGame::isWithinBorders(const GridTetromino& shape) const {
 
 void TetrisGame::determineSecondsPerTick() {
     secondsPerTick = MAX_SECONDS_PER_TICK / (score / 100 + 1);
+}
+
+// MY OWN METHODS CUS IM COOL AS FUCK
+
+bool TetrisGame::attemptRotateCounterClockwise(GridTetromino& shape) {
+    // Create a temporary copy of the shape
+    GridTetromino temp = shape;
+    
+    // Rotate the temporary shape
+    temp.rotateCounterClockwise();
+    
+    // Check if the rotated position is legal
+    if (isPositionLegal(temp)) {
+        // If legal, apply the rotation to the actual shape
+        shape = temp;
+        return true;
+    }
+    
+    return false;
 }

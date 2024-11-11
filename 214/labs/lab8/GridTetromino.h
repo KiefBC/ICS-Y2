@@ -61,6 +61,8 @@ public:
 	// return: a vector of Point objects.
 	std::vector<Point> getBlockLocsMappedToGrid() const;
 
+	// MY OWN METHOD
+	void rotateCounterClockwise();
 };
 
 #endif /* GRIDTETROMINO_H */

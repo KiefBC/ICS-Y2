@@ -45,3 +45,14 @@ std::vector<Point> GridTetromino::getBlockLocsMappedToGrid() const {
     }
     return mappedBlocks;
 }
+
+/// @brief Rotates the tetromino counterclockwise.
+/// @details Transposes the block locations of the tetromino.
+/// @return void
+void GridTetromino::rotateCounterClockwise() {
+    for (auto& block : blockLocs) {
+        int temp = block.getX();
+        block.setX(-block.getY());
+        block.setY(temp);
+    }
+}

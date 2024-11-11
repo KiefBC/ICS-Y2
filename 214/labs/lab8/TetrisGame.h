@@ -107,6 +107,7 @@ private:
 
 	// assign nextShape.setShape a new random shape  
 	// - params: none
+	
 	// - return: nothing
 	void pickNextShape();
 	
@@ -125,6 +126,12 @@ private:
 	// - param 1: GridTetromino shape
 	// - return: bool, true/false to indicate successful movement
 	bool attemptRotate(GridTetromino& shape);
+
+	// MY OWN METHOD
+	bool attemptRotateCounterClockwise(GridTetromino& shape);
+
+	// MY OWN METHOD
+	void rotateCounterClockwise();
    
 	// test if a move is legal on the tetromino, if so, move it.
 	//  To do this:
