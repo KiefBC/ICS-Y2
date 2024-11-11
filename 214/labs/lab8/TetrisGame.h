@@ -30,10 +30,16 @@ class TetrisGame
 {
 public:
 	// STATIC CONSTANTS
-	static const int BLOCK_WIDTH;			  // pixel width of a tetris block, init to 32
-	static const int BLOCK_HEIGHT;			  // pixel height of a tetris block, int to 32
-	static const double MAX_SECONDS_PER_TICK; // the slowest "tick" rate (in seconds), init to 0.75
-	static const double MIN_SECONDS_PER_TICK; // the fastest "tick" rate (in seconds), init to 0.20
+	static constexpr int BLOCK_WIDTH = 32;			  // pixel width of a tetris block
+	static constexpr int BLOCK_HEIGHT = 32;			  // pixel height of a tetris block
+	static constexpr double MAX_SECONDS_PER_TICK = 0.75; // the slowest "tick" rate (in seconds)
+	static constexpr double MIN_SECONDS_PER_TICK = 0.20; // the fastest "tick" rate (in seconds)
+
+	// My Constants
+	static constexpr int POINTS_PER_LINE_CLEARED = 100;
+	static constexpr int VOLUME_INCREMENT = 10;
+	static constexpr float VOLUME_INITIAL = 50.0f;
+	static constexpr int NUM_SHAPES = 7;
 
 private:	
 	// MEMBER VARIABLES

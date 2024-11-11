@@ -1,16 +1,16 @@
 #include "TetrisGame.h"
 
 // Define static constants
-const int TetrisGame::BLOCK_WIDTH = 32;
-const int TetrisGame::BLOCK_HEIGHT = 32;
-const double TetrisGame::MAX_SECONDS_PER_TICK = 0.75;
-const double TetrisGame::MIN_SECONDS_PER_TICK = 0.20;
+// const int TetrisGame::BLOCK_WIDTH = 32;
+// const int TetrisGame::BLOCK_HEIGHT = 32;
+// const double TetrisGame::MAX_SECONDS_PER_TICK = 0.75;
+// const double TetrisGame::MIN_SECONDS_PER_TICK = 0.20;
 
 // My Constants
-const int POINTS_PER_LINE_CLEARED = 100;
-const int VOLUME_INCREMENT = 10;
-const float VOLUME_INITIAL = 50.0f;
-const int NUM_SHAPES = 7;
+// const int POINTS_PER_LINE_CLEARED = 100;
+// const int VOLUME_INCREMENT = 10;
+// const float VOLUME_INITIAL = 50.0f;
+// const int NUM_SHAPES = 7;
 
 // PUBLIC METHODS
 
@@ -316,15 +316,10 @@ void TetrisGame::determineSecondsPerTick() {
 /// @param shape The shape to rotate.
 /// @return True if the rotation is legal, false otherwise.
 bool TetrisGame::attemptRotateCounterClockwise(GridTetromino& shape) {
-    // Create a temporary copy of the shape
     GridTetromino temp = shape;
-    
-    // Rotate the temporary shape
     temp.rotateCounterClockwise();
     
-    // Check if the rotated position is legal
     if (isPositionLegal(temp)) {
-        // If legal, apply the rotation to the actual shape
         shape = temp;
 
         return true;
