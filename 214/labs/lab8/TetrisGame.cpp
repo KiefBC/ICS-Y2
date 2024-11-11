@@ -93,18 +93,7 @@ void TetrisGame::processGameLoop(float secondsSinceLastLoop) {
 // PRIVATE METHODS
 
 void TetrisGame::tick() {
-    // Create a temporary shape to test the next position
-    GridTetromino temp = currentShape;
-    temp.move(0, 1);
-    
-    // If the next position would be illegal, lock the current piece
-    if (!isPositionLegal(temp)) {
-        lock(currentShape);
-        shapePlacedSinceLastGameLoop = true;
-    } else {
-        // Otherwise, move the piece down
-        currentShape = temp;
-    }
+    if (!attemptMove(currentShape, 0, 1)) { lock(currentShape); }
 }
 
 void TetrisGame::reset() {
@@ -118,7 +107,6 @@ void TetrisGame::reset() {
 void TetrisGame::pickNextShape() {
     int ranShape = rand() % 7;
     nextShape.setShape(static_cast<TetShape>(ranShape));
-    nextShape.setGridLoc(board.getSpawnLoc());
 }
 
 bool TetrisGame::spawnNextShape() {
@@ -128,12 +116,19 @@ bool TetrisGame::spawnNextShape() {
 }
 
 bool TetrisGame::attemptRotate(GridTetromino& shape) {
+    // Create a temporary copy of the shape
     GridTetromino temp = shape;
+    
+    // Rotate the temporary shape
     temp.rotateClockwise();
+    
+    // Check if the rotated position is legal
     if (isPositionLegal(temp)) {
+        // If legal, apply the rotation to the actual shape
         shape = temp;
         return true;
     }
+    
     return false;
 }
 
