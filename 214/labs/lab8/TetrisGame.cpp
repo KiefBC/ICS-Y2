@@ -16,6 +16,12 @@ const float VOLUME_INITIAL = 50.0f;
 const int NUM_SHAPES = 7;
 
 // PUBLIC METHODS
+
+/// @brief Constructor for TetrisGame.
+/// @param window The SFML render window.
+/// @param blockSprite The SFML sprite for blocks.
+/// @param gameboardOffset The offset of the gameboard.
+/// @param nextShapeOffset The offset of the next shape.
 TetrisGame::TetrisGame(sf::RenderWindow& window, sf::Sprite& blockSprite, const Point& gameboardOffset, const Point& nextShapeOffset)
     : window(window), 
       blockSprite(blockSprite), 
@@ -30,24 +36,28 @@ TetrisGame::TetrisGame(sf::RenderWindow& window, sf::Sprite& blockSprite, const 
 
     if (!scoreFont.loadFromFile("fonts/RedOctober.ttf")) {
         std::cerr << "Failed to load font" << std::endl;
+    } else {
+        std::cout << "Font loaded successfully" << std::endl;
+        scoreText.setFont(scoreFont);
+        scoreText.setCharacterSize(24);
+        scoreText.setFillColor(sf::Color::White);
+        scoreText.setPosition(425, 325);
     }
 
     if (!backgroundMusic.openFromFile("audio/Tetromino-Flow.ogg")) {
         std::cerr << "Failed to load background music" << std::endl;
     } else {
+        std::cout << "Background music loaded successfully" << std::endl;
         backgroundMusic.setLoop(true);
         backgroundMusic.setVolume(VOLUME_INITIAL);  // Set volume to 50% (0-100 range)
         backgroundMusic.play();
     }   
 
-    scoreText.setFont(scoreFont);
-    scoreText.setCharacterSize(24);
-    scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition(450, 50);
-
     reset();
 }
 
+/// @brief Draws the game elements to the screen.
+/// @details Draws the gameboard, current shape, next shape, and score.
 void TetrisGame::draw() {
     drawGameboard();
     drawTetromino(currentShape, gameboardOffset);
@@ -55,6 +65,8 @@ void TetrisGame::draw() {
     window.draw(scoreText);
 }
 
+/// @brief Handles key presses.
+/// @param event The SFML event.
 void TetrisGame::onKeyPressed(const sf::Event& event) {
     switch (event.key.code) {
         case sf::Keyboard::Up:
@@ -92,6 +104,8 @@ void TetrisGame::onKeyPressed(const sf::Event& event) {
     }
 }
 
+/// @brief Processes the game loop.
+/// @param secondsSinceLastLoop The time since the last game loop.
 void TetrisGame::processGameLoop(float secondsSinceLastLoop) {
     secondsSinceLastTick += secondsSinceLastLoop;
     while (secondsSinceLastTick >= secondsPerTick) {
@@ -117,6 +131,9 @@ void TetrisGame::processGameLoop(float secondsSinceLastLoop) {
 }
 
 // PRIVATE METHODS
+
+/// @brief Ticks the game.
+/// @details Moves the current shape down one line if possible, otherwise locks it.
 void TetrisGame::tick() {
     if (!attemptMove(currentShape, 0, 1)) { lock(currentShape); }
 }
@@ -129,11 +146,16 @@ void TetrisGame::reset() {
     spawnNextShape();
 }
 
+/// @brief Picks the next shape.
+/// @details Sets the next shape to a random shape.
 void TetrisGame::pickNextShape() {
     int ranShape = rand() % NUM_SHAPES;
     nextShape.setShape(static_cast<TetShape>(ranShape));
 }
 
+/// @brief Spawns the next shape.
+/// @details Sets the current shape to the next shape and sets its grid location to the spawn location.
+/// @return True if the shape is legal, false otherwise.
 bool TetrisGame::spawnNextShape() {
     currentShape = nextShape;
     currentShape.setGridLoc(board.getSpawnLoc());
@@ -141,6 +163,9 @@ bool TetrisGame::spawnNextShape() {
     return isPositionLegal(currentShape);
 }
 
+/// @brief Attempts to rotate the shape clockwise.
+/// @param shape The shape to rotate.
+/// @return True if the rotation is legal, false otherwise.
 bool TetrisGame::attemptRotate(GridTetromino& shape) {
     GridTetromino temp = shape;
     temp.rotateClockwise();
@@ -153,6 +178,11 @@ bool TetrisGame::attemptRotate(GridTetromino& shape) {
     return false;
 }
 
+/// @brief Attempts to move the shape.
+/// @param shape The shape to move.
+/// @param xOffset The x offset to move the shape.
+/// @param yOffset The y offset to move the shape.
+/// @return True if the move is legal, false otherwise.
 bool TetrisGame::attemptMove(GridTetromino& shape, int xOffset, int yOffset) {
     GridTetromino temp = shape;
     temp.move(xOffset, yOffset);
@@ -164,10 +194,16 @@ bool TetrisGame::attemptMove(GridTetromino& shape, int xOffset, int yOffset) {
     return false;
 }
 
+/// @brief Drops the shape.
+/// @details Moves the shape down one line until it can't move anymore.
+/// @param shape The shape to drop.
 void TetrisGame::drop(GridTetromino& shape) {
     while(attemptMove(shape, 0, 1));
 }
 
+/// @brief Locks the shape.
+/// @details Locks the shape on the board by setting the content of the shape's block locations to the shape's color.
+/// @param shape The shape to lock.
 void TetrisGame::lock(GridTetromino& shape) {
     std::vector<Point> mappedLocs = shape.getBlockLocsMappedToGrid();
     for (const auto& loc : mappedLocs) {
@@ -178,6 +214,11 @@ void TetrisGame::lock(GridTetromino& shape) {
 
 // GRAPHICS METHODS
 
+/// @brief Draws a block.
+/// @param topLeft The top left point of the block.
+/// @param xOffset The x offset of the block.
+/// @param yOffset The y offset of the block.
+/// @param color The color of the block.
 void TetrisGame::drawBlock(const Point& topLeft, int xOffset, int yOffset, TetColor color) {
     blockSprite.setTextureRect(sf::IntRect(static_cast<int>(color) * BLOCK_WIDTH, 0, BLOCK_WIDTH, BLOCK_HEIGHT));
     
@@ -188,6 +229,8 @@ void TetrisGame::drawBlock(const Point& topLeft, int xOffset, int yOffset, TetCo
     window.draw(blockSprite);
 }
 
+/// @brief Draws the gameboard.
+/// @details Draws the gameboard by iterating through each cell and drawing a block if it is not empty.
 void TetrisGame::drawGameboard() {
     for (int row = 0; row < Gameboard::MAX_Y; row++) {
         for (int col = 0; col < Gameboard::MAX_X; col++) {
@@ -199,6 +242,9 @@ void TetrisGame::drawGameboard() {
     }
 }
 
+/// @brief Draws a tetromino.
+/// @param tetromino The tetromino to draw.
+/// @param topLeft The top left point of the tetromino.
 void TetrisGame::drawTetromino(const GridTetromino& tetromino, const Point& topLeft) {
     std::vector<Point> mappedLocs = tetromino.getBlockLocsMappedToGrid();
     Point gridLoc = tetromino.getGridLoc();
@@ -208,11 +254,17 @@ void TetrisGame::drawTetromino(const GridTetromino& tetromino, const Point& topL
     }
 }
 
+/// @brief Updates the score display.
+/// @details Updates the score display by setting the string of the score text to the current score.
 void TetrisGame::updateScoreDisplay() {
     scoreText.setString("Score: " + std::to_string(score));
 }
 
 // STATE & GAMEPLAY/LOGIC METHODS
+
+/// @brief Checks if the shape is within the borders.
+/// @param shape The shape to check.
+/// @return True if the shape is within the borders, false otherwise.
 bool TetrisGame::isPositionLegal(const GridTetromino& shape) const {
     if (!isWithinBorders(shape)) {
         return false;
@@ -230,6 +282,9 @@ bool TetrisGame::isPositionLegal(const GridTetromino& shape) const {
 }
 
 
+/// @brief Checks if the shape is within the borders.
+/// @param shape The shape to check.
+/// @return True if the shape is within the borders, false otherwise.
 bool TetrisGame::isWithinBorders(const GridTetromino& shape) const {
     std::vector<Point> mappedLocs = shape.getBlockLocsMappedToGrid();
     
@@ -245,11 +300,17 @@ bool TetrisGame::isWithinBorders(const GridTetromino& shape) const {
     return true;
 }
 
+/// @brief Determines the seconds per tick based on the score.
+/// @details Determines the seconds per tick based on the score by dividing the maximum seconds per tick by the score divided by 100 plus 1.
 void TetrisGame::determineSecondsPerTick() {
     secondsPerTick = MAX_SECONDS_PER_TICK / (score / 100 + 1);
 }
 
 // MY OWN METHODS CUS IM COOL AS FUCK
+
+/// @brief Attempts to rotate the shape counterclockwise.
+/// @param shape The shape to rotate.
+/// @return True if the rotation is legal, false otherwise.
 bool TetrisGame::attemptRotateCounterClockwise(GridTetromino& shape) {
     // Create a temporary copy of the shape
     GridTetromino temp = shape;

@@ -1,5 +1,3 @@
-
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "TetrisGame.h"
@@ -29,7 +27,7 @@ int main()
 	window.setFramerateLimit(30);				// set a max framerate of 30 FPS
 
 	const Point gameboardOffset{ 54, 125 };		// the pixel offset of the top left of the gameboard 
-	const Point nextShapeOffset{ 490, 210 };	// the pixel offset of the next shape Tetromino
+	const Point nextShapeOffset{ 470, 200 };	// the pixel offset of the next shape Tetromino
 
 	// set up a tetris game
 	TetrisGame game(window, blockSprite, gameboardOffset, nextShapeOffset);
