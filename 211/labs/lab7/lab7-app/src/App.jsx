@@ -6,13 +6,28 @@ import FavoriteItemList from "./components/FavoriteItemList";
 import FavoriteItemFilter from "./components/FavoriteItemFilter";
 import axios from 'axios';
 
+{/*
+  pm2 start npx -- json-server movies.json
+*/}
+
 const App = ({ className }) => {
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [filterText, setFilterText] = useState("");
-  const nextId = useRef(Math.max(...favoriteMovies.map(movie => movie.id)) + 1);
+  const nextId = useRef(0);
 
   useEffect(() => {
     console.log('useEffect was executed!');
+    axios.get('http://localhost:3000/movies')
+      .then((response) => {
+        console.log('Data received:', response.data);
+        setFavoriteMovies(response.data);
+        if (response.data.length > 0) {
+          nextId.current = Math.max(...response.data.map(movie => movie.id)) + 1;
+        }
+      })
+      .catch((error) => {
+        console.log('Error fetching data:', error);
+      });
   }, []);
 
   const handleFilterChange = (text) => {

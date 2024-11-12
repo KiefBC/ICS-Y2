@@ -2,6 +2,10 @@ import FavoriteItem from "./FavoriteItem";
 import styled from 'styled-components';
 
 const FavoriteItemList = ({ favoriteMovies, filterText, onTitleChange, onDelete }) => {
+  if (!favoriteMovies) {
+    return <div>Loading...</div>;
+  }
+
   const filteredMovies = filterText === "" 
     ? favoriteMovies 
     : favoriteMovies.filter((movie) =>
