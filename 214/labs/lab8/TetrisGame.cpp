@@ -341,7 +341,7 @@ bool TetrisGame::attemptRotateCounterClockwise(GridTetromino& shape) {
     return false;
 }
 
-/// @brief Updates the ghost shape.
+/// @brief Updates the ghost shape that is the current shape dropped to the bottom.
 void TetrisGame::updateGhostShape() {
     ghostShape = currentShape;
     drop(ghostShape);
