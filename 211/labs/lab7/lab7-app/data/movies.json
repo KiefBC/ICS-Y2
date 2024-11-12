@@ -1,0 +1,25 @@
+{
+  "movies": [
+    {
+      "id": 0,
+      "title": "The Dark Knight",
+      "genre": "Action",
+      "url": "https://www.imdb.com/title/tt0468569/",
+      "color": "brown"
+    },
+    {
+      "id": 1,
+      "title": "The Godfather",
+      "genre": "Crime",
+      "url": "https://www.imdb.com/title/tt0068646/",
+      "color": "red"
+    },
+    {
+      "id": 2,
+      "title": "The Lord of the Rings",
+      "genre": "Action",
+      "url": "https://www.imdb.com/title/tt0167261/",
+      "color": "blue"
+    }
+  ]
+} 
