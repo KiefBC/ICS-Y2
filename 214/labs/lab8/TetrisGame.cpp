@@ -56,8 +56,9 @@ TetrisGame::TetrisGame(sf::RenderWindow& window, sf::Sprite& blockSprite, const 
 /// @brief Draws the gameboard, current shape, next shape, and score.
 void TetrisGame::draw() {
     drawGameboard();
-    drawTetromino(currentShape, gameboardOffset);
-    drawTetromino(nextShape, nextShapeOffset);
+    drawTetromino(ghostShape, gameboardOffset, 0.3f);  // Draw ghost shape with 30% opacity
+    drawTetromino(currentShape, gameboardOffset, 1.0f);
+    drawTetromino(nextShape, nextShapeOffset, 1.0f);
     window.draw(scoreText);
 }
 
@@ -155,6 +156,9 @@ void TetrisGame::reset() {
     board.empty();
     pickNextShape();
     spawnNextShape();
+
+    ghostShape = currentShape;
+    updateGhostShape();
 }
 
 /// @brief Sets the next shape to a random shape.
@@ -168,7 +172,7 @@ void TetrisGame::pickNextShape() {
 bool TetrisGame::spawnNextShape() {
     currentShape = nextShape;
     currentShape.setGridLoc(board.getSpawnLoc());
-
+    updateGhostShape();
     return isPositionLegal(currentShape);
 }
 
@@ -181,6 +185,9 @@ bool TetrisGame::attemptRotate(GridTetromino& shape) {
     
     if (isPositionLegal(temp)) {
         shape = temp;
+        if (&shape == &currentShape) {
+            updateGhostShape();
+        }
         return true;
     }
 
@@ -197,6 +204,9 @@ bool TetrisGame::attemptMove(GridTetromino& shape, int xOffset, int yOffset) {
     temp.move(xOffset, yOffset);
     if (isPositionLegal(temp)) {
         shape = temp;
+        if (&shape == &currentShape) {
+            updateGhostShape();
+        }
         return true;
     }
 
@@ -226,14 +236,17 @@ void TetrisGame::lock(GridTetromino& shape) {
 /// @param xOffset The x offset of the block.
 /// @param yOffset The y offset of the block.
 /// @param color The color of the block.
-void TetrisGame::drawBlock(const Point& topLeft, int xOffset, int yOffset, TetColor color) {
+/// @param alpha The opacity of the block.
+void TetrisGame::drawBlock(const Point& topLeft, int xOffset, int yOffset, TetColor color, float alpha) {
     blockSprite.setTextureRect(sf::IntRect(static_cast<int>(color) * BLOCK_WIDTH, 0, BLOCK_WIDTH, BLOCK_HEIGHT));
     
     float pixelX = topLeft.getX() + (xOffset * BLOCK_WIDTH);
     float pixelY = topLeft.getY() + (yOffset * BLOCK_HEIGHT);
 
     blockSprite.setPosition(pixelX, pixelY);
+    blockSprite.setColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(alpha * 255)));
     window.draw(blockSprite);
+    blockSprite.setColor(sf::Color(255, 255, 255, 255));
 }
 
 /// @brief Draws the gameboard by iterating through each cell and drawing a block if it is not empty.
@@ -242,7 +255,7 @@ void TetrisGame::drawGameboard() {
         for (int col = 0; col < Gameboard::MAX_X; col++) {
             int content = board.getContent(col, row);
             if (content != Gameboard::EMPTY_BLOCK) {
-                drawBlock(gameboardOffset, col, row, static_cast<TetColor>(content));
+                drawBlock(gameboardOffset, col, row, static_cast<TetColor>(content), 0.3f);
             }
         }
     }
@@ -251,12 +264,12 @@ void TetrisGame::drawGameboard() {
 /// @brief Draws a tetromino.
 /// @param tetromino The tetromino to draw.
 /// @param topLeft The top left point of the tetromino.
-void TetrisGame::drawTetromino(const GridTetromino& tetromino, const Point& topLeft) {
+void TetrisGame::drawTetromino(const GridTetromino& tetromino, const Point& topLeft, float alpha) {
     std::vector<Point> mappedLocs = tetromino.getBlockLocsMappedToGrid();
     Point gridLoc = tetromino.getGridLoc();
     
     for (const auto& loc : mappedLocs) {
-        drawBlock(topLeft, loc.getX(), loc.getY(), tetromino.getColor());
+        drawBlock(topLeft, loc.getX(), loc.getY(), tetromino.getColor(), alpha);
     }
 }
 
@@ -321,9 +334,15 @@ bool TetrisGame::attemptRotateCounterClockwise(GridTetromino& shape) {
     
     if (isPositionLegal(temp)) {
         shape = temp;
-
+        updateGhostShape();
         return true;
     }
     
     return false;
+}
+
+/// @brief Updates the ghost shape.
+void TetrisGame::updateGhostShape() {
+    ghostShape = currentShape;
+    drop(ghostShape);
 }

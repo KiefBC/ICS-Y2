@@ -61,6 +61,7 @@ private:
 
 	// MY OWN MEMBER VARIABLE
 	sf::Music backgroundMusic;
+	GridTetromino ghostShape;
 									
 	// Time members ----------------------------------------------
 	// Note: a "tick" is the amount of time it takes a block to fall one line.
@@ -188,8 +189,9 @@ private:
 	// param 2: int xOffset
 	// param 3: int yOffset
 	// param 4: TetColor color
+	// param 5: float alpha
 	// return: nothing
-	void drawBlock(const Point& topLeft, int xOffset, int yOffset, TetColor color);
+	void drawBlock(const Point& topLeft, int xOffset, int yOffset, TetColor color, float alpha);
 										
 	// Draw the gameboard blocks on the window
 	//   Iterate through each row & col, use drawBlock() to 
@@ -204,8 +206,9 @@ private:
 	//      If the Tetromino is on the gameboard: use gameboardOffset
 	// param 1: GridTetromino tetromino
 	// param 2: Point topLeft
+	// param 3: float alpha
 	// return: nothing
-	void drawTetromino(const GridTetromino& tetromino, const Point& topLeft);
+	void drawTetromino(const GridTetromino& tetromino, const Point& topLeft, float alpha);
 	
 	// update the score display
 	// form a string "score: ##" to display the current score
@@ -241,6 +244,8 @@ private:
 	// params: none
 	// return: nothing
 	void determineSecondsPerTick();
+
+	void updateGhostShape();
 
 
 };
