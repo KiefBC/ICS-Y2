@@ -61,7 +61,6 @@ const FavoriteItemForm = ({ addFavoriteMovie }) => {
             marginTop: "15px",
           }}
         >
-          {/* Pass the disabled prop based on form completion */}
           <StyledButton type="submit" disabled={isFormIncomplete}>
             Add Movie
           </StyledButton>

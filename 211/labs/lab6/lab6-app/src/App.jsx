@@ -30,7 +30,7 @@ const App = ({ className }) => {
     },
   ]);
   const [filterText, setFilterText] = useState("");
-  const nextId = useRef(1);
+  const nextId = useRef(Math.max(...favoriteMovies.map(movie => movie.id)) + 1);
 
   const handleFilterChange = (text) => {
     setFilterText(text);
@@ -62,7 +62,7 @@ const App = ({ className }) => {
     setFavoriteMovies([...favoriteMovies, newMovie]);
   };
 
-  // Update the title of a movie
+
   const handleTitleChange = (id, newTitle) => {
     if (isDuplicateTitle(newTitle, id)) {
       alert("This title already exists in your favorites!");
@@ -87,7 +87,9 @@ const App = ({ className }) => {
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this movie?')) {
+      const movieToDelete = favoriteMovies.find(movie => movie.id === id);
       setFavoriteMovies(favoriteMovies.filter(movie => movie.id !== id));
+      console.log(`Deleted Item: ${movieToDelete.title} - ${id}`);
     }
   };
 
@@ -116,6 +118,7 @@ const StyledApp = styled(App)`
   font-family: Arial, sans-serif;
   color: #333;
   text-align: center;
+  
 
   h1 {
     font-size: 2.5rem;
@@ -151,6 +154,9 @@ const StyledApp = styled(App)`
 
   a {
     text-decoration: none;
+    background-color: #d0d0d0;
+    padding: 2px 5px;
+    border-radius: 3px;
   }
 
   a:hover {
@@ -162,42 +168,6 @@ const StyledTitle = styled.h1`
   font-size: 30pt;
   color: navy;
   margin-bottom: -10px;
-`;
-
-const StyledListItem = styled.li`
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-  list-style: none;
-  font-family: sans-serif;
-  color: ${(props) => props.color};
-`;
-
-const StyledLegend = styled.legend`
-  font-weight: bold;
-  color: navy;
-  padding: 5px;
-`;
-
-const StyledLabel = styled.label`
-  font-weight: bold;
-  color: navy;
-  padding: 5px;
-`;
-
-const StyledButton = styled.button`
-  width: auto;
-  padding: 10px 20px;
-  background-color: #ccc;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-
-  &:hover {
-    background-color: green;
-  }
 `;
 
 export default StyledApp;

@@ -53,13 +53,27 @@ const DeleteIconWrapper = styled.div`
   cursor: pointer;
 
   .delete-icon {
-    color: #666;
+    color: #ff4444;
     transition: all 0.2s ease;
+    animation: breathe 2s infinite ease-in-out;
+  }
+
+  @keyframes breathe {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   &:hover .delete-icon {
-    color: #ff4444;
+    animation: none;
     transform: scale(1.1);
+    filter: brightness(0.8);
   }
 
   &:hover > div {
