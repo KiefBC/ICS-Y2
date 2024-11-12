@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Header from "./components/Header";
 import FavoriteItemForm from "./components/FavoriteItemForm";
 import FavoriteItemList from "./components/FavoriteItemList";
@@ -23,19 +23,20 @@ const App = ({ className }) => {
     },
     {
       id: 2,
-      title: "The Lord of the Rings: The Return of the King",
+      title: "The Lord of the Rings",
       genre: "Action",
       url: "https://www.imdb.com/title/tt0167261/",
       color: "blue",
     },
   ]);
   const [filterText, setFilterText] = useState("");
+  const nextId = useRef(1);
 
   const handleFilterChange = (text) => {
     setFilterText(text);
   };
 
-  // Function to check for duplicate titles (case-insensitive)
+  // case-insensitive
   const isDuplicateTitle = (title, excludeId = null) => {
     return favoriteMovies.some(
       (movie) =>
@@ -51,14 +52,14 @@ const App = ({ className }) => {
     }
 
     const newMovie = {
-      id: favoriteMovies.length,
+      id: nextId.current,
       title,
       genre: "Unknown",
       url,
       color: getRandomColor(),
     };
-
-    setFavoriteMovies(favoriteMovies.concat(newMovie));
+    nextId.current += 1;
+    setFavoriteMovies([...favoriteMovies, newMovie]);
   };
 
   // Update the title of a movie
@@ -75,10 +76,20 @@ const App = ({ className }) => {
     );
   };
 
-  const getRandomColor = () =>
-    ["brown", "red", "blue", "green", "purple", "orange"][
-      Math.floor(Math.random() * 6)
+  const getRandomColor = () => {
+    const colors = [
+      'crimson', 'forestgreen', 'dodgerblue', 'mediumorchid', 
+      'chocolate', 'darkorange', 'steelblue', 'seagreen',
+      'slateblue', 'tomato', 'teal', 'indianred'
     ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this movie?')) {
+      setFavoriteMovies(favoriteMovies.filter(movie => movie.id !== id));
+    }
+  };
 
   return (
     <div className={className}>
@@ -90,7 +101,7 @@ const App = ({ className }) => {
         favoriteMovies={favoriteMovies}
         filterText={filterText}
         onTitleChange={handleTitleChange}
-        isDuplicateTitle={isDuplicateTitle} // Pass the duplicate checker as a prop
+        onDelete={handleDelete}
       />
     </div>
   );
