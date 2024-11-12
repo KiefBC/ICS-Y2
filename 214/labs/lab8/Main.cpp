@@ -3,6 +3,7 @@
 #include "TetrisGame.h"
 #include "TestSuite.h"
 
+// g++ Gameboard.cpp GridTetromino.cpp Main.cpp Point.cpp TestSuite.cpp Tetromino.cpp TetrisGame.cpp -o main -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 int main()
 {	
