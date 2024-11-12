@@ -17,17 +17,33 @@ const App = ({ className }) => {
 
   useEffect(() => {
     console.log('useEffect was executed!');
-    axios.get('http://localhost:3000/movies')
-      .then((response) => {
-        console.log('Data received:', response.data);
-        setFavoriteMovies(response.data);
-        if (response.data.length > 0) {
-          nextId.current = Math.max(...response.data.map(movie => movie.id)) + 1;
+    
+    // Promise syntax (old way)
+    // axios.get('http://localhost:3000/movies')
+    //   .then((response) => {
+    //     console.log('Data received:', response.data);
+    //     setFavoriteMovies(response.data);
+    //     if (response.data.length > 0) {
+    //       nextId.current = Math.max(...response.data.map(movie => movie.id)) + 1;
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log('Error fetching data:', error);
+    //   });
+  
+    // ES8 async/await syntax with IIFE (new way)
+    (async () => {
+      try {
+        const { data } = await axios.get('http://localhost:3000/movies');
+        console.log('Data received:', data);
+        setFavoriteMovies(data);
+        if (data.length > 0) {
+          nextId.current = Math.max(...data.map(movie => movie.id)) + 1;
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.log('Error fetching data:', error);
-      });
+      }
+    })();
   }, []);
 
   const handleFilterChange = (text) => {
