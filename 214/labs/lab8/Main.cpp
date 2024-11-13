@@ -7,6 +7,8 @@
 
 int main()
 {	
+	srand(time(nullptr));
+
 	// run some sanity tests on our classes to ensure they're working as expected.
 	TestSuite::runTestSuite();
 
