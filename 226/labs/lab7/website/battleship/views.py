@@ -54,43 +54,57 @@ def display_game(request):
 
 @transaction.atomic
 def pick_tile(request, player_name, row, col):
-    redirect_script = "<script>setTimeout(function(){ window.location.href = '/game/'; }, 2000);</script>"
-    
     try:
         # Input validation
         if not (0 <= row <= 9 and 0 <= col <= 9):
-            return HttpResponse("Out of Boundary. Redirecting..." + redirect_script)
+            return render(request, 'battleship/pick_result.html', {
+                'message': "Out of Boundary",
+                'players': Player.objects.all()
+            })
             
         # Get player with lock
         try:
             player = Player.objects.select_for_update().get(name=player_name)
         except Player.DoesNotExist:
-            return HttpResponse(f"Player {player_name} not found. Redirecting..." + redirect_script)
+            return render(request, 'battleship/pick_result.html', {
+                'message': f"Player {player_name} not found",
+                'players': Player.objects.all()
+            })
             
         # Get tile with lock
         try:
             tile = Tile.objects.select_for_update().get(row=row, column=col)
         except Tile.DoesNotExist:
-            return HttpResponse(f"Tile at position ({row}, {col}) not found. Redirecting..." + redirect_script)
+            return render(request, 'battleship/pick_result.html', {
+                'message': f"Tile at position ({row}, {col}) not found",
+                'players': Player.objects.all()
+            })
             
         # Check if tile was already picked
         if tile.value in ["picked", "revealed_treasure"]:
-            return HttpResponse("This tile has already been picked. Redirecting..." + redirect_script)
+            return render(request, 'battleship/pick_result.html', {
+                'message': "This tile has already been picked",
+                'players': Player.objects.all()
+            })
             
         # Update tile and score
         if tile.value == "treasure":
             player.score += 1
             player.save()
             tile.value = "revealed_treasure"
+            message = "Treasure found!"
         else:
             tile.value = "picked"
+            message = "No treasure here"
         tile.save()
         
-        # Get all players for score display
-        players = Player.objects.all()
-        scores = ", ".join([f"{p.name}: {p.score}" for p in players])
-        
-        return HttpResponse(f"Pick processed. Current scores: {scores}" + redirect_script)
+        return render(request, 'battleship/pick_result.html', {
+            'message': message,
+            'players': Player.objects.all()
+        })
         
     except Exception as e:
-        return HttpResponse(f"An error occurred: {str(e)}. Redirecting..." + redirect_script)
+        return render(request, 'battleship/pick_result.html', {
+            'message': f"An error occurred: {str(e)}",
+            'players': Player.objects.all()
+        })
