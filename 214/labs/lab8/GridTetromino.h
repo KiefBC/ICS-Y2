@@ -12,8 +12,10 @@
 #include "Tetromino.h"
 #include "Point.h"
 #include "TestSuite.h"
+#include "Gameboard.h"
 #include <vector>
 #include <iostream>
+#include <cassert>
 
 
 
