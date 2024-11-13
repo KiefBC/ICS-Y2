@@ -27,7 +27,7 @@ def create_game(request):
         tile.value = "treasure"
         tile.save()
     
-    return HttpResponse("Game created successfully!")
+    return redirect('display_game')
 
 def display_game(request):
     # Get all tiles ordered by row and column
@@ -59,7 +59,7 @@ def pick_tile(request, player_name, row, col):
     try:
         # Input validation
         if not (0 <= row <= 9 and 0 <= col <= 9):
-            return HttpResponse("Invalid row or column. Must be between 0 and 9. Redirecting..." + redirect_script)
+            return HttpResponse("Out of Boundary. Redirecting..." + redirect_script)
             
         # Get player with lock
         try:
@@ -74,15 +74,16 @@ def pick_tile(request, player_name, row, col):
             return HttpResponse(f"Tile at position ({row}, {col}) not found. Redirecting..." + redirect_script)
             
         # Check if tile was already picked
-        if tile.value == "picked":
+        if tile.value in ["picked", "revealed_treasure"]:
             return HttpResponse("This tile has already been picked. Redirecting..." + redirect_script)
             
         # Update tile and score
         if tile.value == "treasure":
             player.score += 1
             player.save()
-            
-        tile.value = "picked"
+            tile.value = "revealed_treasure"
+        else:
+            tile.value = "picked"
         tile.save()
         
         # Get all players for score display

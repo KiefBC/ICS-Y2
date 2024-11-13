@@ -21,11 +21,28 @@
                     {% for row in board %}
                         <div class="flex">
                             {% for tile in row %}
-                                <div class="w-[50px] h-[50px] border border-gray-500 flex items-center justify-center m-0.5 rounded
-                                          {% if tile.value == 'empty' %}bg-gray-200
-                                          {% elif tile.value == 'treasure' %}bg-yellow-400
-                                          {% elif tile.value == 'picked' %}bg-red-400{% endif %}">
-                                    {{ tile.value }}
+                            <div class="w-[50px] h-[50px] border border-gray-500 flex items-center justify-center m-0.5 rounded
+                                {% if tile.value == 'empty' %}tile-bg bg-gray-200
+                                {% elif tile.value == 'treasure' %}tile-bg bg-yellow-400
+                                {% elif tile.value == 'revealed_treasure' %}tile-bg bg-green-400
+                                {% elif tile.value == 'picked' %}tile-bg bg-red-400{% endif %}">
+                                {% if tile.value == 'picked' %}
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                {% elif tile.value == 'revealed_treasure' %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                {% else %}
+                                    <span class="real-value">
+                                        {% if tile.value == 'empty' %}E
+                                        {% elif tile.value == 'treasure' %}T
+                                        {% endif %}
+                                    </span>
+                                    <span class="hidden obfuscated-value">x</span>
+                                {% endif %}
+                                    </span>
                                 </div>
                             {% endfor %}
                         </div>
@@ -81,11 +98,22 @@
                 </form>
             </div>
             {% endfor %}
+            <div class="mt-6">
+                <a href="/game/create/" 
+                   class="block w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 text-center font-bold">
+                    New Game
+                </a>
+            </div>
+            <div class="mt-2">
+                <button onclick="toggleBoard()" 
+                        class="block w-full bg-black text-white py-2 px-4 rounded hover:bg-gray-900 text-center font-bold">
+                    Toggle Board View
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Add this script at the bottom of the content block -->
 <script>
 function showForm(playerName) {
     // Hide all forms first
@@ -101,6 +129,35 @@ function handleSubmit(event, playerName) {
     const row = document.getElementById(`row-${playerName}`).value;
     const col = document.getElementById(`col-${playerName}`).value;
     window.location.href = `/game/pick/${playerName}/${row}/${col}/`;
+}
+
+function toggleBoard() {
+    const realValues = document.querySelectorAll('.real-value');
+    const obfuscatedValues = document.querySelectorAll('.obfuscated-value');
+    const tileBgs = document.querySelectorAll('.tile-bg');
+    
+    realValues.forEach(value => {
+        value.classList.toggle('hidden');
+    });
+    
+    obfuscatedValues.forEach(value => {
+        value.classList.toggle('hidden');
+    });
+    
+    tileBgs.forEach(bg => {
+        // Store original classes in a data attribute if not already stored
+        if (!bg.dataset.originalClasses) {
+            bg.dataset.originalClasses = bg.classList.toString();
+        }
+        
+        if (bg.classList.contains('bg-white')) {
+            // Restore original background classes
+            bg.className = bg.dataset.originalClasses;
+        } else {
+            // Store original classes and set to white
+            bg.className = 'w-[50px] h-[50px] border border-gray-500 flex items-center justify-center m-0.5 rounded tile-bg bg-white';
+        }
+    });
 }
 </script>
 {% endblock %} 
