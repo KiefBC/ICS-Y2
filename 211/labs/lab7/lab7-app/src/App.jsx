@@ -4,11 +4,13 @@ import Header from "./components/Header";
 import FavoriteItemForm from "./components/FavoriteItemForm";
 import FavoriteItemList from "./components/FavoriteItemList";
 import FavoriteItemFilter from "./components/FavoriteItemFilter";
-import axios from 'axios';
+import axios from "axios";
 
-{/*
+{
+  /*
   pm2 start npx -- json-server movies.json
-*/}
+*/
+}
 
 const App = ({ className }) => {
   const [favoriteMovies, setFavoriteMovies] = useState([]);
@@ -16,8 +18,8 @@ const App = ({ className }) => {
   const nextId = useRef(0);
 
   useEffect(() => {
-    console.log('useEffect was executed!');
-    
+    console.log("useEffect was executed!");
+
     // Promise syntax (old way)
     // axios.get('http://localhost:3000/movies')
     //   .then((response) => {
@@ -30,18 +32,18 @@ const App = ({ className }) => {
     //   .catch((error) => {
     //     console.log('Error fetching data:', error);
     //   });
-  
+
     // ES8 async/await syntax with IIFE (new way)
     (async () => {
       try {
-        const { data } = await axios.get('http://localhost:3000/movies');
-        console.log('Data received:', data);
+        const { data } = await axios.get("http://localhost:3000/movies");
+        console.log("Data received:", data);
         setFavoriteMovies(data);
         if (data.length > 0) {
-          nextId.current = Math.max(...data.map(movie => movie.id)) + 1;
+          nextId.current = Math.max(...data.map((movie) => movie.id)) + 1;
         }
       } catch (error) {
-        console.log('Error fetching data:', error);
+        console.log("Error fetching data:", error);
       }
     })();
   }, []);
@@ -76,7 +78,6 @@ const App = ({ className }) => {
     setFavoriteMovies([...favoriteMovies, newMovie]);
   };
 
-
   const handleTitleChange = (id, newTitle) => {
     if (isDuplicateTitle(newTitle, id)) {
       alert("This title already exists in your favorites!");
@@ -92,17 +93,26 @@ const App = ({ className }) => {
 
   const getRandomColor = () => {
     const colors = [
-      'crimson', 'forestgreen', 'dodgerblue', 'mediumorchid', 
-      'chocolate', 'darkorange', 'steelblue', 'seagreen',
-      'slateblue', 'tomato', 'teal', 'indianred'
+      "crimson",
+      "forestgreen",
+      "dodgerblue",
+      "mediumorchid",
+      "chocolate",
+      "darkorange",
+      "steelblue",
+      "seagreen",
+      "slateblue",
+      "tomato",
+      "teal",
+      "indianred",
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this movie?')) {
-      const movieToDelete = favoriteMovies.find(movie => movie.id === id);
-      setFavoriteMovies(favoriteMovies.filter(movie => movie.id !== id));
+    if (window.confirm("Are you sure you want to delete this movie?")) {
+      const movieToDelete = favoriteMovies.find((movie) => movie.id === id);
+      setFavoriteMovies(favoriteMovies.filter((movie) => movie.id !== id));
       console.log(`Deleted Item: ${movieToDelete.title} - ${id}`);
     }
   };
@@ -132,7 +142,6 @@ const StyledApp = styled(App)`
   font-family: Arial, sans-serif;
   color: #333;
   text-align: center;
-  
 
   h1 {
     font-size: 2.5rem;

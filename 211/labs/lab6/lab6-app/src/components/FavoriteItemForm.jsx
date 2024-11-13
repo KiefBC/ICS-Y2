@@ -4,16 +4,16 @@ import { useState } from "react";
 const FavoriteItemForm = ({ addFavoriteMovie }) => {
   const [formData, setFormData] = useState({ title: "", url: "" });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (eventTarget) => {
+    const { name, value } = eventTarget.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (eventTarget) => {
+    eventTarget.preventDefault();
     addFavoriteMovie(formData.title, formData.url);
     setFormData({ title: "", url: "" });
   };
@@ -70,7 +70,6 @@ const FavoriteItemForm = ({ addFavoriteMovie }) => {
   );
 };
 
-// Style adjustments to handle disabled state
 const StyledLegend = styled.legend`
   font-weight: bold;
   color: navy;

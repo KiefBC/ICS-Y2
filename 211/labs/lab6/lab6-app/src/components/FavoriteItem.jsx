@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { BadgeX } from 'lucide-react';
+import { BadgeX } from "lucide-react";
 
 const StyledListItem = styled.li`
   display: inline-flex;
@@ -9,18 +9,18 @@ const StyledListItem = styled.li`
   padding: 4px 16px;
   margin: 2px 0;
   border-radius: 4px;
-  color: ${props => props.color};
-  background-color: ${props => props.color}22;
+  color: ${(props) => props.color};
+  background-color: ${(props) => props.color}22;
   transition: background-color 0.2s ease;
   width: fit-content;
   max-width: 100%;
 
   &:hover {
-    background-color: ${props => props.color}33;
+    background-color: ${(props) => props.color}33;
   }
 
   span {
-    color: ${props => props.color};
+    color: ${(props) => props.color};
     white-space: nowrap;
   }
 `;
@@ -98,7 +98,7 @@ const DeleteTooltip = styled.div`
   transition: all 0.2s ease;
 
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 100%;
     left: 50%;
@@ -113,27 +113,23 @@ const FavoriteItem = ({ id, title, url, color, onTitleChange, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
 
-  // Enable edit mode on double-click
   const handleDoubleClick = () => {
     setIsEditing(true);
   };
 
-  // Handle title change input
   const handleChange = (e) => {
     setEditedTitle(e.target.value);
   };
 
-  // Save the edited title and exit edit mode
   const handleSave = () => {
     setIsEditing(false);
     if (editedTitle.trim()) {
       onTitleChange(id, editedTitle);
     } else {
-      setEditedTitle(title); // Revert to the original title if input is empty
+      setEditedTitle(title);
     }
   };
 
-  // Save title on Enter key press
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSave();
@@ -153,15 +149,13 @@ const FavoriteItem = ({ id, title, url, color, onTitleChange, onDelete }) => {
           style={{ width: "40%" }}
         />
       ) : (
-        <span onDoubleClick={handleDoubleClick}>
-          {title}
-        </span>
+        <span onDoubleClick={handleDoubleClick}>{title}</span>
       )}
       <StyledLink href={url} target="_blank" rel="noopener noreferrer">
         {new URL(url).hostname}
       </StyledLink>
       <DeleteIconWrapper>
-        <BadgeX 
+        <BadgeX
           size={18}
           onClick={() => onDelete(id)}
           className="delete-icon"

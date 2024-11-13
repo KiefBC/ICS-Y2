@@ -5,14 +5,14 @@ const FavoriteItemFilter = ({ onFilterChange }) => {
   const [filterText, setFilterText] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
 
-  const handleChange = (e) => {
-    const value = e.target.value;
+  const handleChange = (eventTarget) => {
+    const value = eventTarget.target.value;
     setFilterText(value);
     onFilterChange(isEnabled ? value : "");
   };
 
-  const handleCheckboxChange = (e) => {
-    const checked = e.target.checked;
+  const handleCheckboxChange = (eventTarget) => {
+    const checked = eventTarget.target.checked;
     setIsEnabled(checked);
     onFilterChange(checked ? filterText : "");
   };
@@ -50,7 +50,7 @@ const StyledFilterContainer = styled.div`
   background-color: #d0e7ff;
   padding: 10px;
   border-radius: 5px;
-  opacity: ${props => props.$disabled ? 0.6 : 1};
+  opacity: ${(props) => (props.$disabled ? 0.6 : 1)};
   transition: opacity 0.3s ease;
 `;
 
@@ -76,7 +76,7 @@ const StyledFilterInput = styled.input`
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
-  
+
   &:disabled {
     background-color: #f0f0f0;
     cursor: not-allowed;
