@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.db import transaction
 from .models import Tile, Player
 import random
+import time
 
 def create_game(request):
     # Clear existing game data
@@ -53,26 +54,28 @@ def display_game(request):
 
 @transaction.atomic
 def pick_tile(request, player_name, row, col):
+    redirect_script = "<script>setTimeout(function(){ window.location.href = '/game/'; }, 2000);</script>"
+    
     try:
         # Input validation
         if not (0 <= row <= 9 and 0 <= col <= 9):
-            return HttpResponseBadRequest("Invalid row or column. Must be between 0 and 9.")
+            return HttpResponse("Invalid row or column. Must be between 0 and 9. Redirecting..." + redirect_script)
             
         # Get player with lock
         try:
             player = Player.objects.select_for_update().get(name=player_name)
         except Player.DoesNotExist:
-            return HttpResponseBadRequest(f"Player {player_name} not found.")
+            return HttpResponse(f"Player {player_name} not found. Redirecting..." + redirect_script)
             
         # Get tile with lock
         try:
             tile = Tile.objects.select_for_update().get(row=row, column=col)
         except Tile.DoesNotExist:
-            return HttpResponseBadRequest(f"Tile at position ({row}, {col}) not found.")
+            return HttpResponse(f"Tile at position ({row}, {col}) not found. Redirecting..." + redirect_script)
             
         # Check if tile was already picked
         if tile.value == "picked":
-            return HttpResponseBadRequest("This tile has already been picked.")
+            return HttpResponse("This tile has already been picked. Redirecting..." + redirect_script)
             
         # Update tile and score
         if tile.value == "treasure":
@@ -86,7 +89,7 @@ def pick_tile(request, player_name, row, col):
         players = Player.objects.all()
         scores = ", ".join([f"{p.name}: {p.score}" for p in players])
         
-        return HttpResponse(f"Pick processed. Current scores: {scores}")
+        return HttpResponse(f"Pick processed. Current scores: {scores}" + redirect_script)
         
     except Exception as e:
-        return HttpResponseBadRequest(f"An error occurred: {str(e)}")
+        return HttpResponse(f"An error occurred: {str(e)}. Redirecting..." + redirect_script)

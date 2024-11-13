@@ -1,110 +1,106 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Battleship Game</title>
-    <style>
-        .game-container {
-            display: inline-block;
-            margin: 20px;
-        }
-        .board-with-labels {
-            display: grid;
-            grid-template-columns: 30px auto;
-            grid-template-rows: 30px auto;
-        }
-        .column-labels {
-            display: flex;
-            grid-column: 2;
-            grid-row: 1;
-            padding-left: 12px;
-        }
-        .row-labels {
-            display: flex;
-            flex-direction: column;
-            grid-column: 1;
-            grid-row: 2;
-            padding-top: 12px;
-        }
-        .label {
-            width: 54px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        .row-label {
-            width: 30px;
-            height: 54px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        .board {
-            grid-column: 2;
-            grid-row: 2;
-            border: 2px solid black;
-            padding: 10px;
-        }
-        .row {
-            display: flex;
-        }
-        .tile {
-            width: 50px;
-            height: 50px;
-            border: 1px solid black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 2px;
-        }
-        .empty {
-            background-color: #eee;
-        }
-        .treasure {
-            background-color: #ffd700;
-        }
-        .picked {
-            background-color: #ff6b6b;
-        }
-        .scores {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="game-container">
-        <div class="board-with-labels">
-            <div class="column-labels">
-                {% for i in "0123456789" %}
-                    <div class="label">{{i}}</div>
-                {% endfor %}
-            </div>
-            <div class="row-labels">
-                {% for i in "0123456789" %}
-                    <div class="row-label">{{i}}</div>
-                {% endfor %}
-            </div>
-            <div class="board">
-                {% for row in board %}
-                    <div class="row">
-                        {% for tile in row %}
-                            <div class="tile {{ tile.value }}">
-                                {{ tile.value }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-800 p-10">
+    <div class="flex justify-center items-start space-x-10">
+        <!-- Game Board Section -->
+        <div class="bg-gray-700 p-8 rounded-lg shadow-xl">
+            <div class="grid grid-cols-[30px_auto] grid-rows-[30px_auto]">
+                <div class="flex col-start-2 row-start-1 pl-3">
+                    {% for i in "0123456789" %}
+                        <div class="w-[54px] h-[30px] flex items-center justify-center font-bold text-white">{{i}}</div>
+                    {% endfor %}
+                </div>
+                <div class="flex flex-col col-start-1 row-start-2 pt-3">
+                    {% for i in "0123456789" %}
+                        <div class="w-[30px] h-[54px] flex items-center justify-center font-bold text-white">{{i}}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-start-2 row-start-2 border-2 border-gray-400 p-2.5 bg-gray-600 rounded-lg">
+                    {% for row in board %}
+                        <div class="flex">
+                            {% for tile in row %}
+                                <div class="w-[50px] h-[50px] border border-gray-500 flex items-center justify-center m-0.5 rounded
+                                          {% if tile.value == 'empty' %}bg-gray-200
+                                          {% elif tile.value == 'treasure' %}bg-yellow-400
+                                          {% elif tile.value == 'picked' %}bg-red-400{% endif %}">
+                                    {{ tile.value }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
-        <div class="scores">
-            <h2>Player Scores:</h2>
+        <!-- Scores Section -->
+        <div class="bg-gray-700 p-8 rounded-lg shadow-xl">
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">Player Scores</h2>
+            <table class="min-w-[300px] mb-6">
+                <thead>
+                    <tr class="border-b-2 border-gray-600">
+                        <th class="text-left py-3 px-4 text-white">Player</th>
+                        <th class="text-left py-3 px-4 text-white">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in players %}
+                    <tr class="border-b border-gray-600">
+                        <td class="py-3 px-4">
+                            <button onclick="showForm('{{ player.name }}')" class="text-blue-300 hover:text-blue-500">
+                                {{ player.name }}
+                            </button>
+                        </td>
+                        <td class="py-3 px-4 text-white">{{ player.score }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Input Forms -->
             {% for player in players %}
-                <p>{{ player.name }}: {{ player.score }}</p>
+            <div id="form-{{ player.name }}" class="hidden">
+                <form onsubmit="handleSubmit(event, '{{ player.name }}')" class="space-y-4">
+                    <div class="flex flex-col space-y-2">
+                        <label class="text-white">Row (0-9):</label>
+                        <input type="number" min="0" max="9" required 
+                               class="bg-gray-800 text-white px-3 py-2 rounded" 
+                               id="row-{{ player.name }}">
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <label class="text-white">Column (0-9):</label>
+                        <input type="number" min="0" max="9" required 
+                               class="bg-gray-800 text-white px-3 py-2 rounded" 
+                               id="col-{{ player.name }}">
+                    </div>
+                    <button type="submit" 
+                            class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+                        Submit
+                    </button>
+                </form>
+            </div>
             {% endfor %}
         </div>
     </div>
-</body>
-</html> 
+</div>
+
+<!-- Add this script at the bottom of the content block -->
+<script>
+function showForm(playerName) {
+    // Hide all forms first
+    document.querySelectorAll('[id^="form-"]').forEach(form => {
+        form.classList.add('hidden');
+    });
+    // Show the selected player's form
+    document.getElementById(`form-${playerName}`).classList.remove('hidden');
+}
+
+function handleSubmit(event, playerName) {
+    event.preventDefault();
+    const row = document.getElementById(`row-${playerName}`).value;
+    const col = document.getElementById(`col-${playerName}`).value;
+    window.location.href = `/game/pick/${playerName}/${row}/${col}/`;
+}
+</script>
+{% endblock %} 
