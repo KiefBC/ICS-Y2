@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Battleship Game</title>
+    <style>
+        .game-container {
+            display: inline-block;
+            margin: 20px;
+        }
+        .board-with-labels {
+            display: grid;
+            grid-template-columns: 30px auto;
+            grid-template-rows: 30px auto;
+        }
+        .column-labels {
+            display: flex;
+            grid-column: 2;
+            grid-row: 1;
+            padding-left: 12px;
+        }
+        .row-labels {
+            display: flex;
+            flex-direction: column;
+            grid-column: 1;
+            grid-row: 2;
+            padding-top: 12px;
+        }
+        .label {
+            width: 54px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .row-label {
+            width: 30px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .board {
+            grid-column: 2;
+            grid-row: 2;
+            border: 2px solid black;
+            padding: 10px;
+        }
+        .row {
+            display: flex;
+        }
+        .tile {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px;
+        }
+        .empty {
+            background-color: #eee;
+        }
+        .treasure {
+            background-color: #ffd700;
+        }
+        .picked {
+            background-color: #ff6b6b;
+        }
+        .scores {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="board-with-labels">
+            <div class="column-labels">
+                {% for i in "0123456789" %}
+                    <div class="label">{{i}}</div>
+                {% endfor %}
+            </div>
+            <div class="row-labels">
+                {% for i in "0123456789" %}
+                    <div class="row-label">{{i}}</div>
+                {% endfor %}
+            </div>
+            <div class="board">
+                {% for row in board %}
+                    <div class="row">
+                        {% for tile in row %}
+                            <div class="tile {{ tile.value }}">
+                                {{ tile.value }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="scores">
+            <h2>Player Scores:</h2>
+            {% for player in players %}
+                <p>{{ player.name }}: {{ player.score }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html> 
