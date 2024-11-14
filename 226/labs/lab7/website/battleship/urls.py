@@ -4,7 +4,7 @@ from django.urls import path
 from . import views
 
 
-def redirect_to_game():
+def redirect_to_game(request):
     return redirect("display_game")
 
 
@@ -18,4 +18,3 @@ urlpatterns = [
         name="pick_tile",
     ),
 ]
-
