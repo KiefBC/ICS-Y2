@@ -1,0 +1,8 @@
+{
+  "courses": [
+    { "id": 0, "code": 211, "title": "Web Apps", "color": "red" },
+    { "id": 1, "code": 226, "title": "Network Programming", "color": "blue" },
+    { "id": 2, "code": 228, "title": "Security Fundamentals", "color": "green" }
+  ]
+}
+
