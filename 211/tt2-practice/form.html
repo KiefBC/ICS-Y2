@@ -14,6 +14,13 @@
     <script type="text/babel">
       // Main App Component
       const MyApp = () => {
+        // We use an object with boolean values when using checkboxes
+        // NOT USED, JUST FOR EXAMPLE
+        const [checkboxGroup, setCheckboxGroup] = React.useState({
+            'Choice 11111': false,
+            'Choice 2': false,
+            'Choice 3': false
+        });
         // State for currently selected radio button
         const [selectedChoice, setSelectedChoice] = React.useState('');
         // State for the submitted choice (only updates on form submission)
@@ -73,6 +80,59 @@
                     Submit
                 </button>
             </form>
+        );
+      };
+      
+      // Checkbox Form Component - NOT USED, JUST FOR EXAMPLE
+      const CheckboxForm = ({ checkboxGroup, setCheckboxGroup, onSubmit }) => {
+        const choices = ['Choice 11111', 'Choice 2', 'Choice 3'];
+
+        // Simplified handler using object spread
+        const handleChange = (event) => {
+            setCheckboxGroup({
+                ...checkboxGroup,
+                // Wrap in [] to make it a dynamic key
+                // event.target.value is the value of the checkbox
+                // event.target.checked is the checked state of the checkbox
+                [event.target.value]: event.target.checked
+            });
+        };
+
+        return (
+            <form onSubmit={onSubmit} className="flex flex-col gap-4">
+                <h2 className="text-2xl font-bold">Please select choices</h2>
+                <div className="space-y-2">
+                    {choices.map((choice) => (
+                        <Checkbox
+                          key={choice}
+                          value={choice}
+                          checked={checkboxGroup[choice]}
+                          onChange={handleChange}
+                        />
+                    ))}
+                </div>
+                <button 
+                    type="submit" 
+                    disabled={!Object.values(checkboxGroup).some(Boolean)} 
+                    className="bg-blue-500 text-white p-2 rounded-md">
+                    Submit
+                </button>
+            </form>
+        );
+      };
+
+      // Individual Checkbox Component - NOT USED, JUST FOR EXAMPLE
+      const Checkbox = ({ value, checked, onChange }) => {
+        return (
+            <div className="flex items-center gap-2">
+                <input
+                    type="checkbox"
+                    value={value}
+                    checked={checked}
+                    onChange={onChange}
+                />
+                <label>{value}</label>
+            </div>
         );
       };
 
