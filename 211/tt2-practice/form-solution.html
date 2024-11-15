@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ICS 211 Week 10 - Review Exercise 2 Solution</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+      const DisplayResult = ({ selectedChoice }) => (
+          <h1>{selectedChoice.charAt(0).toUpperCase() + selectedChoice.slice(1)} is a great choice!</h1>
+      );
+
+      const Radio = ({ choice, onChange, selected }) => (
+        <label>
+          <input type='radio' name={choice} value={choice}
+            checked={choice === selected}
+            onChange={onChange}
+          />
+          &nbsp;{choice.charAt(0).toUpperCase() + choice.slice(1)}
+        </label>
+      );
+
+      const App = () => {
+        
+        const[ selectedChoice, setSelectedChoice ] =
+          React.useState('');
+
+        const [ showResult, setShowResult ] = React.useState(false);
+
+        const handleRadioButton = event => {
+          setSelectedChoice( event.target.value );
+        }
+
+        const handleChoice = () => {
+          setShowResult(true);
+        }
+
+        return (
+          <>
+            <RadioButtonForm
+              selectedChoice={selectedChoice}
+              handleRadioButton={handleRadioButton}
+              handleChoice={handleChoice}
+            />
+            { showResult && <DisplayResult selectedChoice={selectedChoice} /> }
+          </>
+        );
+      }
+    
+      const RadioButtonForm = ({ selectedChoice, handleRadioButton, handleChoice }) => {
+        
+        const choiceList = [
+          "go to disneyland",
+          "buy a small 1 bedroom condo in Victoria",
+          "invest it in cryptocurrency",
+          "buy a bunch of NFTs",
+          "travel the world"
+        ];
+
+        const handleSubmit = event => {
+          event.preventDefault();
+          handleChoice();
+        }
+        
+        return (
+          <form onSubmit={handleSubmit}>
+            <fieldset>
+              <legend>What would you do with a million dollars?</legend>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1em' }}>
+                  { choiceList.map( choice =>
+                    <Radio key={choice} choice={choice}
+                      onChange={handleRadioButton}
+                      selected={selectedChoice} 
+                    />
+                  )}
+                
+                  <button style={{ width: '100px' }} type="submit" disabled={!selectedChoice}>Submit</button>
+                </div>
+            </fieldset>
+          </form>
+        );
+      }
+
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(<App />);
+
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

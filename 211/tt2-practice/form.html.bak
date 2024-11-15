@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <!-- Load React core libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX transformation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // Main App Component
+      const MyApp = () => {
+        // We use an object with boolean values when using checkboxes
+        // NOT USED, JUST FOR EXAMPLE
+        const [checkboxGroup, setCheckboxGroup] = React.useState({
+            'Choice 11111': false,
+            'Choice 2': false,
+            'Choice 3': false
+        });
+        // State for currently selected radio button
+        const [selectedChoice, setSelectedChoice] = React.useState('');
+        // State for the submitted choice (only updates on form submission)
+        const [submittedChoice, setSubmittedChoice] = React.useState('');
+        // State to control whether to show the result
+        const [showResult, setShowResult] = React.useState(false);
+
+        // Handle form submission
+        const handleChoice = (event) => {
+            event.preventDefault();
+            setSubmittedChoice(selectedChoice); // Update submitted choice
+            setShowResult(true); // Show the result component
+        };
+
+        return (
+            <div className="p-4">
+                {/* Radio button form component with necessary props */}
+                <RadioButtonForm 
+                    selectedChoice={selectedChoice}
+                    setSelectedChoice={setSelectedChoice}
+                    onSubmit={handleChoice} />
+                {/* Conditionally render result only after submission */}
+                {showResult && <DisplayResult choice={submittedChoice}/>}
+            </div>
+        );
+      }
+
+      // Radio Button Form Component
+      const RadioButtonForm = ({ selectedChoice, setSelectedChoice, onSubmit }) => {
+        // Array of available choices
+        const choices = ['Choice 11111', 'Choice 2', 'Choice 3'];
+
+        // Handle radio button selection change
+        const handleChange = (event) => {
+            setSelectedChoice(event.target.value);
+        };
+
+        return (
+            <form onSubmit={onSubmit} className="flex flex-col gap-4">
+                <h2 className="text-2xl font-bold">Please select a choice</h2>
+                <div className="space-y-2">
+                    {/* Map through choices to create radio buttons */}
+                    {choices.map((choice) => (
+                        <Radio
+                          key={choice}
+                          value={choice}
+                          checked={selectedChoice === choice}
+                          onChange={handleChange}
+                        />
+                    ))}
+                </div>
+                {/* Submit button - disabled if no choice selected */}
+                <button 
+                    type="submit" 
+                    disabled={!selectedChoice} 
+                    className="bg-blue-500 text-white p-2 rounded-md">
+                    Submit
+                </button>
+            </form>
+        );
+      };
+      
+      // Checkbox Form Component - NOT USED, JUST FOR EXAMPLE
+      const CheckboxForm = ({ checkboxGroup, setCheckboxGroup, onSubmit }) => {
+        const choices = ['Choice 11111', 'Choice 2', 'Choice 3'];
+
+        // Simplified handler using object spread
+        const handleChange = (event) => {
+            setCheckboxGroup({
+                ...checkboxGroup,
+                // Wrap in [] to make it a dynamic key
+                // event.target.value is the value of the checkbox
+                // event.target.checked is the checked state of the checkbox
+                [event.target.value]: event.target.checked
+            });
+        };
+
+        return (
+            <form onSubmit={onSubmit} className="flex flex-col gap-4">
+                <h2 className="text-2xl font-bold">Please select choices</h2>
+                <div className="space-y-2">
+                    {choices.map((choice) => (
+                        <Checkbox
+                          key={choice}
+                          value={choice}
+                          checked={checkboxGroup[choice]}
+                          onChange={handleChange}
+                        />
+                    ))}
+                </div>
+                <button 
+                    type="submit" 
+                    disabled={!Object.values(checkboxGroup).some(Boolean)} 
+                    className="bg-blue-500 text-white p-2 rounded-md">
+                    Submit
+                </button>
+            </form>
+        );
+      };
+
+      // Individual Checkbox Component - NOT USED, JUST FOR EXAMPLE
+      const Checkbox = ({ value, checked, onChange }) => {
+        return (
+            <div className="flex items-center gap-2">
+                <input
+                    type="checkbox"
+                    value={value}
+                    checked={checked}
+                    onChange={onChange}
+                />
+                <label>{value}</label>
+            </div>
+        );
+      };
+
+      // Individual Radio Button Component
+      const Radio = ({ value, checked, onChange }) => {
+        return (
+            <div className="flex items-center gap-2">
+                <input
+                    type="radio"
+                    value={value}
+                    checked={checked}
+                    onChange={onChange}
+                />
+                <label>{value}</label>
+            </div>
+        );
+      };
+
+      const DisplayResult = ({ choice }) => {
+        return (
+            <h1 className="text-4xl font-bold">You chose {choice}</h1>
+        );
+      };
+
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+
+    </script>
+  </body>
+</html>

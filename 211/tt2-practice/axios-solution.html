@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Wk10 Review Exercise 1 for TT2 Soln</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- AXIOS data fetching library CDN-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Styled Components CDNs -->
+    <script src="https://unpkg.com/react-is@18/umd/react-is.development.js"></script>
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
+    
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+      const StyledPar = styled.p`
+        color: ${ props => props.color };
+      `;
+      // alternative, with object destructuring
+      // it doesn't help in this situation so stick
+      // with just using props, like above
+      // color: ${ ({color}) => color };
+      
+      const Course = ({ id, code, title, color }) => (
+        <StyledPar color={color} id={id}>
+          {code}&nbsp;{title}
+        </StyledPar>
+      );
+
+
+      const App = ({ className }) => {
+        // This data is now stored in courses.json
+        // const courses = [
+        //   { id: 1, code: 211, title: "Web Applications" },
+        //   { id: 2, code: 212, title: "Database Systems Management" },
+        //   { id: 3, code: 214, title: "Programming from C to C++" }
+        // ];
+        
+        // State Hook added for server-side data fetching
+        const [ courses, setCourses ] = React.useState([]);
+
+        // ES8 Async/await Version
+        // React.useEffect( () => {
+        //   console.log('useEffect executed!');
+        //   // start of IIFE
+        //   (async () => {
+        //     try {
+        //       const response = await axios.get('http://localhost:3001/courses');
+        //       const { data } = response;
+        //       setCourses(data);
+        //     } catch (error) {
+        //       console.log('API Error: ' + error);
+        //     }
+        //   })();
+        //   // End of IIFE
+        // },[]);
+
+        // ES6 Promise Version
+        React.useEffect( () => {
+          console.log('useEffect executed!');
+
+          axios.get('http://localhost:3001/courses')
+          .then( response => {
+            const { data } = response;
+            setCourses(data);
+          })
+          .catch( error => {
+            console.log('API Error: ' + error);
+          });
+        },[]);
+
+        return (
+          // changed <> to div for Styled Component
+          <div className={className}>
+            {courses.map( course => 
+              <Course
+                key = {course.id}
+                id = {course.id}
+                code = {course.code}
+                title = {course.title}
+                color = {course.color}
+              />
+            )}
+          </div>
+        )
+      }
+      
+      const StyledApp = styled(App)`
+        padding: 10px;
+        border: 5px solid;
+      `;
+
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      // render StyledApp as it is a wrapper around App
+      root.render(<StyledApp />);
+
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

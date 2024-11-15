@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Wk4 TT1 Practice Exercise</title>
+    <!-- Load React library and DOM handling -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Load Axios for HTTP requests -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Load styled-components for CSS-in-JS styling -->
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
+    <!-- Babel compiler for JSX transformation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <!-- Root container for React application -->
+    <div id="root"></div>
+    <script type="text/babel">
+      // Course component: Displays individual course information
+      // Destructures props for easy access to course properties
+      const Course = ({ id, code, title, color }) => (
+        <StyledPar id={id} color={color}>{code}&nbsp;{title}</StyledPar>
+      );
+
+      // Styled paragraph component using styled-components
+      // Uses props.color for dynamic color styling
+      const StyledPar = styled.p`
+       color: ${props => props.color};
+       font-size: 3em;
+      `;
+
+      // Main App component
+      // Accepts className prop from styled-components
+      const App = ({ className}) => {
+      // State hook for storing course data
+      const [courses, setCourses] = React.useState([]);
+
+      // Effect hook for fetching data when component mounts
+      React.useEffect(() => {
+        console.log('useEffect');
+        // Self-executing async function for data fetching
+        (async () => {
+          try {
+            // Fetch courses data from local server
+            const { data } = await axios.get('http://localhost:3000/courses');
+            // Update state with fetched data
+            setCourses(data);
+          } catch (error) {
+            console.error(error);
+          }
+          })();
+      }, []); // Empty dependency array means this runs once on mount
+
+        return (
+          // Container div that receives styled-components className
+          <div className={className}>
+            {/* Map through courses array to create Course components */}
+            {courses.map( course => 
+              <Course
+                key = {course.id}  // React needs unique key for list items
+                id = {course.id}
+                code = {course.code}
+                title = {course.title}
+                color = {course.color}
+              />
+            )}
+          </div>
+        )
+      };
+
+      // Styled version of App component
+      // Applies layout styling using flexbox
+      const StyledApp = styled(App)`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2em;
+        border: 5px solid black;
+      `;
+
+      // Get the root DOM node
+      const container = document.getElementById('root');
+      // Create a React root
+      const root = ReactDOM.createRoot(container);
+      // Render the StyledApp component into the root
+      root.render(<StyledApp />);
+
+    </script>
+  </body>
+</html>
