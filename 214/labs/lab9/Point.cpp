@@ -69,21 +69,26 @@ std::string Point::toString() const {
     return ss.str();
 }
 
+/// @brief Overloads the + operator to add two points.
+/// @param other The point to add to the current point.
+/// @return A new point that is the sum of the current point and the other point.
 Point Point::operator+(const Point& other) const {
     return Point(x + other.x, y + other.y);
 }
 
+/// @brief Overloads the == operator to compare two points.
+/// @param left The left point to compare.
+/// @param right The right point to compare.
+/// @return True if the points are equal, false otherwise.
 bool operator==(const Point& left, const Point& right) {
     return (left.x == right.x) && (left.y == right.y);
 }
 
+/// @brief Overloads the << operator to print a point.
+/// @param os The output stream to print to.
+/// @param point The point to print.
+/// @return The output stream.
 std::ostream& operator<<(std::ostream& os, const Point& point) {
     os << point.toString();
     return os;
-}
-
-int main() {
-    // Run tests
-    TestSuite::runTestSuite();
-    return 0;
 }

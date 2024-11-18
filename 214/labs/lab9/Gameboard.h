@@ -1,6 +1,7 @@
 #pragma once
-#include "GameboardItem.h"
 #include "Point.h"
+
+class GameboardItem;
 
 class Gameboard {
 

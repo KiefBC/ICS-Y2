@@ -2,6 +2,7 @@
 #include <cassert>
 #include <iomanip>
 #include <iostream>
+#include "GameboardItem.h"
 
 Gameboard::Gameboard()
     : grid() // this is a way to init an array of pointers to all be nullptr
