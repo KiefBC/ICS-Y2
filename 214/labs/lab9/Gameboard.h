@@ -3,7 +3,8 @@
 
 class GameboardItem;
 
-class Gameboard {
+class Gameboard
+{
 
 public:
   // CONSTANTS

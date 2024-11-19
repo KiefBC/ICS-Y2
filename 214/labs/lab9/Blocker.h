@@ -1,10 +1,18 @@
 #pragma once
 #include "GameboardItem.h"
 
-class Blocker : public GameboardItem {
+/// @brief Represents a blocker on the gameboard
+class Blocker : public GameboardItem
+{
 public:
-    Blocker(const Gameboard& gameBoard) : GameboardItem(gameBoard) {}
-    char getDisplayChar() const override {
+    /// @brief Constructor for Blocker  
+    /// @param gameBoard - reference to the gameboard
+    Blocker(const Gameboard &gameBoard) : GameboardItem(gameBoard) {}
+
+    /// @brief Returns the display character for the blocker
+    /// @return display character
+    char getDisplayChar() const override
+    {
         return '#';
     }
 };
