@@ -2,14 +2,22 @@
 #include "TestSuite.h"
 #include "ConcreteChessPieces.h"
 #include "Blocker.h"
-int main() {
-    Gameboard board;
-    TestSuite::runTestSuite();
+#include "Chessboard.h"
 
-    board.setContent(Point(3, 1), new Blocker(board));
-    board.setContent(Point(4, 0), new King(board));
-    board.setContent(Point(1, 0), new Knight(board));
+
+int main() {
+    // Gameboard board;
+    // board.setContent(Point(3, 1), new Blocker(board));
+    // board.setContent(Point(4, 0), new King(board));
+    // board.setContent(Point(1, 0), new Knight(board));
+
+    Chessboard board;
+    board.setContent(ColRowPair{ 'd', '7' }, new Blocker(board));
+    board.setContent(ColRowPair{ 'e', '8' }, new King(board));
+    board.setContent(ColRowPair{ 'b', '8' }, new Knight(board));
     board.printToConsole();
+
+    // TestSuite::runTestSuite();
     
     return 0;
 } 

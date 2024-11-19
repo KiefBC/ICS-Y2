@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>
-#include <windows.h>
+//#include <windows.h>
 #include <iomanip>
 #include "Chessboard.h"
 #include <vector>
@@ -66,43 +66,80 @@ int Chessboard::getTextColorForPoint(const Point& targetPoint, ChessPiece* pActi
 }
 
 
+// void Chessboard::printToConsole(ChessPiece* pActiveChessPiece) const {
+//     // go through each row
+//     for (int y = 0; y < MAX_Y; y++) {
+
+//         // output the left hand guide for rows ['8'..'1'])
+//         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Chessboard::COLOR_ROW_COL_GUIDE);
+//         std::cout << (8 - y) << " | ";
+
+//         // go through each column
+//         for (int x = 0; x < MAX_X; x++) {
+//             std::cout << std::setw(2);  // set the width to 2 characters
+
+//             // get the color for the point we're about to print
+//             Point currentPoint(x, y);
+//             int color = getTextColorForPoint(currentPoint, pActiveChessPiece);
+//             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+
+//             // determine which character to print 
+//             GameboardItem* pItem = getContent(currentPoint);
+//             if (pItem) {
+//                 std::cout << pItem->getDisplayChar();
+//             }
+//             else {
+//                 std::cout << ".";
+//             }
+//         }
+//         std::cout << "\n";
+//     }
+//     // output the lower guide for columns ['a'..'h']
+//     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Chessboard::COLOR_ROW_COL_GUIDE);
+//     std::cout << "    ----------------\n";
+//     std::cout << "     a b c d e f g h \n";
+//     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Chessboard::COLOR_NORMAL);   // restore color 
+//     std::cout << "\n";
+// }
+
+// This works for Linux
 void Chessboard::printToConsole(ChessPiece* pActiveChessPiece) const {
     // go through each row
     for (int y = 0; y < MAX_Y; y++) {
-
         // output the left hand guide for rows ['8'..'1'])
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Chessboard::COLOR_ROW_COL_GUIDE);
-        std::cout << (8 - y) << " | ";
+        std::cout << " \033[37m" << (8 - y) << " | "; // white color for guide
 
         // go through each column
         for (int x = 0; x < MAX_X; x++) {
-            std::cout << std::setw(2);  // set the width to 2 characters
-
+            std::cout << std::setw(2);
             // get the color for the point we're about to print
             Point currentPoint(x, y);
             int color = getTextColorForPoint(currentPoint, pActiveChessPiece);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+            
+            // Convert color code to ANSI
+            switch(color) {
+                case COLOR_ACTIVE_PIECE: std::cout << "\033[32m"; break; // green
+                case COLOR_VALID_MOVE: std::cout << "\033[34m"; break;   // blue
+                default: std::cout << "\033[37m"; break;                 // white
+            }
 
             // determine which character to print 
             GameboardItem* pItem = getContent(currentPoint);
             if (pItem) {
-                std::cout << pItem->getDisplayChar();
+                std::cout << pItem->getDisplayChar() << " ";  // Add space after character
             }
             else {
-                std::cout << ".";
+                std::cout << ". ";  // Add space after dot
             }
         }
         std::cout << "\n";
     }
     // output the lower guide for columns ['a'..'h']
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Chessboard::COLOR_ROW_COL_GUIDE);
+    std::cout << "\033[37m";  // white color for guide
     std::cout << "    ----------------\n";
     std::cout << "     a b c d e f g h \n";
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Chessboard::COLOR_NORMAL);   // restore color 
-    std::cout << "\n";
+    std::cout << "\033[0m\n";  // reset color
 }
-
-
 
 
 

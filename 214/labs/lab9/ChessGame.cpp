@@ -114,13 +114,33 @@ void ChessGame::runGameLoop() {
 
 
 bool ChessGame::setActiveChessPiece(const ColRowPair& crPair) {
-    // TODO: Steps:
-    //   -ensure the row/col is valid (if not: error message & return false)
-    //   -convert col/row to point
-    //   -ensure the point is valid (if not: error message & return false)
-    //   -ensure the content is a GameboardItem (if not: error message & return false)
-    //   -ensure the content is a chess piece (if not: error message & return false)
-    //   -update pActiveChessPiece to point to the chess piece (output a confirmation message & return true)
+    if (!board.isColRowValid(crPair)) {
+        std::cout << "Invalid col/row pair.\n";
+        return false;
+    } // Row and column are valid
+
+    Point point = board.convertColRowToPoint(crPair);
+    if (!board.isValidPoint(point)) {
+        std::cout << "Invalid point.\n";
+        return false;
+    } // Point is valid
+
+    GameboardItem* item = board.getContent(point);
+    if (!item) {
+        std::cout << "No item at point.\n";
+        return false;
+    } // Item is valid
+
+    ChessPiece* chessPiece = dynamic_cast<ChessPiece*>(item);
+    if (!chessPiece) {
+        std::cout << "Item is not a chess piece.\n";
+        return false;
+    } // Item is a chess piece
+
+    pActiveChessPiece = chessPiece;
+    std::cout << "Successfully set active piece to " << chessPiece->getDisplayChar() << " at position " 
+              << crPair.col << crPair.row << ".\n";
+
     return true;
 }
 
@@ -132,6 +152,33 @@ bool ChessGame::moveActiveChessPiece(const ColRowPair& crPair) {
     //   -check if there is a chess piece at the point, if so, capture it (delete it & output message)
     //   -remove the active piece from its current position on the board (set the board content to nullptr)
     //   -set the board content at the point to be the active chess piece & return true
+
+    if (!pActiveChessPiece) {
+        std::cout << "No active chess piece.\n";
+        return false;
+    } // There is an active chess piece
+
+    Point point = board.convertColRowToPoint(crPair);
+    if (!board.isValidPoint(point)) {
+        std::cout << "Invalid point.\n";
+        return false;
+    } // Point is valid
+
+    std::vector<Point> validMoves = pActiveChessPiece->getValidMoves();
+    if (std::find(validMoves.begin(), validMoves.end(), point) == validMoves.end()) {
+        std::cout << "Invalid move.\n";
+        return false;
+    } // Move is valid
+    
+    GameboardItem* item = board.getContent(point);
+    if (item) {
+        std::cout << "Capturing " << item->getDisplayChar() << " at " << crPair.col << crPair.row << ".\n";
+        delete item;
+    }
+
+    board.setContent(point, pActiveChessPiece);
+    std::cout << "Successfully moved active piece to " << crPair.col << crPair.row << ".\n";
+    return true;
 }
 
 
