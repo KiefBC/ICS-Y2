@@ -16,6 +16,7 @@ struct Command {
 
 
 class ChessGame  {
+    friend class TestSuite;
 private:
     Chessboard board;                           // the chess board       
     ChessPiece* pActiveChessPiece{ nullptr };   // the active chess piece (if any)
@@ -54,7 +55,7 @@ public:
     bool moveActiveChessPiece(const ColRowPair& crPair);
 
     // Save this chess game to a file.
-    void saveToFile(const char* filename) ;  
+    void saveToFile(const char* filename);  
 };
 
 

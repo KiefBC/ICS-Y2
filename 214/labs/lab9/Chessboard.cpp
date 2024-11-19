@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>
-//#include <windows.h>
+//#include <windows.h> // Disable this for Linux
 #include <iomanip>
 #include "Chessboard.h"
 #include <vector>

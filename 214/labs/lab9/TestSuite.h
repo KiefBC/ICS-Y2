@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------
 #define POINT
 #define CONCRETE_CHESS_PIECES
-//#define CHESSGAME
+#define CHESSGAME
 
 
 class TestSuite {
