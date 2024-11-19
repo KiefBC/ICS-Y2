@@ -1,11 +1,12 @@
 #pragma once
 #include "GameboardItem.h"
+#include "Gameboard.h"
 #include "Blocker.h"
 #include <vector>
 #include <algorithm>
 
 class ChessPiece : public GameboardItem {
-protected:
+public:
     std::vector<Point> convertOffsetsToValidMoves(const std::vector<Point>& offsets) const {
         std::vector<Point> validMoves;
         Point currentPosition = getPosition();
@@ -22,7 +23,6 @@ protected:
         return validMoves;
     }
 
-public:
     // Constructor
     ChessPiece(const Gameboard& gameBoard) : GameboardItem(gameBoard) {}
     
@@ -30,7 +30,7 @@ public:
     virtual std::vector<Point> getValidMoves() const = 0;
     
     // Virtual function to check if a move is valid
-    virtual bool isValidMove(const Point& destination) {
+    virtual bool isValidMove(const Point& destination) const {
         std::vector<Point> validMoves = getValidMoves();
         return std::find(validMoves.begin(), validMoves.end(), destination) != validMoves.end();
     }
