@@ -7,7 +7,7 @@
 // 2) Uncomment the #define statements directly below (as you're ready to test each class):
 //-----------------------------------------------------------------------
 #define POINT
-//#define CONCRETE_CHESS_PIECES
+#define CONCRETE_CHESS_PIECES
 //#define CHESSGAME
 
 

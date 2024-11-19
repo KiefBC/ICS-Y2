@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include "Gameboard.h"
 
 #ifdef POINT
 #include "Point.h"
@@ -189,18 +190,18 @@ bool TestSuite::testConcreteChessPieces() {
   const std::vector<Point> v{Point(0, 0)};
 
   const Knight constKnight(board);
-  constKnight.getDisplayChar();
-  constKnight.getPosition();
-  constKnight.getValidMoves();
-  constKnight.isValidMove(Point(0, 0));
-  constKnight.convertOffsetsToValidMoves(v);
+  const Knight.getDisplayChar();
+  const Knight.getPosition();
+  const Knight.getValidMoves();
+  const Knight.isValidMove(Point(0, 0));
+  const Knight.convertOffsetsToValidMoves(v);
 
   const King constKing(board);
-  constKing.getDisplayChar();
-  constKing.getPosition();
-  constKing.getValidMoves();
-  constKing.isValidMove(Point(0, 0));
-  constKing.convertOffsetsToValidMoves(v);
+  const King.getDisplayChar();
+  const King.getPosition();
+  const King.getValidMoves();
+  const King.isValidMove(Point(0, 0));
+  const King.convertOffsetsToValidMoves(v);
 
   // test getDisplayChar()
   assert(constKnight.getDisplayChar() == 'k');
