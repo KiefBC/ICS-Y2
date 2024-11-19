@@ -141,5 +141,21 @@ void Chessboard::printToConsole(ChessPiece* pActiveChessPiece) const {
     std::cout << "\033[0m\n";  // reset color
 }
 
+std::string Chessboard::toString() const {
+    std::string result;
+    for (int y = 0; y < MAX_Y; y++) {
+        for (int x = 0; x < MAX_X; x++) {
+            GameboardItem* pItem = getContent(Point(x, y));
+            if (pItem) {
+                result += pItem->getDisplayChar();
+            } else {
+                result += '.';
+            }
+        }
+        result += '\n';
+    }
+    return result;
+}
+
 
 

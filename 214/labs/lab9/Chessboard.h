@@ -2,7 +2,8 @@
 #include "Gameboard.h"
 #include "ChessPiece.h"
 #include "Point.h"
-
+#include "ISerializable.h"
+#include <string>
 
 // Specifying locations on a board is done with a col
 struct ColRowPair {
@@ -10,7 +11,7 @@ struct ColRowPair {
     char row{ };    // ['1'..'8']
 };
 
-class Chessboard : public Gameboard {
+class Chessboard : public Gameboard, public ISerializable {
 public:
     static const int COLOR_ACTIVE_PIECE{ 10 };     // green
     static const int COLOR_VALID_MOVE{ 12 };       // red
@@ -55,5 +56,7 @@ public:
     // - params: none
     // - return: nothing
     void printToConsole(ChessPiece* pActivePiece = nullptr) const;
+
+    std::string toString() const;
 
 };

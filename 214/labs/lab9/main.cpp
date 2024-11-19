@@ -18,10 +18,10 @@ int main() {
     // board.setContent(ColRowPair{ 'b', '8' }, new Knight(board));
     // board.printToConsole();
 
-    // ChessGame game;
-    // game.runGameLoop();
+    ChessGame game;
+    game.runGameLoop();
 
-    TestSuite::runTestSuite();
+    // TestSuite::runTestSuite();
     
     return 0;
 } 
