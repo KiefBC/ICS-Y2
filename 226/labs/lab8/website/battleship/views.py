@@ -7,6 +7,9 @@ from .models import Player, Tile
 
 
 def create_game(request):
+    """
+    Create a new game
+    """
     # Clear existing game data
     Tile.objects.all().delete()
     Player.objects.all().delete()
@@ -32,6 +35,9 @@ def create_game(request):
 
 
 def display_game(request):
+    """
+    Display the game board
+    """
     # Get all tiles ordered by row and column
     tiles = Tile.objects.all().order_by("row", "column")
     players = Player.objects.all().order_by("name")
@@ -61,6 +67,9 @@ def display_game(request):
 
 @transaction.atomic
 def pick_tile(request, player_name, row, col):
+    """
+    Pick a tile
+    """
     try:
         # Convert row and col to integers if they're not already
         try:

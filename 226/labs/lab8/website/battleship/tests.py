@@ -4,12 +4,13 @@ from .models import Player, Tile
 
 class BattleshipGameTests(TestCase):
     def setUp(self):
-        # Create a new game before each test
+        """Set up the test environment"""
         self.client = Client()
         self.client.get(reverse('create_game'))
 
     def test_game_initialization(self):
         """Test that the game is properly initialized with players and tiles"""
+        
         # Test player creation
         players = Player.objects.all()
         self.assertEqual(players.count(), 2)
