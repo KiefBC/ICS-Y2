@@ -21,6 +21,7 @@ set(SOURCES
     Point.h
     Point.cpp
     TestSuite.cpp
+    main.cpp
 )
 
 # Create test executable
