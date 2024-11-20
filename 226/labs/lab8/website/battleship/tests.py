@@ -1,23 +1,25 @@
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
+
 from .models import Player, Tile
+
 
 class BattleshipGameTests(TestCase):
     def setUp(self):
         """Set up the test environment"""
         self.client = Client()
-        self.client.get(reverse('create_game'))
+        self.client.get(reverse("create_game"))
 
     def test_game_initialization(self):
         """Test that the game is properly initialized with players and tiles"""
-        
+
         # Test player creation
         players = Player.objects.all()
         self.assertEqual(players.count(), 2)
-        
+
         player_one = Player.objects.get(name="One")
         player_two = Player.objects.get(name="Two")
-        
+
         # Test player initial states
         self.assertEqual(player_one.score, 0)
         self.assertTrue(player_one.is_turn)
@@ -36,26 +38,30 @@ class BattleshipGameTests(TestCase):
         """Test picking a tile with treasure"""
         # Find a treasure tile
         treasure_tile = Tile.objects.filter(value="treasure").first()
-        
+
         # Make the pick
         response = self.client.get(
-            reverse('pick_tile', 
-                   kwargs={'player_name': 'One',
-                          'row': treasure_tile.row,
-                          'col': treasure_tile.column})
+            reverse(
+                "pick_tile",
+                kwargs={
+                    "player_name": "One",
+                    "row": treasure_tile.row,
+                    "col": treasure_tile.column,
+                },
+            )
         )
-        
+
         # Check response
         self.assertEqual(response.status_code, 200)
-        
+
         # Verify score update
         player_one = Player.objects.get(name="One")
         self.assertEqual(player_one.score, 1)
-        
+
         # Verify tile state change
         updated_tile = Tile.objects.get(id=treasure_tile.id)
         self.assertEqual(updated_tile.value, "revealed_treasure")
-        
+
         # Verify turn switched
         self.assertFalse(player_one.is_turn)
         player_two = Player.objects.get(name="Two")
@@ -65,22 +71,26 @@ class BattleshipGameTests(TestCase):
         """Test picking an empty tile"""
         # Find an empty tile
         empty_tile = Tile.objects.filter(value="empty").first()
-        
+
         # Make the pick
         response = self.client.get(
-            reverse('pick_tile', 
-                   kwargs={'player_name': 'One',
-                          'row': empty_tile.row,
-                          'col': empty_tile.column})
+            reverse(
+                "pick_tile",
+                kwargs={
+                    "player_name": "One",
+                    "row": empty_tile.row,
+                    "col": empty_tile.column,
+                },
+            )
         )
-        
+
         # Check response
         self.assertEqual(response.status_code, 200)
-        
+
         # Verify score didn't change
         player_one = Player.objects.get(name="One")
         self.assertEqual(player_one.score, 0)
-        
+
         # Verify tile state change
         updated_tile = Tile.objects.get(id=empty_tile.id)
         self.assertEqual(updated_tile.value, "picked")
@@ -89,12 +99,9 @@ class BattleshipGameTests(TestCase):
         """Test picking a tile when it's not the player's turn"""
         # Try to pick as Player Two when it's Player One's turn
         response = self.client.get(
-            reverse('pick_tile', 
-                   kwargs={'player_name': 'Two',
-                          'row': 0,
-                          'col': 0})
+            reverse("pick_tile", kwargs={"player_name": "Two", "row": 0, "col": 0})
         )
-        
+
         # Check response
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "It's not Two's turn!", html=True)
@@ -102,12 +109,9 @@ class BattleshipGameTests(TestCase):
     def test_pick_tile_out_of_bounds(self):
         """Test picking a tile outside the board boundaries"""
         response = self.client.get(
-            reverse('pick_tile', 
-                   kwargs={'player_name': 'One',
-                          'row': 10,
-                          'col': 0})
+            reverse("pick_tile", kwargs={"player_name": "One", "row": 10, "col": 0})
         )
-        
+
         # Check response
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Out of Boundary")
@@ -117,20 +121,20 @@ class BattleshipGameTests(TestCase):
         # Pick a tile
         tile = Tile.objects.filter(value="empty").first()
         self.client.get(
-            reverse('pick_tile', 
-                   kwargs={'player_name': 'One',
-                          'row': tile.row,
-                          'col': tile.column})
+            reverse(
+                "pick_tile",
+                kwargs={"player_name": "One", "row": tile.row, "col": tile.column},
+            )
         )
-        
+
         # Try to pick the same tile as Player Two
         response = self.client.get(
-            reverse('pick_tile', 
-                   kwargs={'player_name': 'Two',
-                          'row': tile.row,
-                          'col': tile.column})
+            reverse(
+                "pick_tile",
+                kwargs={"player_name": "Two", "row": tile.row, "col": tile.column},
+            )
         )
-        
+
         # Check response
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "This tile has already been picked")
