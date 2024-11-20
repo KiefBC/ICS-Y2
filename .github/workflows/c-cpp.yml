@@ -1,0 +1,38 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install CMake
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake
+
+    - name: Create Build Directory
+      run: mkdir lab9/build
+
+    - name: Configure CMake
+      working-directory: lab9/build
+      run: cmake ..
+
+    - name: Build
+      working-directory: lab9/build
+      run: cmake --build .
+
+    - name: Run Tests 
+      working-directory: lab9/build
+      run: ctest --output-on-failure
+
+    - name: Run TestSuite Directly
+      working-directory: lab9/build
+      run: ./TestSuite
