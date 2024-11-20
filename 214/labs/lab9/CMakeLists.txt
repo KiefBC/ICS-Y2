@@ -19,6 +19,7 @@ set(SOURCES
     GameboardItem.h
     ISerializable.h
     Point.h
+    Point.cpp
     TestSuite.cpp
 )
 
