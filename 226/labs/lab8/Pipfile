@@ -19,6 +19,9 @@ six = "==1.16.0"
 tomli = "==2.0.2"
 urllib3 = "==2.2.3"
 django-tailwind = "==3.8.0"
+django-stubs = "*"
+ruff = "*"
+autopep8 = "*"
 
 [dev-packages]
 
