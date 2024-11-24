@@ -61,24 +61,17 @@ std::ostream &operator<<(std::ostream &os, const MyVector &myVector) {
 }
 
 MyVector &MyVector::operator=(const MyVector &other) {
-  // Check for self-assignment
   if (this == &other) {
     return *this;
   }
 
-  // Delete the old array
   delete[] pItems;
-
-  // Copy the size
   m_size = other.size();
 
-  // Allocate if necessary
   if (m_size == 0) {
     pItems = nullptr;
   } else {
     pItems = new double[m_size];
-
-    // Copy the elements
     for (int i = 0; i < m_size; i++) {
       pItems[i] = other.get(i);
     }
