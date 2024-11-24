@@ -87,10 +87,23 @@ MyVector &MyVector::operator=(const MyVector &other) {
   return *this;
 }
 
+double &MyVector::operator[](int index) {
+  checkRange(index);
+  return pItems[index];
+}
+
+double &MyVector::operator[](int index) const {
+  checkRange(index);
+  return pItems[index];
+}
+
 void MyVector::runner() {
-  MyVector v1{1.5, 2.5};
-  MyVector v2 = v1; // copy constructor called
-  MyVector v3(v1);  // copy constructor called
-  v3.set(0, 9);     // check if a change here affects the original.
-  std::cout << v1 << v2 << v3 << "\n";
+  std::cout << "\n";
+  MyVector v{1.1, 2.2};
+  std::cout << v[0] << '\n'; // should output 1.1
+  v[0] = 9.9;
+  std::cout << v[0] << '\n'; // should output 9.9
+  const MyVector constVec{3.3, 4.4};
+  std::cout << constVec[0]; // should output 3.3
+  std::cout << "\n\n";
 }

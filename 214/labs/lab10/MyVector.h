@@ -18,4 +18,6 @@ public:
   void runner();
   friend std::ostream &operator<<(std::ostream &os, const MyVector &vec);
   MyVector &operator=(const MyVector &other);
+  double &operator[](int index);
+  double &operator[](int index) const;
 };
