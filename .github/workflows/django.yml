@@ -23,7 +23,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           
       - name: Install Dependencies
-        working-directory: 226/labs/lab10
+        working-directory: 226/labs/lab9
         run: |
           python -m pip install --upgrade pip
           pip install pipenv
@@ -31,6 +31,6 @@ jobs:
           pipenv install django
           
       - name: Run Tests
-        working-directory: 226/labs/lab10/website
+        working-directory: 226/labs/lab9/website
         run: |
           pipenv run python manage.py test battleship
