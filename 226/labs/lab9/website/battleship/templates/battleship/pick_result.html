@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-800 p-10 flex items-center justify-center">
+    <div class="bg-gray-700 p-8 rounded-lg drop-shadow-md max-w-md w-full">
+        <h2 class="text-2xl font-bold text-white mb-6 text-center">Pick Result</h2>
+        {% if message == "Treasure found!" %}
+            <div class="text-green-500 text-2xl font-bold text-center mb-2">
+                Correct Pick!
+            </div>
+        {% endif %}
+        <div class="{% if message == 'Out of Boundary' or 'not found' in message or 'already been picked' in message %}text-red-500 text-2xl font-bold{% else %}text-white{% endif %} text-center mb-6">
+            {{ message }}
+        </div>
+        <div class="text-gray-300 text-center mb-8">
+            Current Scores:<br>
+            {% for player in players %}
+                {{ player.name }}: {{ player.score }}{% if not forloop.last %}<br>{% endif %}
+            {% endfor %}
+        </div>
+        <div class="text-gray-400 text-sm text-center">
+            Redirecting to game...
+        </div>
+    </div>
+</div>
+
+<script>
+    setTimeout(function() {
+        window.location.href = '/game/';
+    }, 2000);
+</script>
+{% endblock %} 
