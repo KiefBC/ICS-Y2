@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 pipenv run pipenv install
 python website/manage.py collectstatic --no-input
