@@ -22,6 +22,10 @@ django-tailwind = "==3.8.0"
 django-stubs = "*"
 ruff = "*"
 autopep8 = "*"
+dj-database-url = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 
