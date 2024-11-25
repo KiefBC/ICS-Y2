@@ -7,6 +7,15 @@ log() {
     echo "-----> $1"
 }
 
+# Get the current working directory
+cwd=$(pwd)
+
+# Convert to uppercase
+CWD_UPPER=${cwd^^}
+
+# Print the result
+echo "Current Working Directory in uppercase: $CWD_UPPER"
+
 log "Starting build process..."
 
 # Install Python dependencies
