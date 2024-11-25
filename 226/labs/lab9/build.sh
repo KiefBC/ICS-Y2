@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Exit on error
-set -o errexit
 
 # Function to print messages to the Render log
 log() {
