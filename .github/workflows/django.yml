@@ -2,9 +2,9 @@ name: Django Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "render" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "render" ]
 
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           
       - name: Install Dependencies
-        working-directory: 226/labs/lab8
+        working-directory: 226/labs/lab10
         run: |
           python -m pip install --upgrade pip
           pip install pipenv
@@ -31,6 +31,6 @@ jobs:
           pipenv install django
           
       - name: Run Tests
-        working-directory: 226/labs/lab8
+        working-directory: 226/labs/lab10
         run: |
           pipenv run python website/manage.py test battleship
