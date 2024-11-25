@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-
-pipenv run pipenv install
+python -m pip install --upgrade pip
+pip install pipenv
+pipenv install --deploy --system
 python website/manage.py collectstatic --no-input
 python website/manage.py migrate
