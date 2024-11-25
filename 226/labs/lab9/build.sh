@@ -2,7 +2,6 @@
 pip install pipenv
 pipenv lock
 pipenv install
-pipenv shell
 pipenv run pip install -r website/battleship/requirements.txt
 npm install website/bs_theme/static_src
 pipenv run python website/manage.py tailwind build
