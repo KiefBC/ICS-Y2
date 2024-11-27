@@ -1,0 +1,53 @@
+{
+  "movies": [
+    {
+      "id": "27da",
+      "title": "Meow2",
+      "genre": "Unknown",
+      "url": "https://www.imdb.com/title/tt0468569/",
+      "color": "steelblue"
+    },
+    {
+      "id": "35a6",
+      "title": "MEOW MEOW",
+      "genre": "Unknown",
+      "url": "https://www.imdb.com/title/tt0468569/",
+      "color": "darkorange"
+    },
+    {
+      "id": "7dc4",
+      "title": "dwadad",
+      "genre": "Unknown",
+      "url": "http://www.com.com",
+      "color": "chocolate"
+    },
+    {
+      "id": "f754",
+      "title": "fadadadaw",
+      "genre": "Unknown",
+      "url": "https://www.imdb.com/title/tt0468569/",
+      "color": "mediumorchid"
+    },
+    {
+      "id": "3ab8",
+      "title": "thomas",
+      "genre": "Unknown",
+      "url": "https://www.imdb.com/title/tt0468569/",
+      "color": "seagreen"
+    },
+    {
+      "id": "8fe3",
+      "title": "reeeeag",
+      "genre": "Unknown",
+      "url": "http://www.com.com",
+      "color": "darkorange"
+    },
+    {
+      "id": "39d6",
+      "title": "Test",
+      "genre": "Unknown",
+      "url": "https://www.kiefer.com",
+      "color": "tomato"
+    }
+  ]
+}
