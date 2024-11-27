@@ -1,4 +1,5 @@
-#include "TestSuite.h"
+// #include "TestSuite.h"
+#include "TestSuiteTemplate.h"
 // #include "DebugNewOp.h"
 #include "MyVector.h"
 #include "Cents.h"
@@ -22,7 +23,8 @@ int main() {
   //   std::cout << "Unknown exception\n";
   // }
 
-  TestSuite::runTestSuite();
+  // TestSuite::runTestSuite();
+  TestSuiteTemplate::runTestSuite();
   // MyVector vec(3);
   // vec.runner();
   return 0;
