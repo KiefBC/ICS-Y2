@@ -6,9 +6,9 @@
 /// @tparam T The type of the elements in the vector
 template <typename T> class MyVector {
 private:
-  int m_size; // number of elements in the vector
+  int m_size;     // number of elements in the vector
   int m_capacity; // number of elements the vector can hold
-  T *pItems; // pointer to the dynamically allocated array
+  T *pItems;      // pointer to the dynamically allocated array
   void checkRange(int index) const; // checks if the index is in range
 
 public:

@@ -16,13 +16,10 @@ MyVector::MyVector(int size) : m_size(size) {
 
 MyVector::MyVector(const std::initializer_list<double> &list)
     : MyVector(static_cast<int>(list.size())) {
-  if (list.size() > 0) {
-    pItems = new double[list.size()];
-    int i = 0;
-    for (auto &element : list) {
-      pItems[i] = element;
-      i++;
-    }
+  int i = 0;
+  for (auto &element : list) {
+    pItems[i] = element;
+    i++;
   }
 }
 
