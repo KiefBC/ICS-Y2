@@ -162,8 +162,8 @@ void testSet() {
 
 template <typename T, int N = 3> class MyArray {
 private:
-  static const int SIZE = N;
-  T arr[SIZE];
+  static const int SIZE = N; // The size of the array
+  T arr[SIZE]; // The array that holds the values
 
 public:
   MyArray() : arr{} {};
@@ -237,8 +237,14 @@ void testMyArray() {
 //  1) Implement the function below:
 int sum(const std::array<int, 3> arr) { 
   int sum = 0;
-  for (auto& val : arr) {
-    sum += val;
+  // for (auto& val : arr) {
+  //   sum += val;
+  // }
+  auto begin = arr.begin();
+  auto end = arr.end();
+  while (begin != end) {
+    sum += *begin; // Dereference the iterator to get the value
+    begin++;
   }
   return sum;
 }
