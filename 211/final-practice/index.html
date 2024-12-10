@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Practice Exercise for the ICS 211 Final Exam</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- CDN for React Is to support Styled Components -->
+    <script src="https://unpkg.com/react-is@18/umd/react-is.development.js"></script>
+    <!-- CDN for Styled Components -->
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
+    <!-- CDNs for React Router UNCOMMENT IF USING -->
+    <!-- <script src="https://unpkg.com/@remix-run/router@1.21.0/dist/router.umd.min.js"></script>
+    <script src="https://unpkg.com/react-router@6.28.0/dist/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.28.0/dist/umd/react-router-dom.development.js"></script> -->
+    <!-- CDNs for MUI UNCOMMENT IF USING -->
+    <!-- <script src="https://unpkg.com/@mui/material@5/umd/material-ui.development.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" /> -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      
+      // UNCOMMENT FOR MATERIAL UI
+      //const { Button, Checkbox, FormControlLabel, FormControl, FormLabel } = MaterialUI;
+      
+      // UNCOMMENT FOR REACT ROUTER
+      //const { BrowserRouter, Routes, Route, useNavigate } = ReactRouterDOM; 
+      
+      // Object-destructured Hooks available
+      // so you don't need to put 'React.' in front
+      const { createContext, useContext, useState } = React;
+
+      // ***global Context Object can go here***
+
+      const CheckboxControl = ({ item, onChange, checkboxGroup }) => (
+        <label>
+          <input type='checkbox' name={item} value={item}
+            checked={checkboxGroup.item}
+            onChange={onChange}
+          />
+          &nbsp;{item.charAt(0).toUpperCase() + item.slice(1)}
+        </label>
+      );
+
+
+      const ShoppingForm = () => {
+        
+        const[ checkboxGroup, setCheckboxGroup ] =
+          useState({ milk: false, eggs: false, bread: false, cheese: false, ham: false });
+        
+        const shoppingItemList =
+          Object.keys(checkboxGroup);
+        
+        // disable/enable Submit button logic
+        // if any of the values in the checkboxGroup Object
+        // are true, the Submit button should be enabled
+        let disableSubmit = true;
+        for (const checked of Object.values(checkboxGroup)) {
+          if (checked) disableSubmit = false;
+        }
+
+        const handleCheckbox = event => {
+          setCheckboxGroup({ ...checkboxGroup,
+            [event.target.value]: event.target.checked });
+        }
+
+        const handleSubmit = event => {
+          event.preventDefault();
+        }
+
+        
+        return (
+          <form>
+            <fieldset>
+              <legend>Build a shopping list of one or more items by checking them below:</legend>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
+                { shoppingItemList.map( item =>
+                  <CheckboxControl key={item} item={item}
+                    onChange={handleCheckbox}
+                    checkboxGroup={checkboxGroup} 
+                  />
+                )}
+                <button
+                  type="submit"
+                  style={{ width: '75px'}}
+                  disabled={disableSubmit}
+                  onClick={handleSubmit}
+                >
+                  Build List
+                </button>
+              </div>
+            </fieldset>
+          </form>
+        );
+      }
+
+
+      const App = () => {
+        return (
+          <ShoppingForm />
+        );
+      }
+      
+      
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(<App />);
+
+    </script>
+  </body>
+</html>
