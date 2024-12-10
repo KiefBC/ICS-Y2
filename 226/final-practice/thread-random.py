@@ -59,7 +59,7 @@ def handle_client(client, client_id):
                         client.send(b"Try a lower number.\n")
 
     except Exception:
-        print(f"Cient {client_id} has disconnected.")
+        print("Cient {client_id} has disconnected.")
     finally:  # If the client disconnects, close the connection
         print(f"Closing connection for client {client_id}.")
         client.close()
