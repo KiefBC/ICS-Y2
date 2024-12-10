@@ -12,33 +12,60 @@
     <!-- CDN for Styled Components -->
     <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
     <!-- CDNs for React Router UNCOMMENT IF USING -->
-    <!-- <script src="https://unpkg.com/@remix-run/router@1.21.0/dist/router.umd.min.js"></script>
+    <script src="https://unpkg.com/@remix-run/router@1.21.0/dist/router.umd.min.js"></script>
     <script src="https://unpkg.com/react-router@6.28.0/dist/umd/react-router.development.js"></script>
-    <script src="https://unpkg.com/react-router-dom@6.28.0/dist/umd/react-router-dom.development.js"></script> -->
+    <script src="https://unpkg.com/react-router-dom@6.28.0/dist/umd/react-router-dom.development.js"></script>
     <!-- CDNs for MUI UNCOMMENT IF USING -->
-    <!-- <script src="https://unpkg.com/@mui/material@5/umd/material-ui.development.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" /> -->
+    <script src="https://unpkg.com/@mui/material@5/umd/material-ui.development.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
   </head>
   <body>
     <div id="root"></div>
     <script type="text/babel">
-      
-      // UNCOMMENT FOR MATERIAL UI
-      //const { Button, Checkbox, FormControlLabel, FormControl, FormLabel } = MaterialUI;
-      
-      // UNCOMMENT FOR REACT ROUTER
-      //const { BrowserRouter, Routes, Route, useNavigate } = ReactRouterDOM; 
-      
-      // Object-destructured Hooks available
-      // so you don't need to put 'React.' in front
+      const { 
+        Button, 
+        Checkbox, 
+        FormControlLabel, 
+        FormControl, 
+        FormLabel
+      } = MaterialUI;
+
+      const { BrowserRouter, Routes, Route, useNavigate } = ReactRouterDOM;
       const { createContext, useContext, useState } = React;
 
-      // ***global Context Object can go here***
+      // Checkbox Context
+      const CheckboxContext = createContext();
+      const CheckBoxControlContext = ({ item, onChange }) => {
+        const checkboxGroup = useContext(CheckboxContext);
+        return (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={checkboxGroup.item}
+                onChange={onChange}
+                name={item}
+                value={item}
+              />
+            }
+            label={item.charAt(0).toUpperCase() + item.slice(1)}
+          />
+        );
+      };
 
+      // Checkbox Component
       const CheckboxControl = ({ item, onChange, checkboxGroup }) => (
         <label>
-          <input type='checkbox' name={item} value={item}
+          <input
+            type="checkbox"
+            name={item}
+            value={item}
             checked={checkboxGroup.item}
             onChange={onChange}
           />
@@ -46,70 +73,176 @@
         </label>
       );
 
+      const ShoppingForm = ({ setShoppingList, setShoppingDone }) => {
+        const navigate = useNavigate();
+        const [checkboxGroup, setCheckboxGroup] = useState({
+          milk: false,
+          eggs: false,
+          bread: false,
+          cheese: false,
+          ham: false,
+        });
 
-      const ShoppingForm = () => {
-        
-        const[ checkboxGroup, setCheckboxGroup ] =
-          useState({ milk: false, eggs: false, bread: false, cheese: false, ham: false });
-        
-        const shoppingItemList =
-          Object.keys(checkboxGroup);
-        
-        // disable/enable Submit button logic
-        // if any of the values in the checkboxGroup Object
-        // are true, the Submit button should be enabled
+        const shoppingItemList = Object.keys(checkboxGroup);
+
         let disableSubmit = true;
         for (const checked of Object.values(checkboxGroup)) {
           if (checked) disableSubmit = false;
         }
 
-        const handleCheckbox = event => {
-          setCheckboxGroup({ ...checkboxGroup,
-            [event.target.value]: event.target.checked });
-        }
+        const handleCheckbox = (event) => {
+          setCheckboxGroup({
+            ...checkboxGroup,
+            [event.target.value]: event.target.checked,
+          });
+        };
 
-        const handleSubmit = event => {
+        const handleSubmit = (event) => {
           event.preventDefault();
-        }
+          const selectedItems = shoppingItemList.filter(
+            (item) => checkboxGroup[item]
+          );
+          setShoppingList(selectedItems);
+          setShoppingDone(true);
+          navigate("/list");
+        };
 
-        
         return (
-          <form>
-            <fieldset>
-              <legend>Build a shopping list of one or more items by checking them below:</legend>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
-                { shoppingItemList.map( item =>
-                  <CheckboxControl key={item} item={item}
-                    onChange={handleCheckbox}
-                    checkboxGroup={checkboxGroup} 
-                  />
-                )}
-                <button
-                  type="submit"
-                  style={{ width: '75px'}}
-                  disabled={disableSubmit}
-                  onClick={handleSubmit}
+          <CheckboxContext.Provider value={checkboxGroup}>
+            <div style={{ margin: '20px', width: '700px' }}>
+              <FormControl component="fieldset" variant="outlined" style={{ width: '100%' }}>
+                <FormLabel 
+                  component="legend" 
+                  style={{ 
+                    backgroundColor: 'black',
+                    color: 'white',
+                    padding: '4px 8px',
+                    fontWeight: 'bold'
+                  }}
                 >
-                  Build List
-                </button>
-              </div>
-            </fieldset>
-          </form>
+                  Build a shopping list of one or more items by checking them below:
+                </FormLabel>
+                <div style={{ 
+                  backgroundColor: '#545761',
+                  color: 'white',
+                  padding: '16px',
+                  border: '5px solid black',
+                  boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.5)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px'
+                }}>
+                  {shoppingItemList.map((item) => (
+                    <CheckboxControl
+                      key={item}
+                      item={item}
+                      onChange={handleCheckbox}
+                      checkboxGroup={checkboxGroup}
+                    />
+                  ))}
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    disabled={disableSubmit}
+                    onClick={handleSubmit}
+                    style={{ width: '120px' }}
+                  >
+                    Build List
+                  </Button>
+                </div>
+              </FormControl>
+            </div>
+          </CheckboxContext.Provider>
         );
-      }
+      };
 
+      const ShoppingList = ({ items, clearList }) => {
+        const navigate = useNavigate();
+
+        const handleClear = () => {
+          clearList();
+          navigate("/");
+        };
+
+        return (
+          <div style={{ margin: '20px', width: '700px' }}>
+            <FormControl component="fieldset" variant="outlined" style={{ width: '100%' }}>
+              <FormLabel 
+                component="legend"
+                style={{ 
+                  backgroundColor: 'black',
+                  color: 'white',
+                  padding: '4px 8px',
+                  fontWeight: 'bold'
+                }}
+              >
+                Shopping List
+              </FormLabel>
+              <div style={{ 
+                backgroundColor: '#545761',
+                color: 'white',
+                padding: '16px',
+                border: '5px solid black',
+                boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.5)'
+              }}>
+                <ul>
+                  {items.map((item) => (
+                    <ShoppingListItem key={item} item={item} />
+                  ))}
+                </ul>
+                <Button
+                  variant="contained"
+                  onClick={handleClear}
+                >
+                  Clear List
+                </Button>
+              </div>
+            </FormControl>
+          </div>
+        );
+      };
+
+      const ShoppingListItem = ({ item }) => {
+        return <li>{item.charAt(0).toUpperCase() + item.slice(1)}</li>;
+      };
 
       const App = () => {
+        const [shoppingDone, setShoppingDone] = useState(false);
+        const [shoppingList, setShoppingList] = useState([]);
+
+        const clearList = () => {
+          setShoppingList([]);
+          setShoppingDone(false);
+        };
+
         return (
-          <ShoppingForm />
+          <>
+            <BrowserRouter>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <ShoppingForm
+                      setShoppingList={setShoppingList}
+                      setShoppingDone={setShoppingDone}
+                    />
+                  }
+                />
+                <Route
+                  path="/list"
+                  element={
+                    <ShoppingList items={shoppingList} clearList={clearList} />
+                  }
+                />
+              </Routes>
+            </BrowserRouter>
+          </>
         );
-      }
-      
-      
-      const container = document.getElementById('root');
+      };
+
+      const container = document.getElementById("root");
       const root = ReactDOM.createRoot(container);
       root.render(<App />);
-
     </script>
   </body>
 </html>
