@@ -60,28 +60,25 @@
       };
 
       // Checkbox Component
-      const CheckboxControl = ({ item, onChange, checkboxGroup }) => (
-        <label>
-          <input
-            type="checkbox"
-            name={item}
-            value={item}
-            checked={checkboxGroup.item}
-            onChange={onChange}
-          />
-          &nbsp;{item.charAt(0).toUpperCase() + item.slice(1)}
-        </label>
-      );
+      // const CheckboxControl = ({ item, onChange, checkboxGroup }) => (
+      //   <label>
+      //     <input
+      //       type="checkbox"
+      //       name={item}
+      //       value={item}
+      //       checked={checkboxGroup.item}
+      //       onChange={onChange}
+      //     />
+      //     &nbsp;{item.charAt(0).toUpperCase() + item.slice(1)}
+      //   </label>
+      // );
 
-      const ShoppingForm = ({ setShoppingList, setShoppingDone }) => {
+      const ShoppingForm = ({ handleCheckbox }) => {
+
+        // Navigate to the shopping list page 
         const navigate = useNavigate();
-        const [checkboxGroup, setCheckboxGroup] = useState({
-          milk: false,
-          eggs: false,
-          bread: false,
-          cheese: false,
-          ham: false,
-        });
+        // Get the checkbox group from the context
+        const checkboxGroup = useContext(CheckboxContext);
 
         const shoppingItemList = Object.keys(checkboxGroup);
 
@@ -90,25 +87,12 @@
           if (checked) disableSubmit = false;
         }
 
-        const handleCheckbox = (event) => {
-          setCheckboxGroup({
-            ...checkboxGroup,
-            [event.target.value]: event.target.checked,
-          });
-        };
-
         const handleSubmit = (event) => {
           event.preventDefault();
-          const selectedItems = shoppingItemList.filter(
-            (item) => checkboxGroup[item]
-          );
-          setShoppingList(selectedItems);
-          setShoppingDone(true);
           navigate("/list");
         };
 
         return (
-          <CheckboxContext.Provider value={checkboxGroup}>
             <div style={{ margin: '20px', width: '700px' }}>
               <FormControl component="fieldset" variant="outlined" style={{ width: '100%' }}>
                 <FormLabel 
@@ -133,7 +117,7 @@
                   gap: '16px'
                 }}>
                   {shoppingItemList.map((item) => (
-                    <CheckboxControl
+                    <CheckBoxControlContext
                       key={item}
                       item={item}
                       onChange={handleCheckbox}
@@ -152,15 +136,23 @@
                 </div>
               </FormControl>
             </div>
-          </CheckboxContext.Provider>
         );
       };
 
-      const ShoppingList = ({ items, clearList }) => {
+      const ShoppingList = ({ onClear }) => {
+        const checkboxGroup = useContext(CheckboxContext);
         const navigate = useNavigate();
+        const shoppingListItems = [];
 
-        const handleClear = () => {
-          clearList();
+        for (const [item, isChecked] of Object.entries(checkboxGroup)) {
+          if (isChecked) {
+            shoppingListItems.push(item);
+          }
+        }
+
+        const handleClear = (event) => {
+          event.preventDefault();
+          onClear();
           navigate("/");
         };
 
@@ -186,63 +178,94 @@
                 boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.5)'
               }}>
                 <ul>
-                  {items.map((item) => (
+                  {shoppingListItems.map((item) => (
                     <ShoppingListItem key={item} item={item} />
                   ))}
                 </ul>
-                <Button
-                  variant="contained"
-                  onClick={handleClear}
-                >
-                  Clear List
-                </Button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <Button
+                    variant="contained"
+                    onClick={handleClear}
+                  >
+                    Clear List
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate("/")}
+                  >
+                    Back
+                  </Button>
+                </div>
               </div>
             </FormControl>
           </div>
         );
       };
 
-      const ShoppingListItem = ({ item }) => {
-        return <li>{item.charAt(0).toUpperCase() + item.slice(1)}</li>;
-      };
+      const ShoppingListItem = ({ item }) => (
+        <li>{item.charAt(0).toUpperCase() + item.slice(1)}</li>
+      );
 
       const App = () => {
-        const [shoppingDone, setShoppingDone] = useState(false);
-        const [shoppingList, setShoppingList] = useState([]);
+        // const [shoppingDone, setShoppingDone] = useState(false);
+        // const [shoppingList, setShoppingList] = useState([]);
+        
+        const [checkboxGroup, setCheckboxGroup] = useState({
+          milk: false,
+          eggs: false,
+          bread: false,
+          cheese: false,
+          ham: false,
+        });
 
-        const clearList = () => {
-          setShoppingList([]);
-          setShoppingDone(false);
+        const handleCheckbox = (event) => {
+          setCheckboxGroup({
+            ...checkboxGroup,
+            [event.target.value]: event.target.checked,
+          });
+        };
+
+        const clearCheckboxes = () => {
+          setCheckboxGroup({
+            milk: false,
+            eggs: false,
+            bread: false,
+            cheese: false,
+            ham: false,
+          });
         };
 
         return (
           <>
-            <BrowserRouter>
+            <CheckboxContext.Provider value={checkboxGroup}>
               <Routes>
                 <Route
                   path="/"
                   element={
                     <ShoppingForm
-                      setShoppingList={setShoppingList}
-                      setShoppingDone={setShoppingDone}
+                      handleCheckbox={handleCheckbox}
                     />
                   }
                 />
                 <Route
                   path="/list"
                   element={
-                    <ShoppingList items={shoppingList} clearList={clearList} />
+                    <ShoppingList onClear={clearCheckboxes} />
                   }
                 />
               </Routes>
-            </BrowserRouter>
+            </CheckboxContext.Provider>
           </>
         );
       };
 
       const container = document.getElementById("root");
       const root = ReactDOM.createRoot(container);
-      root.render(<App />);
+      root.render(
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      );
     </script>
   </body>
 </html>
