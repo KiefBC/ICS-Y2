@@ -21,6 +21,7 @@ client_lock = [Semaphore(0) for _ in range(NUM_CLIENTS)]
 client_sockets = []
 socket_lock = Lock()  # Mutex lock for safely modifying the shared client_sockets list
 
+
 def handle_client(client_socket: socket, client_id: int):
     """
     Handle individual client connections. Each client runs in its own thread.
@@ -32,7 +33,7 @@ def handle_client(client_socket: socket, client_id: int):
     try:
         # Accept incoming connection
         used_socket, client_address = client_socket.accept()
-        
+
         # Safely add this client to our list of connected clients
         with socket_lock:
             client_sockets.append(used_socket)
@@ -40,19 +41,19 @@ def handle_client(client_socket: socket, client_id: int):
 
         with used_socket:
             print(f"Thread for client {client_id} unlocked.")
-            
+
             while SERVER_RUNNING:
                 # Wait for our turn using the semaphore token system
                 client_lock[client_id].acquire()
-                
+
                 # Check if server is still running after waiting
                 if not SERVER_RUNNING:
                     break
-                
+
                 # Prompt client for input
                 used_socket.send(b"\nEnter: ? or ! to alert the next client: ")
                 client_response = used_socket.recv(1)
-                
+
                 # Handle alert message from client
                 if client_response == ALERT:
                     alert_count += 1
@@ -63,7 +64,7 @@ def handle_client(client_socket: socket, client_id: int):
                     if alert_count == 3:
                         print("Alert count reached 3. Server shutting down....")
                         SERVER_RUNNING = False
-                        
+
                         # Notify all clients about the shutdown
                         with socket_lock:
                             for sock in client_sockets:
@@ -74,21 +75,21 @@ def handle_client(client_socket: socket, client_id: int):
                                     sock.send(b"Goodbye!\n")
                                 except Exception as e:
                                     print(f"Error sending shutdown message: {e}")
-                        
+
                         # Release all semaphores so clients aren't stuck waiting
                         for lock in client_lock:
                             try:
                                 lock.release()
                             except ValueError:  # Ignore if already released
                                 pass
-                                
+
                         break
-                        
+
                 # Pass the token to the next client if server is still running
                 if SERVER_RUNNING:
                     # Use modulo to wrap around to client 0 after last client
                     client_lock[(client_id + 1) % NUM_CLIENTS].release()
-                
+
     except Exception as e:
         print(f"Error handling client {client_id}: {e}")
     finally:
@@ -97,6 +98,7 @@ def handle_client(client_socket: socket, client_id: int):
             if used_socket in client_sockets:
                 client_sockets.remove(used_socket)
         used_socket.close()
+
 
 def main():
     """
@@ -115,9 +117,11 @@ def main():
             num_connected = 0
             while num_connected != NUM_CLIENTS:
                 print("Creating thread for client: ", num_connected)
-                Thread(target=handle_client, 
-                      args=(server_socket, num_connected), 
-                      daemon=True).start()
+                Thread(
+                    target=handle_client,
+                    args=(server_socket, num_connected),
+                    daemon=True,
+                ).start()
                 num_connected += 1
 
             print("Server setup complete. Awaiting client connections...")
@@ -139,6 +143,7 @@ def main():
             except:
                 pass
         sys.exit(0)
+
 
 if __name__ == "__main__":
     main()

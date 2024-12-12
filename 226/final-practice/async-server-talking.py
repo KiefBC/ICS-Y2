@@ -1,4 +1,5 @@
 import asyncio
+
 # from socket import AF_INET, SO_REUSEADDR, SOCK_STREAM, SOL_SOCKET, socket
 # from threading import Lock, Thread
 
@@ -13,11 +14,15 @@ SERVER_RUNNING = True  # Global flag to control server shutdown
 client_id = 0
 client_list = []  # Will store (reader, writer) pairs instead of raw sockets
 
-async def get_message(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> bytes:
+
+async def get_message(
+    reader: asyncio.StreamReader, writer: asyncio.StreamWriter
+) -> bytes:
     """Async version of message retrieval"""
     writer.write(b"Message: ")
     await writer.drain()
     return await reader.readline()
+
 
 # Old threaded version
 # def get_message(local_socket: socket) -> bytes:
@@ -29,7 +34,10 @@ async def get_message(reader: asyncio.StreamReader, writer: asyncio.StreamWriter
 #             return buffer
 #         buffer += received_data
 
-async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter, local_id: int):
+
+async def handle_client(
+    reader: asyncio.StreamReader, writer: asyncio.StreamWriter, local_id: int
+):
     """Async version of client handler"""
     global client_id
     try:
@@ -40,12 +48,13 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 client_id -= 1
                 break
             print(f"[Client {local_id}] Message Received: {message.decode()}")
-    except Exception as e:
+    except Exception:
         if (reader, writer) in client_list:
             client_list.remove((reader, writer))
     finally:
         writer.close()
         await writer.wait_closed()
+
 
 # Old threaded version
 # def handle_client(local_socket: socket, local_id: int):
@@ -68,15 +77,20 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
 #     finally:
 #         local_socket.close()
 
-async def handle_new_connection(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+
+async def handle_new_connection(
+    reader: asyncio.StreamReader, writer: asyncio.StreamWriter
+):
     """Handler for new client connections"""
     global client_id
     local_id = client_id
     client_id += 1
     client_list.append((reader, writer))
-    
+
     try:
-        writer.write(f"Welcome to the Server Chat, Client {local_id}\n\n".encode("utf-8"))
+        writer.write(
+            f"Welcome to the Server Chat, Client {local_id}\n\n".encode("utf-8")
+        )
         await writer.drain()
     except Exception:
         client_list.remove((reader, writer))
@@ -84,8 +98,10 @@ async def handle_new_connection(reader: asyncio.StreamReader, writer: asyncio.St
 
     await handle_client(reader, writer, local_id)
 
+
 async def main():
     """Async main server function"""
+
     def shutdown_handler():
         """Handle graceful shutdown"""
         global SERVER_RUNNING
@@ -93,22 +109,20 @@ async def main():
         for reader, writer in client_list:
             writer.close()
         client_list.clear()
-        
+
     try:
         server = await asyncio.start_server(
-            handle_new_connection,
-            host=HOST,
-            port=PORT,
-            reuse_address=True
+            handle_new_connection, host=HOST, port=PORT, reuse_address=True
         )
-        
+
         print("Server listening...\n")
-        
+
         async with server:
             await server.serve_forever()
     except KeyboardInterrupt:
         print("\nServer Shutdown...")
         shutdown_handler()
+
 
 # Old threaded version
 # def main():
@@ -145,3 +159,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())  # Use asyncio.run() instead of direct main() call
+

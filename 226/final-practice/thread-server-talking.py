@@ -12,14 +12,16 @@ client_lock = Lock()
 client_id = 0
 client_list = []
 
+
 def get_message(local_socket: socket) -> bytes:
     local_socket.send(b"Message: ")
-    buffer = b''
+    buffer = b""
     while True:
         received_data = local_socket.recv(1)
-        if received_data in [b'', b'\n']:
+        if received_data in [b"", b"\n"]:
             return buffer
         buffer += received_data
+
 
 def handle_client(local_socket: socket, local_id: int):
     global client_id
@@ -41,6 +43,7 @@ def handle_client(local_socket: socket, local_id: int):
     finally:
         local_socket.close()
 
+
 def main():
     global client_id, client_list
     try:
@@ -57,7 +60,11 @@ def main():
                     client_id += 1
                     client_list.append(cs)
                     try:
-                        cs.send(f"Welcome to the Server Chat, Client {local_id}\n\n".encode("utf-8"))
+                        cs.send(
+                            f"Welcome to the Server Chat, Client {local_id}\n\n".encode(
+                                "utf-8"
+                            )
+                        )
                     except Exception:
                         client_list.remove(cs)
                         continue
@@ -74,6 +81,7 @@ def main():
             client_list.clear()
     finally:
         print("All Connectioned Closed.")
+
 
 if __name__ == "__main__":
     main()

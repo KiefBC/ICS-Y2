@@ -17,7 +17,7 @@ def handle_client(client_socket, user_id):
     """
     This function handles individual client connections. Each client runs in its own thread.
     Receives messages from the client and broadcasts them to all other connected clients.
-    
+
     Args:
         client_socket: Socket object for this client's connection
         user_id: Unique identifier for this client
@@ -63,8 +63,12 @@ def main():
             while SERVER_RUNNING:
                 try:
                     # Accept new client connection
-                    client_socket, client_address = server_socket.accept() # This line is blocking until a client connects
-                    print(f"Client {client_address} connected. This is Client {client_id}")
+                    client_socket, client_address = (
+                        server_socket.accept()
+                    )  # This line is blocking until a client connects
+                    print(
+                        f"Client {client_address} connected. This is Client {client_id}"
+                    )
 
                     with clients_lock:
                         user_id = client_id
@@ -75,15 +79,19 @@ def main():
                         if len(clients) < MAX_CONNECTIONS:
                             print("Connection accepted.")
                         else:
-                            print("Connection refused. Server is full. Look at this idiot trying to MITM us.")
-                            client_socket.send(b"Server is full. Try again later you squid born fuck.\n")
+                            print(
+                                "Connection refused. Server is full. Look at this idiot trying to MITM us."
+                            )
+                            client_socket.send(
+                                b"Server is full. Try again later you squid born fuck.\n"
+                            )
                             client_socket.close()
                             continue
                         clients.append(client_socket)
 
                     # Send welcome message to new client
                     client_socket.send(f"Welcome, Client {user_id}!\n".encode("utf-8"))
-                    
+
                     # Create new thread to handle this client
                     Thread(
                         target=handle_client,
