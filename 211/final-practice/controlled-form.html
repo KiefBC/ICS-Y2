@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>React Controlled Form Example</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // Destructure React hooks for state management and side effects
+      const { useState, useEffect } = React;
+
+      // Styled Components Section
+      // Main container that centers and styles the form
+      const FormContainer = styled.div`
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      `;
+
+      // Groups form elements with consistent spacing
+      const FormGroup = styled.div`
+        margin-bottom: 15px;
+      `;
+
+      // Base styles for all input fields
+      const Input = styled.input`
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      `;
+
+      // Dropdown menu styling
+      const Select = styled.select`
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      `;
+
+      // Multi-line input styling
+      const TextArea = styled.textarea`
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      `;
+
+      // Error message styling - appears below invalid fields
+      const ErrorMessage = styled.div`
+        color: red;
+        font-size: 0.8em;
+        margin-top: 5px;
+      `;
+
+      // Button that changes appearance based on form validity
+      const SubmitButton = styled.button`
+        // Dynamic background color based on disabled state
+        background-color: ${props => props.disabled ? '#cccccc' : '#4CAF50'};
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+      `;
+
+      const Label = styled.label`
+        display: block;
+        margin-bottom: 5px;
+      `;
+
+      const CheckboxLabel = styled.label`
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      `;
+
+      const CheckboxInput = styled.input`
+        width: auto;
+        margin: 0;
+      `;
+
+      // Form Validation Logic
+      const validateField = (name, value) => {
+        switch (name) {
+          case 'username':
+            // Ensures username is at least 3 characters
+            return value.length < 3 ? 'Username must be at least 3 characters' : '';
+          case 'email':
+            return !value.includes('@') ? 'Please enter a valid email' : '';
+          case 'age':
+            return value < 18 ? 'Must be 18 or older' : '';
+          case 'country':
+            return value === '' ? 'Please select a country' : '';
+          case 'bio':
+            return value.length > 200 ? 'Bio must be less than 200 characters' : '';
+          default:
+            return '';
+        }
+      };
+
+      // Main Form Component
+      const ControlledForm = () => {
+        // Initialize form state with empty values
+        const [formData, setFormData] = useState({
+          username: '',
+          email: '',
+          age: '',
+          country: '',
+          bio: '',
+          subscribe: false
+        });
+
+        // Track validation errors for each field
+        const [errors, setErrors] = useState({});
+        
+        // Track overall form validity
+        const [isFormValid, setIsFormValid] = useState(false);
+
+        // Handle all input changes
+        const handleChange = (e) => {
+          const { name, value, type, checked } = e.target;
+          // Special handling for checkbox vs other inputs
+          const newValue = type === 'checkbox' ? checked : value;
+          
+          // Update form state with new value
+          setFormData(prev => ({
+            ...prev,
+            [name]: newValue
+          }));
+
+          // Validate field if it's not a checkbox
+          if (type !== 'checkbox') {
+            const error = validateField(name, newValue);
+            setErrors(prev => ({
+              ...prev,
+              [name]: error
+            }));
+          }
+        };
+
+        // Effect runs after every form data or error change
+        useEffect(() => {
+          console.log('useEffect running for:', formData);
+          
+          // Check if any field has validation errors
+          const hasErrors = Object.values(errors).some(error => error !== '');
+          
+          // Check if any required field is empty (except newsletter checkbox)
+          const hasEmptyFields = Object.entries(formData).some(([key, value]) => {
+            if (key === 'subscribe') return false;
+            return value === '';
+          });
+          
+          // Form is valid only if there are no errors and no empty fields
+          setIsFormValid(!hasErrors && !hasEmptyFields);
+        }, [formData, errors]); // Dependencies that trigger this effect
+
+        // Handle form submission
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          if (isFormValid) {
+            console.log('Form submitted:', formData);
+            alert('Form submitted successfully!');
+          }
+        };
+
+        // Render form structure
+        return (
+          <FormContainer>
+            <h2>User Registration Form</h2>
+            <form onSubmit={handleSubmit}>
+              {/* Username field with error display */}
+              <FormGroup>
+                <Label>
+                  Username:
+                  <Input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
+                </Label>
+                {/* Conditional rendering of error message */}
+                {errors.username && <ErrorMessage>{errors.username}</ErrorMessage>}
+              </FormGroup>
+
+              <FormGroup>
+                <Label>
+                  Email:
+                  <Input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </Label>
+                {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+              </FormGroup>
+
+              <FormGroup>
+                <Label>
+                  Age:
+                  <Input
+                    type="number"
+                    name="age"
+                    value={formData.age}
+                    onChange={handleChange}
+                  />
+                </Label>
+                {errors.age && <ErrorMessage>{errors.age}</ErrorMessage>}
+              </FormGroup>
+
+              <FormGroup>
+                <Label>
+                  Country:
+                  <Select
+                    name="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select a country</option>
+                    <option value="usa">USA</option>
+                    <option value="canada">Canada</option>
+                    <option value="uk">UK</option>
+                    <option value="australia">Australia</option>
+                  </Select>
+                </Label>
+                {errors.country && <ErrorMessage>{errors.country}</ErrorMessage>}
+              </FormGroup>
+
+              <FormGroup>
+                <Label>
+                  Bio:
+                  <TextArea
+                    name="bio"
+                    value={formData.bio}
+                    onChange={handleChange}
+                    rows="4"
+                  />
+                </Label>
+                {errors.bio && <ErrorMessage>{errors.bio}</ErrorMessage>}
+              </FormGroup>
+
+              <FormGroup>
+                <CheckboxLabel>
+                  <CheckboxInput
+                    type="checkbox"
+                    name="subscribe"
+                    checked={formData.subscribe}
+                    onChange={handleChange}
+                  />
+                  Subscribe to newsletter
+                </CheckboxLabel>
+              </FormGroup>
+
+              {/* Submit button - disabled when form is invalid */}
+              <SubmitButton type="submit" disabled={!isFormValid}>
+                Submit
+              </SubmitButton>
+            </form>
+          </FormContainer>
+        );
+      };
+
+      // Mount the app to the DOM
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(<ControlledForm />);
+    </script>
+  </body>
+</html>

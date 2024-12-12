@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Practice Exercise for the ICS 211 Final Exam</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- CDN for React Is to support Styled Components -->
+    <script src="https://unpkg.com/react-is@18/umd/react-is.development.js"></script>
+    <!-- CDN for Styled Components -->
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
+    <!-- CDNs for React Router UNCOMMENT IF USING -->
+    <script src="https://unpkg.com/@remix-run/router@1.21.0/dist/router.umd.min.js"></script>
+    <script src="https://unpkg.com/react-router@6.28.0/dist/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.28.0/dist/umd/react-router-dom.development.js"></script>
+    <!-- CDNs for MUI UNCOMMENT IF USING -->
+    <script src="https://unpkg.com/@mui/material@5/umd/material-ui.development.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // UNCOMMENT FOR MATERIAL UI
+      const { Button, Checkbox, FormControlLabel, FormControl, FormLabel } =
+        MaterialUI;
+
+      // UNCOMMENT FOR REACT ROUTER
+      const { BrowserRouter, Routes, Route, useNavigate } = ReactRouterDOM;
+
+      // Object-destructured Hooks available
+      // so you don't need to put 'React.' in front
+      const { createContext, useContext, useState } = React;
+
+      // ***global Context Object can go here***
+      const checkboxGroupContext = createContext(null);
+
+      const CheckboxControl = ({ item, onChange }) => {
+        const checkboxGroup = useContext(checkboxGroupContext);
+        return (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={checkboxGroup.item}
+                onChange={onChange}
+                name={item}
+                value={item}
+              />
+            }
+            label={item.charAt(0).toUpperCase() + item.slice(1)}
+          />
+        );
+      };
+
+      const ShoppingForm = ({ className, handleCheckbox }) => {
+        // Needed for Context
+        let checkboxGroup = useContext(checkboxGroupContext);
+        // Needed for Routing
+        const navi = useNavigate();
+
+        const shoppingItemList = Object.keys(checkboxGroup);
+
+        let disableSubmit = true;
+        for (const checked of Object.values(checkboxGroup)) {
+          if (checked) disableSubmit = false;
+        }
+
+        const handleSubmit = (event) => {
+          event.preventDefault();
+          // Turned off for Routing
+          // setDoneShopping(true);
+          navi("/list");
+        };
+
+        return (
+          <FormControl>
+            <fieldset className={className}>
+              <FormLabel component="legend">
+                Build a shopping list of one or more items by checking them
+                below:
+              </FormLabel>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "1em" }}
+              >
+                {shoppingItemList.map((item) => (
+                  <CheckboxControl
+                    key={item}
+                    item={item}
+                    onChange={handleCheckbox}
+                  />
+                ))}
+                <Button
+                  variant="contained"
+                  type="submit"
+                  style={{ width: "150px" }}
+                  disabled={disableSubmit}
+                  onClick={handleSubmit}
+                >
+                  Build List
+                </Button>
+              </div>
+            </fieldset>
+          </FormControl>
+        );
+      };
+
+      const ShoppingList = ({ className }) => {
+        const checkboxGroup = useContext(checkboxGroupContext);
+        const navi = useNavigate();
+
+        let shoppingList = [];
+        for (const [item, isChecked] of Object.entries(checkboxGroup)) {
+          if (isChecked) {
+            shoppingList.push(item);
+            console.log({ shoppingList });
+          }
+        }
+
+        return (
+          <FormControl>
+            <fieldset className={className}>
+              <FormLabel component="legend">Your Shopping List</FormLabel>
+              <ul>
+                {shoppingList.map((item) => (
+                  <ShoppingListItem key={item} item={item} />
+                ))}
+              </ul>
+              <Button
+                variant="contained"
+                type="submit"
+                style={{ width: "150px" }}
+                onClick={() => navi("/")}
+              >
+                Back 2 Shop
+              </Button>
+            </fieldset>
+          </FormControl>
+        );
+      };
+      const StyledShoppingList = styled(ShoppingList)`
+        border: 5px solid black;
+        margin: 20px;
+        padding-left: 10px;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+      `;
+
+      const StyledShoppingForm = styled(ShoppingForm)`
+        border: 5px solid black;
+        margin: 20px;
+        padding-left: 10px;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+      `;
+
+      const ShoppingListItem = ({ item }) => {
+        return <li>{item.charAt(0).toUpperCase() + item.slice(1)}</li>;
+      };
+
+      const App = () => {
+        // Not needed with React Router
+        // const [doneShopping, setDoneShopping] = useState(false);
+
+        // Lifted from ShoppingForm
+        const [checkboxGroup, setCheckboxGroup] = useState({
+          milk: false,
+          eggs: false,
+          bread: false,
+          cheese: false,
+          ham: false,
+        });
+
+        // Lifted from ShoppingForm
+        const handleCheckbox = (event) => {
+          setCheckboxGroup({
+            ...checkboxGroup,
+            [event.target.value]: event.target.checked,
+          });
+        };
+
+        // return doneShopping ? (
+        //   //This is not needed with !!!React Router!!!
+        //   <checkboxGroupContext.Provider value={checkboxGroup}>
+        //     <StyledShoppingList />
+        //   </checkboxGroupContext.Provider>
+        // ) : (
+        //   <checkboxGroupContext.Provider value={checkboxGroup}>
+        //     <StyledShoppingForm
+        //       setDoneShopping={setDoneShopping}
+        //       handleCheckbox={handleCheckbox}
+        //     />
+        //   </checkboxGroupContext.Provider>
+        // );
+
+        return (
+          <checkboxGroupContext.Provider value={checkboxGroup}>
+            <Routes>
+              <Route
+                path="/"
+                element={<StyledShoppingForm handleCheckbox={handleCheckbox} />}
+              />
+              <Route path="/list" element={<StyledShoppingList />} />
+            </Routes>
+          </checkboxGroupContext.Provider>
+        );
+      };
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      );
+    </script>
+  </body>
+</html>

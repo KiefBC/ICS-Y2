@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shopping List with Radio Buttons</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react-is@18/umd/react-is.development.js"></script>
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { createContext, useContext, useState } = React;
+
+      // Create a RadioControl component
+      const RadioControl = ({ item, selectedItem, onChange }) => (
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
+          <input 
+            type='radio' 
+            name="shoppingItem"
+            value={item}
+            checked={selectedItem === item}
+            onChange={onChange}
+          />
+          {item.charAt(0).toUpperCase() + item.slice(1)}
+        </label>
+      );
+
+      const ShoppingForm = () => {
+        // Change to single selected item instead of group
+        const [selectedItem, setSelectedItem] = useState('');
+        
+        const shoppingItemList = ['milk', 'eggs', 'bread', 'cheese', 'ham'];
+        
+        // Submit is disabled if no item is selected
+        const disableSubmit = !selectedItem;
+
+        const handleRadio = event => {
+          setSelectedItem(event.target.value);
+        }
+
+        const handleSubmit = event => {
+          event.preventDefault();
+          alert(`You selected: ${selectedItem}`);
+        }
+
+        return (
+          <form>
+            <fieldset>
+              <legend>Select one item for your shopping list:</legend>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1em'}}>
+                {shoppingItemList.map(item => (
+                  <RadioControl 
+                    key={item} 
+                    item={item}
+                    selectedItem={selectedItem}
+                    onChange={handleRadio}
+                  />
+                ))}
+                <button
+                  type="submit"
+                  style={{ width: '75px'}}
+                  disabled={disableSubmit}
+                  onClick={handleSubmit}
+                >
+                  Build List
+                </button>
+              </div>
+            </fieldset>
+          </form>
+        );
+      }
+
+      const ShoppingList = () => {
+        // Implementation for showing selected item
+      }
+
+      const ShoppingListItem = () => {
+        // Implementation for individual item display
+      }
+
+      const App = () => {
+        return (
+          <ShoppingForm />
+        );
+      }
+      
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(<App />);
+    </script>
+  </body>
+</html>

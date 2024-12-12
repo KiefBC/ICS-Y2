@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Standard meta and title -->
+    <meta charset="UTF-8" />
+    <title>Shopping List with Input Fields</title>
+    
+    <!-- React Core Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Additional React Libraries for Styling and Routing -->
+    <script src="https://unpkg.com/react-is@18/umd/react-is.development.js"></script>
+    <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
+    <script src="https://unpkg.com/@remix-run/router@1.21.0/dist/router.umd.min.js"></script>
+    <script src="https://unpkg.com/react-router@6.28.0/dist/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.28.0/dist/umd/react-router-dom.development.js"></script>
+    
+    <!-- Material UI Library and Fonts -->
+    <script src="https://unpkg.com/@mui/material@5/umd/material-ui.development.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  </head>
+  <body>
+    <!-- Root div where React will mount the application -->
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      // Destructure required Material UI components
+      const { 
+        TextField, 
+        Button, 
+        FormControl, 
+        FormLabel,
+        IconButton
+      } = MaterialUI;
+      
+      // Destructure routing components from React Router
+      const { BrowserRouter, Routes, Route, useNavigate } = ReactRouterDOM;
+      
+      // Destructure React hooks
+      const { createContext, useContext, useState } = React;
+
+      // Create a context to share shopping list state across components
+      // This allows us to access the items array and setItems function from any component
+      const ShoppingListContext = createContext(null);
+
+      // Component for individual item input row
+      // Handles both item name and quantity inputs, plus remove button
+      const ItemInput = ({ index, item, handleItemChange, handleRemoveItem }) => {
+        return (
+          <div style={{ display: 'flex', gap: '1em', alignItems: 'center' }}>
+            {/* Text field for item name */}
+            <TextField
+              label="Item Name"
+              value={item.name}
+              onChange={(e) => handleItemChange(index, 'name', e.target.value)}
+              size="small"
+            />
+            {/* Number field for quantity */}
+            <TextField
+              label="Quantity"
+              type="number"
+              value={item.quantity}
+              onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+              size="small"
+              style={{ width: '100px' }}
+            />
+            {/* Remove button for deleting items */}
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => handleRemoveItem(index)}
+            >
+              Remove
+            </Button>
+          </div>
+        );
+      };
+
+      // Main form component for adding shopping items
+      const ShoppingForm = ({ className }) => {
+        // Get items and setItems from context
+        const { items, setItems } = useContext(ShoppingListContext);
+        // Get navigation function for routing
+        const navi = useNavigate();
+
+        // Handler for updating item fields (name or quantity)
+        const handleItemChange = (index, field, value) => {
+          const newItems = [...items];
+          newItems[index] = { ...newItems[index], [field]: value };
+          setItems(newItems);
+        };
+
+        // Handler for adding new empty items to the list
+        const handleAddItem = () => {
+          setItems([...items, { name: '', quantity: 1 }]);
+        };
+
+        // Handler for removing items from the list
+        const handleRemoveItem = (index) => {
+          setItems(items.filter((_, i) => i !== index));
+        };
+
+        // Handler for form submission
+        // Navigates to list view if at least one item has a name
+        const handleSubmit = (event) => {
+          event.preventDefault();
+          if (items.some(item => item.name.trim())) {
+            navi("/list");
+          }
+        };
+
+        return (
+          <FormControl>
+            <fieldset className={className}>
+              <FormLabel component="legend">
+                Add items to your shopping list:
+              </FormLabel>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1em', padding: '1em' }}>
+                {/* Map through items array to create input rows */}
+                {items.map((item, index) => (
+                  <ItemInput
+                    key={index}
+                    index={index}
+                    item={item}
+                    handleItemChange={handleItemChange}
+                    handleRemoveItem={handleRemoveItem}
+                  />
+                ))}
+                {/* Buttons for adding items and viewing list */}
+                <div style={{ display: 'flex', gap: '1em' }}>
+                  <Button
+                    variant="contained"
+                    onClick={handleAddItem}
+                  >
+                    Add Item
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={handleSubmit}
+                    disabled={!items.some(item => item.name.trim())}
+                  >
+                    View List
+                  </Button>
+                </div>
+              </div>
+            </fieldset>
+          </FormControl>
+        );
+      };
+
+      // Component for displaying the final shopping list
+      const ShoppingList = ({ className }) => {
+        // Get items from context
+        const { items } = useContext(ShoppingListContext);
+        const navi = useNavigate();
+
+        // Filter out items with empty names
+        const validItems = items.filter(item => item.name.trim());
+
+        return (
+          <FormControl>
+            <fieldset className={className}>
+              <FormLabel component="legend">Your Shopping List</FormLabel>
+              {/* Display list of items with quantities */}
+              <ul style={{ listStyle: 'none', padding: '1em' }}>
+                {validItems.map((item, index) => (
+                  <li key={index} style={{ marginBottom: '0.5em' }}>
+                    {item.quantity}x {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
+                  </li>
+                ))}
+              </ul>
+              {/* Button to return to edit view */}
+              <Button
+                variant="contained"
+                onClick={() => navi("/")}
+                style={{ margin: '1em' }}
+              >
+                Edit List
+              </Button>
+            </fieldset>
+          </FormControl>
+        );
+      };
+
+      // Styled components for consistent styling
+      const StyledShoppingForm = styled(ShoppingForm)`
+        border: 5px solid black;
+        margin: 20px;
+        padding: 20px;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+        min-width: 400px;
+      `;
+
+      const StyledShoppingList = styled(ShoppingList)`
+        border: 5px solid black;
+        margin: 20px;
+        padding: 20px;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+        min-width: 400px;
+      `;
+
+      // Main App component
+      const App = () => {
+        // Initialize state with one empty item
+        const [items, setItems] = useState([
+          { name: '', quantity: 1 }
+        ]);
+
+        return (
+          // Provide shopping list context to all child components
+          <ShoppingListContext.Provider value={{ items, setItems }}>
+            {/* Set up routes for form and list views */}
+            <Routes>
+              <Route path="/" element={<StyledShoppingForm />} />
+              <Route path="/list" element={<StyledShoppingList />} />
+            </Routes>
+          </ShoppingListContext.Provider>
+        );
+      };
+
+      // Get the root element and render the app
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(
+        // Wrap app in BrowserRouter for routing functionality
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      );
+    </script>
+  </body>
+</html>
