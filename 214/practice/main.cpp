@@ -353,16 +353,91 @@ void testMyInt() {
 //(dynamic_cast), 			virtual destructors
 // ------------------------------
 
+class Student {
+protected:
+  const int id;
+
+public:
+  Student(int id) : id(id) { std::cout << "Student Constructor Called\n"; }
+
+  // Returns the ID of the student
+  int getId() const { return id; }
+
+  // Returns the type of the student
+  virtual std::string getType() const = 0;
+
+  virtual ~Student() { std::cout << "Student Destructor Called\n"; }
+};
+
+class UndergradStudent : public Student {
+public:
+  UndergradStudent(int id) : Student(id) {
+    std::cout << "UndergradStudent Constructor Called\n";
+  }
+
+  std::string getType() const override { return "UndergradStudent"; };
+};
+
+class GradStudent : public Student {
+private:
+  std::string degree;
+
+public:
+  GradStudent(int id, std::string degree) : Student(id), degree(degree) {
+    std::cout << "GradStudent Constructor Called\n";
+  }
+
+  std::string getType() const override { return "GradStudent"; }
+
+  std::string getDegree() const { return degree; }
+};
+
+class RegistrationList {
+private:
+  std::vector<Student *> students;
+
+public:
+  RegistrationList() { std::cout << "RegistrationList Constructor Called\n"; }
+
+  // Adds a student to the list
+  void add(Student *student) { students.push_back(student); }
+
+  // Prints each student in the list and their ID, Type and Degree
+  void print() {
+    for (auto student : students) {
+      std::cout << "ID: " << student->getId()
+                << " Type: " << student->getType();
+      if (dynamic_cast<GradStudent *>(student)) {
+        std::cout << " Degree: "
+                  << dynamic_cast<GradStudent *>(student)->getDegree();
+      }
+      std::cout << "\n";
+    }
+  }
+
+  ~RegistrationList() {
+    for (auto student : students) {
+      delete student;
+    }
+    std::cout << "RegistrationList Destructor Called\n";
+  }
+};
+
 // This one covers a lot of ground. Refer to the Student_UML diagram specified
 // in the Review Module. Once the classes in the UML diagram are set up, call
 // testStudents() in main().
 void testStudents() {
   std::cout << "\ntestStudents()---------------------------------\n";
-  // int idGenerator{ 0 };
-  // RegistrationList regList;
-  // regList.add(new UndergradStudent(idGenerator++));
-  // regList.add(new GradStudent(idGenerator++, "comp sci"));
-  // regList.print();
+  int idGenerator{0};
+  // This will print that the RegistrationList Constructor was called
+  RegistrationList regList;
+  // This will print that the Student Constructor was called
+  // Then the UndergradStudent Constructor was called
+  regList.add(new UndergradStudent(idGenerator++));
+  // This will print that the Student Constructor was called
+  // Then the GradStudent Constructor was called
+  regList.add(new GradStudent(idGenerator++, "comp sci"));
+  regList.print();
 }
 
 int main() {
