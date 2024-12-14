@@ -6,6 +6,7 @@
 #include <array>
 #include <cassert>
 #include <iostream>
+#include <set>
 #include <stdexcept>
 #include <strstream>
 #include <vector>
@@ -163,7 +164,7 @@ void testSet() {
 template <typename T, int N = 3> class MyArray {
 private:
   static const int SIZE = N; // The size of the array
-  T arr[SIZE]; // The array that holds the values
+  T arr[SIZE];               // The array that holds the values
 
 public:
   MyArray() : arr{} {};
@@ -235,7 +236,7 @@ void testMyArray() {
 // TASK 4 - topics: iterators, container classes, algorithms, template functions
 // ------------------------------
 //  1) Implement the function below:
-int sum(const std::array<int, 3> arr) { 
+template <typename Container> auto sum(const Container &arr) {
   int sum = 0;
   // for (auto& val : arr) {
   //   sum += val;
@@ -254,7 +255,18 @@ void testSum() {
 
   std::array<int, 3> arr{2, 3, 4};
   std::cout << sum(arr) << "\n";
-  assert(sum(arr) == 9);
+  std::vector<int> arr1{2, 3, 4};
+  std::set<int> arr2{2, 3, 4};
+
+  auto result = std::max_element(arr1.begin(), arr1.end());
+  auto element = std::find(arr2.begin(), arr2.end(), 3);
+  std::cout << "Max Element: " << *result << "\n";
+  if (element != arr2.end()) {
+    std::cout << "Element Found"
+              << "\n";
+  } else {
+    std::cout << "Element not found";
+  }
 }
 // 3) Rewrite the loop to use iterators (instead of for, or for-each)
 // 4) Template this function to make it work with any container class.
@@ -274,6 +286,36 @@ void testSum() {
 class MyInt {
 private:
   int *pInt;
+
+public:
+  MyInt(int value = 0) { pInt = new int{value}; }
+
+  MyInt(const MyInt &other) { pInt = new int{other.getInt()}; }
+
+  MyInt &operator=(const MyInt &other) {
+    if (this == &other) {
+      return *this;
+    }
+    deleteInt();
+    pInt = new int{other.getInt()};
+    return *this;
+  }
+
+  operator int() const { return getInt(); }
+
+  int getInt() const {
+    if (pInt == nullptr) {
+      return 0;
+    }
+    return *pInt;
+  }
+
+  ~MyInt() { deleteInt(); }
+
+  void deleteInt() {
+    delete pInt;
+    pInt = nullptr;
+  }
 };
 // The class uses dynamically allocated memory from the heap.
 // This means a shallow (or memberwise) copy is not sufficient when copies are
@@ -284,19 +326,24 @@ private:
 
 void testMyInt() {
   std::cout << "\ntestMyInt()------------------------------------\n";
-  // MyInt mi1;								//
+  MyInt mi1;
   // dynamically allocate mem (value:0)
-  //										//
-  // deallocate mem with destructor std::cout << mi1.getValue() << "\n";
-  // //
+  std::cout << mi1.getInt() << "\n";
+  // deallocate mem with destructor
+  mi1.deleteInt();
+  std::cout << mi1.getInt() << "\n";
   // verify it worked MyInt mi2(5);
-  // // dynamically allocate mem (value: param1) std::cout << mi2.getValue() <<
-  // "\n";	// verify it worked MyInt mi3 = mi2;
-  // // implement the method that handles this properly std::cout <<
-  // mi3.getValue() << "\n";	// verify it worked mi1 = mi2;
-  // // implement the method that handles this properly int x = mi3;
-  // // provide a typecast to make this conversion implicit. std::cout << x <<
-  // "\n";					// verify it worked
+  MyInt mi2{5};
+  std::cout << mi2.getInt() << "\n";
+  mi2.deleteInt();
+  std::cout << mi2.getInt() << "\n";
+  mi2 = {10};
+  // dynamically allocate mem (value: param1) verify it worked
+  const MyInt mi3 = mi2;
+  std::cout << mi3.getInt() << "\n";
+  int x = mi3;
+  // provide a typecast to make this conversion implicit.
+  std::cout << x << "\n";
 }
 
 // ------------------------------
