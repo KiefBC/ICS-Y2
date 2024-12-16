@@ -8,7 +8,6 @@
 #include <iostream>
 #include <set>
 #include <stdexcept>
-#include <strstream>
 #include <vector>
 
 // ------------------------------
@@ -53,8 +52,15 @@ public:
   void add(char value) {
     Node *newNode = new Node();
     newNode->value = value;
-    newNode->pNext = pHead;
-    pHead = newNode;
+    newNode->pNext = nullptr;
+
+    if (pHead == nullptr) {
+      pHead = newNode;
+      pTail = newNode;
+    } else {
+      pTail->pNext = newNode;
+      pTail = newNode;
+    }
   }
 
   // Checks if a LinkedList contains a given value
