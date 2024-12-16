@@ -147,35 +147,34 @@ int main() {
   std::cout << "Testing stringRepeatNum()\n";
   std::string str = "Hello";
   char c = 'l';
-  // std::cout << "[ " << c << " ] occurs: " << stringRepeatNum(str, c)
-  // << " times!\n";
+  std::cout << "[ " << c << " ] occurs: " << stringRepeatNum(str, c)
+            << " times!\n";
   std::cout << "\nTesting largestIntArray()\n";
   std::array<int, 3> arr = {1, 5, 4};
-  // std::cout << "Largest Int in the array is: " << largestIntArray(arr) <<
-  // "\n";
+  std::cout << "Largest Int in the array is: " << largestIntArray(arr) << "\n";
   std::cout << "\nTesting largestIndexArray()\n";
-  // std::cout << "Largest Index in the array is: " << largestIndexArray(arr)
-  // << "\n";
+  std::cout << "Largest Index in the array is: " << largestIndexArray(arr)
+            << "\n";
   std::cout << "\nTesting characterSpamString()\n";
-  // std::cout << "[ " << characterSpamString(str)
-  // << " ] has appeared the most!\n";
+  std::cout << "[ " << characterSpamString(str)
+            << " ] has appeared the most!\n";
   std::cout << "\nTesting characterSpamCString()\n";
   char str1[] = "Heelo";
-  // std::cout << "[ " << characterSpamCString(str1)
-  // << " ] has appeared the most!\n";
+  std::cout << "[ " << characterSpamCString(str1)
+            << " ] has appeared the most!\n";
   std::cout << "\nTesting changeString()\n";
   std::string str2 = "Money";
   std::cout << "Before: " << str2 << "\n";
-  // changeString(str2);
+  changeString(str2);
   std::cout << "After: " << str2 << "\n";
   std::cout << "\nTesting newStudent()\n";
   std::string name = "Kiefer";
   int id{1};
-  // Student *student = newStudent(id, "Kiefer");
-  // std::cout << "Student name: " << student->name
-  // << ", Student ID: " << student->id << "\n";
-  // delete student;
+  Student *student = newStudent(id, "Kiefer");
+  std::cout << "Student name: " << student->name
+            << ", Student ID: " << student->id << "\n";
+  delete student;
   std::cout << "\nTesting concatStrings()\n";
   char str3[] = "Hay";
-  // std::cout << "New String: " << concatStrings(str1, str3) << "\n";
+  std::cout << "New String: " << concatStrings(str1, str3) << "\n";
 }

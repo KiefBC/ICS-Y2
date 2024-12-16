@@ -332,24 +332,24 @@ public:
 
 void testMyInt() {
   std::cout << "\ntestMyInt()------------------------------------\n";
-  MyInt mi1;
   // dynamically allocate mem (value:0)
-  std::cout << mi1.getInt() << "\n";
+  int value = 76;
+  MyInt *mi1 = new MyInt(value);
+  std::cout << mi1->getInt() << "\n";
   // deallocate mem with destructor
-  mi1.deleteInt();
-  std::cout << mi1.getInt() << "\n";
+  delete mi1;
   // verify it worked MyInt mi2(5);
   MyInt mi2{5};
   std::cout << mi2.getInt() << "\n";
-  mi2.deleteInt();
   std::cout << mi2.getInt() << "\n";
   mi2 = {10};
   // dynamically allocate mem (value: param1) verify it worked
-  const MyInt mi3 = mi2;
-  std::cout << mi3.getInt() << "\n";
-  int x = mi3;
+  const MyInt *mi3 = new MyInt{mi2};
+  std::cout << mi3->getInt() << "\n";
+  int x = *mi3;
   // provide a typecast to make this conversion implicit.
   std::cout << x << "\n";
+  delete mi3;
 }
 
 // ------------------------------
@@ -382,6 +382,8 @@ public:
   }
 
   std::string getType() const override { return "UndergradStudent"; };
+
+  ~UndergradStudent() { std::cout << "UndergradStudent Destructor Called\n"; }
 };
 
 class GradStudent : public Student {
@@ -389,13 +391,15 @@ private:
   std::string degree;
 
 public:
-  GradStudent(int id, std::string degree) : Student(id), degree(degree) {
+  GradStudent(int id, const std::string &degree) : Student(id), degree(degree) {
     std::cout << "GradStudent Constructor Called\n";
   }
 
   std::string getType() const override { return "GradStudent"; }
 
   std::string getDegree() const { return degree; }
+
+  ~GradStudent() { std::cout << "GradStudent Destructor Called\n"; }
 };
 
 class RegistrationList {
